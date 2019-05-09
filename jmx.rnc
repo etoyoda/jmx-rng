@@ -1,0 +1,471 @@
+# 「台風解析・予報情報（５日予報）」の構造（状況把握用）
+#
+# 気象庁防災情報XMLフォーマット　技術資料
+# http://xml.kishou.go.jp/tec_material.html
+# の解説資料セット http://xml.kishou.go.jp/jmaxml_20120615_Manual(pdf).zip
+# の「台風解析・予報情報電文（新形式）_解説資料.pdf」
+# をもとにして３日予報を５日予報に改めたもの 
+
+namespace jx = "http://xml.kishou.go.jp/jmaxml1/"
+namespace jb = "http://xml.kishou.go.jp/jmaxml1/informationBasis1/"
+namespace jm = "http://xml.kishou.go.jp/jmaxml1/body/meteorology1/"
+namespace je = "http://xml.kishou.go.jp/jmaxml1/elementBasis1/"
+
+start = element jx:Report {
+  element jx:Control {
+    element jx:Title {
+      "台風解析・予報情報（５日予報）"
+      | "台風解析・予報情報（３日予報）"
+    },
+    element jx:DateTime { utc_date_time },
+    element jx:Status { "通常" | "訓練" | "試験" },
+    element jx:EditorialOffice { "気象庁本庁" },
+    element jx:PublishingOffice { "気象庁予報部" }
+  },
+  element jb:Head {
+    element jb:Title { "台風解析・予報情報" },
+    # 発表時刻
+    element jb:ReportDateTime { jst_date_time },
+    # 解析時刻
+    element jb:TargetDateTime { jst_date_time },
+    element jb:TargetDuration {
+      ## (1) jx:Control/jx:Title と同じ情報を与える
+      "PT120H" | "PT72H"
+    },
+    # TC番号
+    element jb:EventID { xsd:NMTOKEN { pattern = "TC\d\d\d\d" } },
+    element jb:InfoType { "発表" | "訂正" | "取消" },
+    # 情報番号というが起算・加算条件は未詳
+    element jb:Serial { xsd:nonNegativeInteger },
+    element jb:InfoKind {
+      ## (2) jx:Control/jx:Title と同じ
+      "台風解析・予報情報（５日予報）"
+      | "台風解析・予報情報（３日予報）"
+    },
+    element jb:InfoKindVersion { "1.0_0" },
+    element jb:Headline {
+      element jb:Text { empty }
+    }
+  },
+  element jm:Body {
+    ## (3) 内部に jm:MeteorologicalInfo/jm:DateTime/@type=実況 は必ず存在する
+    element jm:MeteorologicalInfos {
+      attribute type { "台風情報" },
+      element jm:MeteorologicalInfo {
+        ## (4) text() は一意
+        ## (5) @type は一意
+        element jm:DateTime {
+          attribute type {
+            "実況"
+            | "推定　１時間後"
+            | "予報　３時間後"
+            | "予報　６時間後"
+            | "予報　９時間後"
+            | "予報　１２時間後"
+            | "予報　１５時間後"
+            | "予報　１８時間後"
+            | "予報　２１時間後"
+            | "予報　２４時間後"
+            | "予報　４５時間後"
+            | "予報　４８時間後"
+            | "予報　６９時間後"
+            | "予報　７２時間後"
+            | "延長予報　９６時間後"
+            | "延長予報　１２０時間後"
+          },
+          jst_date_time
+        },
+        element jm:Item {
+          ## (6) 呼称は実況のみ存在、実況には必ず存在
+          element jm:Kind {
+            element jm:Property {
+              element jm:Type { "呼称" },
+              element jm:TyphoonNamePart {
+                element jm:Name { xsd:string { pattern = "[\-A-Z]*" } },
+                element jm:NameKana { all_katakana_or_empty },
+                element jm:Number { xsd:nonNegativeInteger? },
+                element jm:Remark {
+                  empty
+                  | "台風発生"
+                  | "台風発生（域外から入る）"
+                  | "台風消滅（域外へ出る）"
+                  | "台風消滅（温帯低気圧化）"
+                  | "台風消滅（熱帯低気圧化）"
+                  | "台風発生の可能性が小さくなった"
+                  | "発表間隔変更（毎時から３時間毎）"
+                  | "発表間隔変更（３時間毎から毎時）"
+                  | "台風発生予想"
+                  | "温帯低気圧化しつつある"
+                }
+              }
+            }
+          }?,
+          element jm:Kind {
+            element jm:Property {
+              element jm:Type { "階級" },
+              ## (8) 後述
+              element jm:ClassPart {
+                ## (7) 空になるのは延長予報だけ
+                element je:TyphoonClass {
+                  attribute type { "熱帯擾乱種類" },
+                  (empty | typhoon_class)
+                },
+                ## (8-1) 実況・推定では常に AreaClass がある
+                element je:AreaClass {
+                  attribute type { "大きさ階級" },
+                  # 実況・推定で大きさ階級を決定しないときは空になる
+                  (empty | typhoon_size_class)
+                }?,
+                ## (8-2) 実況・推定・予報では常に IntensityClass がある
+                element je:IntensityClass {
+                  attribute type { "強さ階級" },
+                  (empty | typhoon_intensity_class)
+                }?
+              }
+            }
+          },
+          element jm:Kind {
+            element jm:Property {
+              element jm:Type { "中心" },
+              ## (9) 予報・延長予報には常に予報円 ProbabilityCircle がある
+              ## (10) 実況・推定には常に Coordinate 2つがある
+              element jm:CenterPart {
+                (element jm:ProbabilityCircle {
+                  attribute type { "予報円" },
+                  basepoint_pair,
+                  radii_yohouen
+                }
+                | coordinate_pair),
+                ## (11) 予報のうち、予報時間が２４未満で１２でないものでは欠く
+                element jm:Location { text }?,
+                element je:Direction {
+                  attribute type { "移動方向" },
+                  attribute unit { "１６方位漢字" },
+                  attribute condition { "不定" }?,
+                  attribute description { "不定" }?,
+                  # 空の実例はないが、予想される
+                  (empty | direction_sixteen)
+                },
+                element je:Speed {
+                  attribute type { "移動速度" },
+                  attribute unit { "ノット" },
+                  attribute description { text },
+                  attribute condition { "ゆっくり" | "ほとんど停滞" }?,
+                  (empty | xsd:positiveInteger)
+                },
+                ## (25) km/h単位の移動速度は ノット 単位の移動速度の関数
+                element je:Speed {
+                  attribute type { "移動速度" },
+                  attribute unit { "km/h" },
+                  attribute description { text },
+                  attribute condition { "ゆっくり" | "ほとんど停滞" }?,
+                  (empty | xsd:positiveInteger)
+                },
+                ## (12) 実況・推定・予報では常に Pressure がある
+                element je:Pressure {
+                  attribute type { "中心気圧" },
+                  attribute unit { "hPa" },
+                  attribute description { text },
+                  xsd:positiveInteger
+                }?
+              }
+            }
+          },
+
+          ## (13) 風は延長予報以外には常にある、ただし、Remark が
+          ## "台風消滅（温帯低気圧化）"
+          ## "台風消滅（熱帯低気圧化）"
+          ## "台風発生の可能性が小さくなった"
+          ## の場合はその限りでない
+          element jm:Kind {
+            element jm:Property {
+              element jm:Type { "風" },
+              element jm:WindPart {
+                # 最大風速と最大瞬間風速が、それぞれノット・米毎秒で書かれる
+                ## (24) ノット単位の風速は m/s 単位の風速の関数
+                element je:WindSpeed {
+                  attribute type { "最大風速" },
+                  attribute unit { "ノット" },
+                  # 中心の移動速度と異なり condition は
+                  # 最大速度が得られた位置を特定するものであるらしい。
+                  # 値「なし」は中心付近でない場所を示すらしく、
+                  # 数値欠損の印ではない。
+                  attribute condition { "中心付近" | "なし" },
+                  attribute description { text },
+                  xsd:nonNegativeInteger
+                },
+                element je:WindSpeed {
+                  attribute type { "最大風速" },
+                  attribute unit { "m/s" },
+                  attribute condition { "中心付近" | "なし" },
+                  attribute description { text },
+                  xsd:nonNegativeInteger
+                },
+                element je:WindSpeed {
+                  attribute type { "最大瞬間風速" },
+                  attribute unit { "ノット" },
+                  attribute description { text },
+                  xsd:nonNegativeInteger
+                },
+                element je:WindSpeed {
+                  attribute type { "最大瞬間風速" },
+                  attribute unit { "m/s" },
+                  attribute description { text },
+                  xsd:nonNegativeInteger
+                }
+              },
+              ## (19) @type は Property 内で一意
+              ## (14) 実況・推定には常に強風域がある
+              ## (15) 暴風域はあるとすれば実況または推定
+              ## (20) 実況・推定において
+              ##      最大風速が 25 m/s に達していれば常に暴風域がある
+              ## (16) 暴風警戒域はあるとすれば予報
+              ## (21) 予報において
+              ##      最大風速が 25 m/s に達していれば常に暴風警戒域がある
+              element jm:WarningAreaPart {
+                attribute type { "暴風域" | "強風域" | "暴風警戒域" },
+                element je:WindSpeed {
+                  attribute type { "風速" },
+                  attribute unit { "ノット" },
+                  attribute condition { "以上" },
+                  attribute description { text },
+                  xsd:positiveInteger
+                },
+                element je:WindSpeed {
+                  attribute type { "風速" },
+                  attribute unit { "m/s" },
+                  attribute condition { "以上" },
+                  attribute description { text },
+                  xsd:positiveInteger
+                },
+                element je:Circle {
+                  radii_of_wind
+                }
+              }*
+            }
+          }?,
+
+          ## Item について、
+          ## (17) 実況・推定には常に強風域 Area が存在
+          ## (18) 予報・延長予報には常に予報円 Area が存在
+          ## 都合、 Area は必ず一つ存在する
+          element jm:Area {
+            element jm:Name { "熱帯低気圧" },
+            (
+              ## (22) 強風域 Area/Circle は WarningAreaPart/Circle と同一内容
+              element je:Circle {
+                attribute type { "強風域" },
+                basepoint_pair,
+                radii_of_wind
+              }
+            |
+              ## (23) 予報円 Area/Circle は ProbabilityCircle と同一内容
+              element je:Circle {
+                attribute type { "予報円" },
+                basepoint_pair,
+                radii_yohouen
+              }
+            )
+          }
+
+        }
+      }+
+    }
+  }
+}
+
+# basepoint_pair と酷似構造であることを見やすくするため別ルール建て
+coordinate_pair =
+  element je:Coordinate {
+    attribute type { "中心位置（度）" },
+    # 消滅または発生可能性減のとき省略
+    attribute condition { "正確" | "ほぼ正確" | "不確実" }?,
+    attribute description { latlon_decimal_ja },
+    latlon_decimal_ascii
+  },
+  element je:Coordinate {
+    attribute type { "中心位置（度分）" },
+    # 消滅または発生可能性減のとき省略
+    attribute condition { "正確" | "ほぼ正確" | "不確実" }?,
+    attribute description { latlon_sexagesimal_ja },
+    latlon_sexagesimal_ascii
+  }
+
+# Area/Circle と CenterPart/ProbabilityCircle で使われる
+basepoint_pair =
+  element je:BasePoint {
+    attribute type { "中心位置（度）" },
+    attribute description { latlon_decimal_ja },
+    latlon_decimal_ascii
+  },
+  element je:BasePoint {
+    attribute type { "中心位置（度分）" },
+    attribute description { latlon_sexagesimal_ja },
+    latlon_sexagesimal_ascii
+  }
+
+# Area/Circle[@type=強風域] と
+# Kind/Property[Type='予報円']/WarningAreaPart/Circle で使う
+radii_of_wind =
+  element je:Axes {
+    # 強風域は、均等円か、偏心円で長径・短径を示す2つのAxisか
+    all_round_axis | (ordinary_axis, ordinary_axis)
+  }
+
+# 均等円の場合の Axes の中身 (読みやすさのため別ルール)
+all_round_axis =
+  element je:Axis {
+    element je:Direction {
+      attribute type { "方向" },
+      attribute unit { "８方位漢字" },
+      attribute description { "全域" },
+      attribute condition { "全域" }?,
+      direction_eight?
+    },
+    # 偏心していない例が与えられていないが、意味的に用意すべき
+    element je:Radius {
+      attribute type { "半径" },
+      attribute unit { "海里" },
+      attribute description { text },
+      attribute condition { "なし" }?,
+      xsd:integer?
+    },
+    element je:Radius {
+      attribute type { "半径" },
+      attribute unit { "km" },
+      attribute description { text },
+      attribute condition { "なし" }?,
+      xsd:integer?
+    }
+  }
+
+# 偏心円の場合の Axes の中身のひとつ
+ordinary_axis =
+  element je:Axis {
+    element je:Direction {
+      attribute type { "方向" },
+      attribute unit { "８方位漢字" },
+      direction_eight
+    },
+    element je:Radius {
+      attribute type { "半径" },
+      attribute unit { "海里" },
+      attribute description { text },
+      xsd:positiveInteger
+    },
+    element je:Radius {
+      attribute type { "半径" },
+      attribute unit { "km" },
+      attribute description { text },
+      xsd:positiveInteger
+    }
+  }
+
+# Area/Circle[@type=予報円] と Kind[Property/Type='予報円'] で使う
+radii_yohouen =
+  element je:Axes {
+    # 予報円の場合は Axis は常に全方位で1つしかない
+    element je:Axis {
+      element je:Direction {
+        attribute type { "方向" },
+        attribute unit { "８方位漢字" },
+        attribute description { "全域" },
+        attribute condition { "全域" }
+      },
+      element je:Radius {
+        attribute type { "７０パーセント確率半径" },
+        attribute unit { "海里" },
+        attribute description { text },
+        xsd:positiveInteger
+      },
+      element je:Radius {
+        attribute type { "７０パーセント確率半径" },
+        attribute unit { "km" },
+        attribute description { text },
+        xsd:positiveInteger
+      }
+    }
+  }
+
+#
+# 以下はデータ型
+#
+
+typhoon_class =
+  "台風(TY)"
+  | "台風(STS)"
+  | "台風(TS)"
+  | "熱帯低気圧(TD)"
+  | "ハリケーン(Hurricane)"
+  | "発達した熱帯低気圧(Tropical Storm)"
+  | "温帯低気圧(LOW)"
+
+typhoon_size_class =
+  "大型"
+  | "超大型"
+
+typhoon_intensity_class =
+  "強い"
+  | "非常に強い"
+  | "猛烈な"
+
+direction_eight =
+  "北"
+  | "北東"
+  | "東"
+  | "南東"
+  | "南"
+  | "南西"
+  | "西"
+  | "北西"
+
+direction_sixteen =
+  "北"
+  | "北北東"
+  | "北東"
+  | "東北東"
+  | "東"
+  | "東南東"
+  | "南東"
+  | "南南東"
+  | "南"
+  | "南南西"
+  | "南西"
+  | "西南西"
+  | "西"
+  | "西北西"
+  | "北西"
+  | "北北西"
+
+all_katakana_or_empty =
+  xsd:string { pattern = "[ァ-ー]*" }
+
+utc_date_time =
+  xsd:dateTime {
+    pattern = "\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ"
+  }
+
+jst_date_time =
+  xsd:dateTime {
+    pattern = "\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\+09:00"
+  }
+
+latlon_decimal_ascii =
+  xsd:string {
+    pattern = "\+\d\d\.\d[\-+]\d\d\d\.\d/"
+  }
+
+latlon_decimal_ja =
+  xsd:string {
+    pattern = "北緯[０-９]+．[０-９]度[東西]経[０-９]+．[０-９]度"
+  }
+
+latlon_sexagesimal_ascii =
+  xsd:string {
+    pattern = "\+\d\d\d\d[\-+]\d\d\d\d\d/"
+  }
+
+latlon_sexagesimal_ja =
+  xsd:string {
+    pattern = "北緯[０-９]{2}度[０-９]{2}分[東西]経[０-９]{3}度[０-９]{2}分"
+  }
