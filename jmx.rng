@@ -1,13 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  「台風解析・予報情報（５日予報）」の構造（状況把握用）
-  
-  気象庁防災情報XMLフォーマット　技術資料
-  http://xml.kishou.go.jp/tec_material.html
-  の解説資料セット http://xml.kishou.go.jp/jmaxml_20120615_Manual(pdf).zip
-  の「台風解析・予報情報電文（新形式）_解説資料.pdf」
-  をもとにして３日予報を５日予報に改めたもの 
--->
 <grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:jm="http://xml.kishou.go.jp/jmaxml1/body/meteorology1/" xmlns:jb="http://xml.kishou.go.jp/jmaxml1/informationBasis1/" xmlns:je="http://xml.kishou.go.jp/jmaxml1/elementBasis1/" xmlns:jx="http://xml.kishou.go.jp/jmaxml1/" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <start>
     <element name="jx:Report">
@@ -16,6 +7,7 @@
           <choice>
             <value>台風解析・予報情報（５日予報）</value>
             <value>台風解析・予報情報（３日予報）</value>
+            <value>季節観測</value>
           </choice>
         </element>
         <element name="jx:DateTime">
@@ -29,15 +21,15 @@
           </choice>
         </element>
         <element name="jx:EditorialOffice">
-          <value>気象庁本庁</value>
+          <ref name="list_edof"/>
         </element>
         <element name="jx:PublishingOffice">
-          <value>気象庁予報部</value>
+          <ref name="list_pbof"/>
         </element>
       </element>
       <element name="jb:Head">
         <element name="jb:Title">
-          <value>台風解析・予報情報</value>
+          <data type="string"/>
         </element>
         <!-- 発表時刻 -->
         <element name="jb:ReportDateTime">
@@ -47,18 +39,17 @@
         <element name="jb:TargetDateTime">
           <ref name="jst_date_time"/>
         </element>
-        <element name="jb:TargetDuration">
-          <choice>
-            <value>PT120H</value>
-            <a:documentation>(1) jx:Control/jx:Title と同じ情報を与える</a:documentation>
-            <value>PT72H</value>
-          </choice>
-        </element>
+        <optional>
+          <element name="jb:TargetDuration">
+            <choice>
+              <value>PT120H</value>
+              <value>PT72H</value>
+            </choice>
+          </element>
+        </optional>
         <!-- TC番号 -->
         <element name="jb:EventID">
-          <data type="NMTOKEN">
-            <param name="pattern">TC\d\d\d\d</param>
-          </data>
+          <data type="NMTOKEN"/>
         </element>
         <element name="jb:InfoType">
           <choice>
@@ -69,14 +60,12 @@
         </element>
         <!-- 情報番号というが起算・加算条件は未詳 -->
         <element name="jb:Serial">
-          <data type="nonNegativeInteger"/>
+          <optional>
+            <data type="nonNegativeInteger"/>
+          </optional>
         </element>
         <element name="jb:InfoKind">
-          <choice>
-            <value>台風解析・予報情報（５日予報）</value>
-            <a:documentation>(2) jx:Control/jx:Title と同じ</a:documentation>
-            <value>台風解析・予報情報（３日予報）</value>
-          </choice>
+          <ref name="list_infokind"/>
         </element>
         <element name="jb:InfoKindVersion">
           <value>1.0_0</value>
@@ -91,33 +80,40 @@
         <element name="jm:MeteorologicalInfos">
           <a:documentation>(3) 内部に jm:MeteorologicalInfo/jm:DateTime/@type=実況 は必ず存在する</a:documentation>
           <attribute name="type">
-            <value>台風情報</value>
+            <ref name="list_jmtype"/>
           </attribute>
           <oneOrMore>
             <element name="jm:MeteorologicalInfo">
               <element name="jm:DateTime">
                 <a:documentation>(4) text() は一意
 (5) @type は一意</a:documentation>
-                <attribute name="type">
-                  <choice>
-                    <value>実況</value>
-                    <value>推定　１時間後</value>
-                    <value>予報　３時間後</value>
-                    <value>予報　６時間後</value>
-                    <value>予報　９時間後</value>
-                    <value>予報　１２時間後</value>
-                    <value>予報　１５時間後</value>
-                    <value>予報　１８時間後</value>
-                    <value>予報　２１時間後</value>
-                    <value>予報　２４時間後</value>
-                    <value>予報　４５時間後</value>
-                    <value>予報　４８時間後</value>
-                    <value>予報　６９時間後</value>
-                    <value>予報　７２時間後</value>
-                    <value>延長予報　９６時間後</value>
-                    <value>延長予報　１２０時間後</value>
-                  </choice>
-                </attribute>
+                <optional>
+                  <attribute name="significant">
+                    <value>yyyy-mm-dd</value>
+                  </attribute>
+                </optional>
+                <optional>
+                  <attribute name="type">
+                    <choice>
+                      <value>実況</value>
+                      <value>推定　１時間後</value>
+                      <value>予報　３時間後</value>
+                      <value>予報　６時間後</value>
+                      <value>予報　９時間後</value>
+                      <value>予報　１２時間後</value>
+                      <value>予報　１５時間後</value>
+                      <value>予報　１８時間後</value>
+                      <value>予報　２１時間後</value>
+                      <value>予報　２４時間後</value>
+                      <value>予報　４５時間後</value>
+                      <value>予報　４８時間後</value>
+                      <value>予報　６９時間後</value>
+                      <value>予報　７２時間後</value>
+                      <value>延長予報　９６時間後</value>
+                      <value>延長予報　１２０時間後</value>
+                    </choice>
+                  </attribute>
+                </optional>
                 <ref name="jst_date_time"/>
               </element>
               <element name="jm:Item">
@@ -778,5 +774,28 @@
     <data type="string">
       <param name="pattern">北緯[０-９]{2}度[０-９]{2}分[東西]経[０-９]{3}度[０-９]{2}分</param>
     </data>
+  </define>
+  <define name="list_edof">
+    <data type="string">
+      <param name="pattern">気象庁本庁|.*気象台</param>
+    </data>
+  </define>
+  <define name="list_pbof">
+    <data type="string">
+      <param name="pattern">気象庁予報部|気象庁本庁|.*気象台</param>
+    </data>
+  </define>
+  <define name="list_infokind">
+    <choice>
+      <value>台風解析・予報情報（５日予報）</value>
+      <value>台風解析・予報情報（３日予報）</value>
+      <value>特殊気象報</value>
+    </choice>
+  </define>
+  <define name="list_jmtype">
+    <choice>
+      <value>季節観測</value>
+      <value>台風情報</value>
+    </choice>
   </define>
 </grammar>

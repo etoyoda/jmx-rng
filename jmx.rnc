@@ -1,11 +1,3 @@
-# 「台風解析・予報情報（５日予報）」の構造（状況把握用）
-#
-# 気象庁防災情報XMLフォーマット　技術資料
-# http://xml.kishou.go.jp/tec_material.html
-# の解説資料セット http://xml.kishou.go.jp/jmaxml_20120615_Manual(pdf).zip
-# の「台風解析・予報情報電文（新形式）_解説資料.pdf」
-# をもとにして３日予報を５日予報に改めたもの 
-
 namespace jx = "http://xml.kishou.go.jp/jmaxml1/"
 namespace jb = "http://xml.kishou.go.jp/jmaxml1/informationBasis1/"
 namespace jm = "http://xml.kishou.go.jp/jmaxml1/body/meteorology1/"
@@ -16,32 +8,28 @@ start = element jx:Report {
     element jx:Title {
       "台風解析・予報情報（５日予報）"
       | "台風解析・予報情報（３日予報）"
+      | "季節観測"
     },
     element jx:DateTime { utc_date_time },
     element jx:Status { "通常" | "訓練" | "試験" },
-    element jx:EditorialOffice { "気象庁本庁" },
-    element jx:PublishingOffice { "気象庁予報部" }
+    element jx:EditorialOffice { list_edof },
+    element jx:PublishingOffice { list_pbof }
   },
   element jb:Head {
-    element jb:Title { "台風解析・予報情報" },
+    element jb:Title { xsd:string },
     # 発表時刻
     element jb:ReportDateTime { jst_date_time },
     # 解析時刻
     element jb:TargetDateTime { jst_date_time },
     element jb:TargetDuration {
-      ## (1) jx:Control/jx:Title と同じ情報を与える
       "PT120H" | "PT72H"
-    },
+    }?,
     # TC番号
-    element jb:EventID { xsd:NMTOKEN { pattern = "TC\d\d\d\d" } },
+    element jb:EventID { xsd:NMTOKEN },
     element jb:InfoType { "発表" | "訂正" | "取消" },
     # 情報番号というが起算・加算条件は未詳
-    element jb:Serial { xsd:nonNegativeInteger },
-    element jb:InfoKind {
-      ## (2) jx:Control/jx:Title と同じ
-      "台風解析・予報情報（５日予報）"
-      | "台風解析・予報情報（３日予報）"
-    },
+    element jb:Serial { xsd:nonNegativeInteger? },
+    element jb:InfoKind { list_infokind },
     element jb:InfoKindVersion { "1.0_0" },
     element jb:Headline {
       element jb:Text { empty }
@@ -50,11 +38,14 @@ start = element jx:Report {
   element jm:Body {
     ## (3) 内部に jm:MeteorologicalInfo/jm:DateTime/@type=実況 は必ず存在する
     element jm:MeteorologicalInfos {
-      attribute type { "台風情報" },
+      attribute type { list_jmtype },
       element jm:MeteorologicalInfo {
         ## (4) text() は一意
         ## (5) @type は一意
         element jm:DateTime {
+          attribute significant {
+            "yyyy-mm-dd"
+          }?,
           attribute type {
             "実況"
             | "推定　１時間後"
@@ -72,7 +63,7 @@ start = element jx:Report {
             | "予報　７２時間後"
             | "延長予報　９６時間後"
             | "延長予報　１２０時間後"
-          },
+          }?,
           jst_date_time
         },
         element jm:Item {
@@ -469,3 +460,18 @@ latlon_sexagesimal_ja =
   xsd:string {
     pattern = "北緯[０-９]{2}度[０-９]{2}分[東西]経[０-９]{3}度[０-９]{2}分"
   }
+list_edof =
+  xsd:string {
+    pattern = "気象庁本庁|.*気象台"
+  }
+list_pbof =
+  xsd:string {
+    pattern = "気象庁予報部|気象庁本庁|.*気象台"
+  }
+list_infokind =
+  "台風解析・予報情報（５日予報）"
+  | "台風解析・予報情報（３日予報）"
+  | "特殊気象報"
+list_jmtype =
+  "季節観測"
+  | "台風情報"
