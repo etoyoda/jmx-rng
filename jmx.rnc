@@ -46,29 +46,12 @@ start = element jx:Report {
           attribute significant {
             "yyyy-mm-dd"
           }?,
-          attribute type {
-            "実況"
-            | "推定　１時間後"
-            | "予報　３時間後"
-            | "予報　６時間後"
-            | "予報　９時間後"
-            | "予報　１２時間後"
-            | "予報　１５時間後"
-            | "予報　１８時間後"
-            | "予報　２１時間後"
-            | "予報　２４時間後"
-            | "予報　４５時間後"
-            | "予報　４８時間後"
-            | "予報　６９時間後"
-            | "予報　７２時間後"
-            | "延長予報　９６時間後"
-            | "延長予報　１２０時間後"
-          }?,
+          attribute type { list_datetime_type }?,
           jst_date_time
         },
         element jm:Item {
-          ## (6) 呼称は実況のみ存在、実況には必ず存在
           element jm:Kind {
+            element jm:Name { xsd:NMTOKEN }?,
             element jm:Property {
               element jm:Type { "呼称" },
               element jm:TyphoonNamePart {
@@ -89,7 +72,7 @@ start = element jx:Report {
                   | "温帯低気圧化しつつある"
                 }
               }
-            }
+            }?
           }?,
           element jm:Kind {
             element jm:Property {
@@ -114,7 +97,7 @@ start = element jx:Report {
                 }?
               }
             }
-          },
+          }?,
           element jm:Kind {
             element jm:Property {
               element jm:Type { "中心" },
@@ -161,7 +144,7 @@ start = element jx:Report {
                 }?
               }
             }
-          },
+          }?,
 
           ## (13) 風は延長予報以外には常にある、ただし、Remark が
           ## "台風消滅（温帯低気圧化）"
@@ -234,6 +217,12 @@ start = element jx:Report {
                 }
               }*
             }
+          }?,
+
+          element jm:Station {
+            element jm:Name { xsd:NMTOKEN }?,
+            element jm:Code { xsd:NMTOKEN }?,
+            element jm:Location { xsd:NMTOKEN }?
           }?,
 
           ## Item について、
@@ -475,3 +464,20 @@ list_infokind =
 list_jmtype =
   "季節観測"
   | "台風情報"
+list_datetime_type =
+  "実況"
+  | "推定　１時間後"
+  | "予報　３時間後"
+  | "予報　６時間後"
+  | "予報　９時間後"
+  | "予報　１２時間後"
+  | "予報　１５時間後"
+  | "予報　１８時間後"
+  | "予報　２１時間後"
+  | "予報　２４時間後"
+  | "予報　４５時間後"
+  | "予報　４８時間後"
+  | "予報　６９時間後"
+  | "予報　７２時間後"
+  | "延長予報　９６時間後"
+  | "延長予報　１２０時間後"
