@@ -5,11 +5,7 @@
       <group>
         <element name="jx:Control">
           <element name="jx:Title">
-            <choice>
-              <value>台風解析・予報情報（５日予報）</value>
-              <value>台風解析・予報情報（３日予報）</value>
-              <value>季節観測</value>
-            </choice>
+            <ref name="list_title"/>
           </element>
           <element name="jx:DateTime">
             <ref name="utc_date_time"/>
@@ -30,7 +26,7 @@
         </element>
         <element name="jb:Head">
           <element name="jb:Title">
-            <data type="string"/>
+            <data type="token"/>
           </element>
           <!-- 発表時刻 -->
           <element name="jb:ReportDateTime">
@@ -68,6 +64,7 @@
           <element name="jb:InfoKind">
             <ref name="list_infokind"/>
           </element>
+          <!-- we can simply ignore this -->
           <element name="jb:InfoKindVersion">
             <value>1.0_0</value>
           </element>
@@ -79,7 +76,6 @@
         </element>
         <element name="jm:Body">
           <element name="jm:MeteorologicalInfos">
-            <a:documentation>(3) 内部に jm:MeteorologicalInfo/jm:DateTime/@type=実況 は必ず存在する</a:documentation>
             <attribute name="type">
               <ref name="list_jmtype"/>
             </attribute>
@@ -87,8 +83,6 @@
               <element name="jm:MeteorologicalInfo">
                 <group>
                   <element name="jm:DateTime">
-                    <a:documentation>(4) text() は一意
-(5) @type は一意</a:documentation>
                     <optional>
                       <attribute name="significant">
                         <value>yyyy-mm-dd</value>
@@ -104,6 +98,11 @@
                   <element name="jm:Item">
                     <group>
                       <optional>
+                        <!--
+                          here can be unbounded number of elements jm:Kind
+                          with various internal structure to deliver various type of meteorological data
+                        -->
+                        <!-- name of tropical depression -->
                         <element name="jm:Kind">
                           <optional>
                             <element name="jm:Name">
@@ -150,6 +149,7 @@
                         </element>
                       </optional>
                       <optional>
+                        <!-- class of tropical depression -->
                         <element name="jm:Kind">
                           <element name="jm:Property">
                             <element name="jm:Type">
@@ -197,6 +197,7 @@
                         </element>
                       </optional>
                       <optional>
+                        <!-- center location of tropical depression -->
                         <element name="jm:Kind">
                           <element name="jm:Property">
                             <element name="jm:Type">
@@ -305,12 +306,8 @@
                         </element>
                       </optional>
                       <optional>
+                        <!-- wind associated with tropical depression -->
                         <element name="jm:Kind">
-                          <a:documentation>(13) 風は延長予報以外には常にある、ただし、Remark が
-"台風消滅（温帯低気圧化）"
-"台風消滅（熱帯低気圧化）"
-"台風発生の可能性が小さくなった"
-の場合はその限りでない</a:documentation>
                           <element name="jm:Property">
                             <element name="jm:Type">
                               <value>風</value>
@@ -429,6 +426,24 @@
                         </element>
                       </optional>
                       <optional>
+                        <element name="jm:Kind">
+                          <element name="jm:Name">
+                            <data type="string">
+                              <param name="pattern">.*日</param>
+                            </data>
+                          </element>
+                          <element name="jm:Code">
+                            <data type="positiveInteger"/>
+                          </element>
+                          <element name="jm:ClassName">
+                            <data type="token"/>
+                          </element>
+                          <element name="jm:Condition">
+                            <value>通常</value>
+                          </element>
+                        </element>
+                      </optional>
+                      <optional>
                         <element name="jm:Station">
                           <optional>
                             <element name="jm:Name">
@@ -446,6 +461,14 @@
                           <optional>
                             <element name="jm:Location">
                               <data type="NMTOKEN"/>
+                            </element>
+                          </optional>
+                          <optional>
+                            <element name="jm:Status">
+                              <choice>
+                                <value>付近</value>
+                                <value>構内</value>
+                              </choice>
                             </element>
                           </optional>
                         </element>
@@ -491,12 +514,19 @@
             <!-- jm:MeteorologicalInfos -->
             <element name="jm:AdditionalInfo">
               <element name="jm:ObservationAddition">
-                <element name="jm:DeviationFromNormal">
-                  <data type="integer"/>
-                </element>
+                <optional>
+                  <element name="jm:DeviationFromNormal">
+                    <data type="integer"/>
+                  </element>
+                </optional>
                 <element name="jm:DeviationFromLastYear">
                   <data type="integer"/>
                 </element>
+                <optional>
+                  <element name="jm:Text">
+                    <data type="token"/>
+                  </element>
+                </optional>
               </element>
             </element>
           </optional>
@@ -829,12 +859,14 @@
       <value>台風解析・予報情報（５日予報）</value>
       <value>台風解析・予報情報（３日予報）</value>
       <value>特殊気象報</value>
+      <value>生物季節観測報告気象報</value>
     </choice>
   </define>
   <define name="list_jmtype">
     <choice>
       <value>季節観測</value>
       <value>台風情報</value>
+      <value>生物季節観測</value>
     </choice>
   </define>
   <define name="list_datetime_type">
@@ -855,6 +887,14 @@
       <value>予報　７２時間後</value>
       <value>延長予報　９６時間後</value>
       <value>延長予報　１２０時間後</value>
+    </choice>
+  </define>
+  <define name="list_title">
+    <choice>
+      <value>台風解析・予報情報（５日予報）</value>
+      <value>台風解析・予報情報（３日予報）</value>
+      <value>季節観測</value>
+      <value>生物季節観測</value>
     </choice>
   </define>
 </grammar>

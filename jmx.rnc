@@ -5,18 +5,14 @@ namespace je = "http://xml.kishou.go.jp/jmaxml1/elementBasis1/"
 
 start = element jx:Report {
   element jx:Control {
-    element jx:Title {
-      "台風解析・予報情報（５日予報）"
-      | "台風解析・予報情報（３日予報）"
-      | "季節観測"
-    },
+    element jx:Title { list_title },
     element jx:DateTime { utc_date_time },
     element jx:Status { "通常" | "訓練" | "試験" },
     element jx:EditorialOffice { list_edof },
     element jx:PublishingOffice { list_pbof }
   },
   element jb:Head {
-    element jb:Title { xsd:string },
+    element jb:Title { xsd:token },
     # 発表時刻
     element jb:ReportDateTime { jst_date_time },
     # 解析時刻
@@ -30,18 +26,16 @@ start = element jx:Report {
     # 情報番号というが起算・加算条件は未詳
     element jb:Serial { xsd:nonNegativeInteger? },
     element jb:InfoKind { list_infokind },
+    # we can simply ignore this
     element jb:InfoKindVersion { "1.0_0" },
     element jb:Headline {
       element jb:Text { empty }
     }
   },
   element jm:Body {
-    ## (3) 内部に jm:MeteorologicalInfo/jm:DateTime/@type=実況 は必ず存在する
     element jm:MeteorologicalInfos {
       attribute type { list_jmtype },
       element jm:MeteorologicalInfo {
-        ## (4) text() は一意
-        ## (5) @type は一意
         element jm:DateTime {
           attribute significant {
             "yyyy-mm-dd"
@@ -50,6 +44,11 @@ start = element jx:Report {
           jst_date_time
         },
         element jm:Item {
+
+          # here can be unbounded number of elements jm:Kind
+          # with various internal structure to deliver various type of meteorological data
+
+          # name of tropical depression
           element jm:Kind {
             element jm:Name { xsd:NMTOKEN }?,
             element jm:Property {
@@ -74,6 +73,8 @@ start = element jx:Report {
               }
             }?
           }?,
+
+          # class of tropical depression
           element jm:Kind {
             element jm:Property {
               element jm:Type { "階級" },
@@ -98,6 +99,8 @@ start = element jx:Report {
               }
             }
           }?,
+
+          # center location of tropical depression
           element jm:Kind {
             element jm:Property {
               element jm:Type { "中心" },
@@ -146,11 +149,7 @@ start = element jx:Report {
             }
           }?,
 
-          ## (13) 風は延長予報以外には常にある、ただし、Remark が
-          ## "台風消滅（温帯低気圧化）"
-          ## "台風消滅（熱帯低気圧化）"
-          ## "台風発生の可能性が小さくなった"
-          ## の場合はその限りでない
+          # wind associated with tropical depression
           element jm:Kind {
             element jm:Property {
               element jm:Type { "風" },
@@ -219,12 +218,20 @@ start = element jx:Report {
             }
           }?,
 
+          element jm:Kind {
+            element jm:Name { xsd:string { pattern = ".*日" }},
+            element jm:Code { xsd:positiveInteger },
+            element jm:ClassName { xsd:token },
+            element jm:Condition { "通常" }
+          }?,
+
           element jm:Station {
             element jm:Name { xsd:NMTOKEN }?,
             element jm:Code {
               attribute type { "国際地点番号" },
               xsd:positiveInteger }?,
-            element jm:Location { xsd:NMTOKEN }?
+            element jm:Location { xsd:NMTOKEN }?,
+            element jm:Status { "付近" | "構内" }?
           }?,
 
           ## Item について、
@@ -256,8 +263,9 @@ start = element jx:Report {
 
           element jm:AdditionalInfo {
             element jm:ObservationAddition {
-              element jm:DeviationFromNormal { xsd:integer },
-              element jm:DeviationFromLastYear { xsd:integer }
+              element jm:DeviationFromNormal { xsd:integer }?,
+              element jm:DeviationFromLastYear { xsd:integer },
+              element jm:Text { xsd:token }?
             }
           }?
   } # jm:Body
@@ -470,9 +478,11 @@ list_infokind =
   "台風解析・予報情報（５日予報）"
   | "台風解析・予報情報（３日予報）"
   | "特殊気象報"
+  | "生物季節観測報告気象報"
 list_jmtype =
   "季節観測"
   | "台風情報"
+  | "生物季節観測"
 list_datetime_type =
   "実況"
   | "推定　１時間後"
@@ -490,3 +500,7 @@ list_datetime_type =
   | "予報　７２時間後"
   | "延長予報　９６時間後"
   | "延長予報　１２０時間後"
+list_title = "台風解析・予報情報（５日予報）"
+      | "台風解析・予報情報（３日予報）"
+      | "季節観測"
+      | "生物季節観測"
