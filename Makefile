@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 test: jmx.rng samples
-	for xml in samples/*.xml; do echo ===$$xml=== ; jing jmx.rng $$xml || break; done
+	bash validate.sh
 
 jmx.rng: jmx.rnc
 	trang jmx.rnc jmx.rng

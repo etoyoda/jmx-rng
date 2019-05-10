@@ -21,7 +21,7 @@ start = element jx:Report {
       "PT120H" | "PT72H"
     }?,
     # TC番号
-    element jb:EventID { xsd:NMTOKEN },
+    element jb:EventID { empty | xsd:token },
     element jb:InfoType { "発表" | "訂正" | "取消" },
     # 情報番号というが起算・加算条件は未詳
     element jb:Serial { xsd:nonNegativeInteger? },
@@ -32,7 +32,8 @@ start = element jx:Report {
       element jb:Text { empty }
     }
   },
-  (content_vgsk50_kisetsu | content_vgsk55_seibutsu | content_vgsk60_tokushu)
+  (content_vgsk50_kisetsu |content_vgsk55_seibutsu |content_vgsk60_tokushu
+  |content_vguv50_shigaisen )
 }
 
 content_vgsk50_kisetsu =
@@ -133,6 +134,63 @@ content_vgsk60_tokushu =
         element jm:Text { xsd:token }
       }
     }
+  }
+
+content_vguv50_shigaisen =
+  element jm:Body {
+    element jm:MeteorologicalInfos {
+      attribute type { "紫外線観測データ" }
+      ,element jm:TimeSeriesInfo {
+        element jm:TimeDefines {
+          element jm:TimeDefine {
+            attribute timeId { xsd:positiveInteger }
+            ,element jm:DateTime { jst_date_time }
+          }+
+        }
+        ,element jm:Item {
+          element jm:Kind {
+            element jm:Property {
+              element jm:Type { "太陽天頂角" }
+              ,element jm:SolarZenithAnglePart {
+                element je:SolarZenithAngle {
+                  attribute unit { "度" }
+                  ,attribute refID { xsd:positiveInteger }
+                  ,xsd:float
+                }+
+              }
+            }
+          }
+          ,element jm:Kind {
+            element jm:Property {
+              element jm:Type { "ＵＶインデックス" }
+              ,element jm:UvIndexPart {
+                element je:UvIndex {
+                  attribute refID { xsd:positiveInteger }
+                  ,(empty | xsd:float)
+                }+
+              }
+            }
+          }
+          ,element jm:Station {
+            element jm:Name { xsd:token }
+            ,element jm:Code {
+              attribute type { "気象・地震・火山情報／市町村等" }
+              ,xsd:positiveInteger
+            }
+            ,element jm:Code {
+              attribute type { "国際地点番号" }
+              ,xsd:positiveInteger
+            }
+            ,element jm:Code {
+              attribute type { "WOUDC地点番号" }
+              ,xsd:positiveInteger
+            }
+            ,element jm:Location { xsd:token }
+            ,element je:Coordinate { latlon_decimal3_ascii }
+          }
+        }+ # jm:Item
+      } # jm:TimeSeriesInfo
+    } # jm:MeteorologicalInfos
   }
 
 content_vptxxx_typhoon =
@@ -520,6 +578,11 @@ jst_date_time =
     pattern = "\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\+09:00"
   }
 
+latlon_decimal3_ascii =
+  xsd:string {
+    pattern = "\+\d\d\.\d\d\d[\-+]\d\d\d\.\d\d\d/"
+  }
+
 latlon_decimal_ascii =
   xsd:string {
     pattern = "\+\d\d\.\d[\-+]\d\d\d\.\d/"
@@ -539,19 +602,24 @@ latlon_sexagesimal_ja =
   xsd:string {
     pattern = "北緯[０-９]{2}度[０-９]{2}分[東西]経[０-９]{3}度[０-９]{2}分"
   }
+
 list_edof =
   xsd:string {
     pattern = "気象庁本庁|.*気象台"
   }
+
 list_pbof =
   xsd:string {
-    pattern = "気象庁予報部|気象庁本庁|.*気象台"
+    pattern = "気象庁予報部|気象庁地球環境・海洋部|気象庁本庁|.*気象台"
   }
+
 list_infokind =
   "台風解析・予報情報（５日予報）"
   | "台風解析・予報情報（３日予報）"
   | "特殊気象報"
   | "生物季節観測報告気象報"
+  | "環境気象情報"
+
 list_typh_datetime =
   "実況"
   | "推定　１時間後"
@@ -569,8 +637,10 @@ list_typh_datetime =
   | "予報　７２時間後"
   | "延長予報　９６時間後"
   | "延長予報　１２０時間後"
+
 list_title = "台風解析・予報情報（５日予報）"
       | "台風解析・予報情報（３日予報）"
       | "季節観測"
       | "生物季節観測"
       | "特殊気象報"
+      | "紫外線観測データ"

@@ -45,7 +45,10 @@
         </optional>
         <!-- TC番号 -->
         <element name="jb:EventID">
-          <data type="NMTOKEN"/>
+          <choice>
+            <empty/>
+            <data type="token"/>
+          </choice>
         </element>
         <element name="jb:InfoType">
           <choice>
@@ -77,6 +80,7 @@
         <ref name="content_vgsk50_kisetsu"/>
         <ref name="content_vgsk55_seibutsu"/>
         <ref name="content_vgsk60_tokushu"/>
+        <ref name="content_vguv50_shigaisen"/>
       </choice>
     </element>
   </start>
@@ -244,6 +248,109 @@
           </element>
         </element>
       </element>
+    </element>
+  </define>
+  <define name="content_vguv50_shigaisen">
+    <element name="jm:Body">
+      <element name="jm:MeteorologicalInfos">
+        <group>
+          <attribute name="type">
+            <value>紫外線観測データ</value>
+          </attribute>
+          <element name="jm:TimeSeriesInfo">
+            <group>
+              <element name="jm:TimeDefines">
+                <oneOrMore>
+                  <element name="jm:TimeDefine">
+                    <attribute name="timeId">
+                      <data type="positiveInteger"/>
+                    </attribute>
+                    <element name="jm:DateTime">
+                      <ref name="jst_date_time"/>
+                    </element>
+                  </element>
+                </oneOrMore>
+              </element>
+              <oneOrMore>
+                <element name="jm:Item">
+                  <element name="jm:Kind">
+                    <element name="jm:Property">
+                      <element name="jm:Type">
+                        <value>太陽天頂角</value>
+                      </element>
+                      <element name="jm:SolarZenithAnglePart">
+                        <oneOrMore>
+                          <element name="je:SolarZenithAngle">
+                            <attribute name="unit">
+                              <value>度</value>
+                            </attribute>
+                            <attribute name="refID">
+                              <data type="positiveInteger"/>
+                            </attribute>
+                            <data type="float"/>
+                          </element>
+                        </oneOrMore>
+                      </element>
+                    </element>
+                  </element>
+                  <element name="jm:Kind">
+                    <element name="jm:Property">
+                      <element name="jm:Type">
+                        <value>ＵＶインデックス</value>
+                      </element>
+                      <element name="jm:UvIndexPart">
+                        <oneOrMore>
+                          <element name="je:UvIndex">
+                            <attribute name="refID">
+                              <data type="positiveInteger"/>
+                            </attribute>
+                            <choice>
+                              <empty/>
+                              <data type="float"/>
+                            </choice>
+                          </element>
+                        </oneOrMore>
+                      </element>
+                    </element>
+                  </element>
+                  <element name="jm:Station">
+                    <element name="jm:Name">
+                      <data type="token"/>
+                    </element>
+                    <element name="jm:Code">
+                      <attribute name="type">
+                        <value>気象・地震・火山情報／市町村等</value>
+                      </attribute>
+                      <data type="positiveInteger"/>
+                    </element>
+                    <element name="jm:Code">
+                      <attribute name="type">
+                        <value>国際地点番号</value>
+                      </attribute>
+                      <data type="positiveInteger"/>
+                    </element>
+                    <element name="jm:Code">
+                      <attribute name="type">
+                        <value>WOUDC地点番号</value>
+                      </attribute>
+                      <data type="positiveInteger"/>
+                    </element>
+                    <element name="jm:Location">
+                      <data type="token"/>
+                    </element>
+                    <element name="je:Coordinate">
+                      <ref name="latlon_decimal3_ascii"/>
+                    </element>
+                  </element>
+                </element>
+              </oneOrMore>
+            </group>
+            <!-- jm:Item -->
+          </element>
+        </group>
+        <!-- jm:TimeSeriesInfo -->
+      </element>
+      <!-- jm:MeteorologicalInfos -->
     </element>
   </define>
   <define name="content_vptxxx_typhoon">
@@ -909,6 +1016,11 @@
       <param name="pattern">\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\+09:00</param>
     </data>
   </define>
+  <define name="latlon_decimal3_ascii">
+    <data type="string">
+      <param name="pattern">\+\d\d\.\d\d\d[\-+]\d\d\d\.\d\d\d/</param>
+    </data>
+  </define>
   <define name="latlon_decimal_ascii">
     <data type="string">
       <param name="pattern">\+\d\d\.\d[\-+]\d\d\d\.\d/</param>
@@ -936,7 +1048,7 @@
   </define>
   <define name="list_pbof">
     <data type="string">
-      <param name="pattern">気象庁予報部|気象庁本庁|.*気象台</param>
+      <param name="pattern">気象庁予報部|気象庁地球環境・海洋部|気象庁本庁|.*気象台</param>
     </data>
   </define>
   <define name="list_infokind">
@@ -945,6 +1057,7 @@
       <value>台風解析・予報情報（３日予報）</value>
       <value>特殊気象報</value>
       <value>生物季節観測報告気象報</value>
+      <value>環境気象情報</value>
     </choice>
   </define>
   <define name="list_typh_datetime">
@@ -974,6 +1087,7 @@
       <value>季節観測</value>
       <value>生物季節観測</value>
       <value>特殊気象報</value>
+      <value>紫外線観測データ</value>
     </choice>
   </define>
 </grammar>
