@@ -32,25 +32,122 @@ start = element jx:Report {
       element jb:Text { empty }
     }
   },
+  (content_vgsk50_kisetsu | content_vgsk55_seibutsu | content_vgsk60_tokushu)
+}
+
+content_vgsk50_kisetsu =
   element jm:Body {
     element jm:MeteorologicalInfos {
-      attribute type { list_jmtype },
-      element jm:MeteorologicalInfo {
+      attribute type { "季節観測" }
+      ,element jm:MeteorologicalInfo {
         element jm:DateTime {
-          attribute significant {
-            "yyyy-mm-dd"
-          }?,
-          attribute type { list_datetime_type }?,
+          attribute significant { "yyyy-mm-dd" }
+          ,jst_date_time
+        }
+        ,element jm:Item {
+          element jm:Kind {
+            element jm:Name { xsd:token }
+          }
+          ,element jm:Station {
+            element jm:Name { xsd:token }
+            ,element jm:Code {
+              attribute type { "国際地点番号" }
+              ,xsd:positiveInteger
+            }?
+            ,element jm:Location { xsd:NMTOKEN }
+          }
+        }
+      }
+    }
+    ,element jm:AdditionalInfo {
+      element jm:ObservationAddition {
+        element jm:DeviationFromNormal { xsd:integer }
+        ,element jm:DeviationFromLastYear { xsd:integer }
+      }
+    }
+  }
+
+content_vgsk55_seibutsu =
+  element jm:Body {
+    element jm:MeteorologicalInfos {
+      attribute type { "生物季節観測" }
+      ,element jm:MeteorologicalInfo {
+        element jm:DateTime {
+          attribute significant { "yyyy-mm-dd" }
+          ,jst_date_time
+        }
+        ,element jm:Item {
+          element jm:Kind {
+            element jm:Name { xsd:token }
+            ,element jm:Code { xsd:positiveInteger }
+            ,element jm:ClassName { xsd:token }
+            ,element jm:Condition { "通常" }
+          }
+          ,element jm:Station {
+            element jm:Name { xsd:token }
+            ,element jm:Code {
+              attribute type { "国際地点番号" }
+              ,xsd:positiveInteger
+            }?
+            ,element jm:Location { xsd:NMTOKEN }
+            ,element jm:Status { xsd:NMTOKEN }
+          }
+        }
+      }
+    }
+    ,element jm:AdditionalInfo {
+      element jm:ObservationAddition {
+        element jm:DeviationFromNormal { xsd:integer }?
+        ,element jm:DeviationFromLastYear { xsd:integer }
+        ,element jm:Text { xsd:token }?
+      }
+    }
+  }
+
+content_vgsk60_tokushu =
+  element jm:Body {
+    element jm:MeteorologicalInfos {
+      attribute type { "特殊気象報（各種現象）" }
+      ,element jm:MeteorologicalInfo {
+        element jm:DateTime {
+          attribute significant { "yyyy-mm-ddThh:mm" }
+          ,jst_date_time
+        }
+        ,element jm:Item {
+          element jm:Kind {
+            element jm:Name { xsd:token }
+          }
+          ,element jm:Station {
+            element jm:Name { xsd:token }
+            ,element jm:Code {
+              attribute type { "国際地点番号" }
+              ,xsd:positiveInteger
+            }?
+            ,element jm:Location { xsd:NMTOKEN }
+          }
+        }
+      }
+    }
+    ,element jm:AdditionalInfo {
+      element jm:ObservationAddition {
+        element jm:Text { xsd:token }
+      }
+    }
+  }
+
+content_vptxxx_typhoon =
+  element jm:Body {
+    element jm:MeteorologicalInfos {
+      attribute type { "台風情報" }
+      ,element jm:MeteorologicalInfo {
+        element jm:DateTime {
+          attribute type { list_typh_datetime },
           jst_date_time
         },
         element jm:Item {
 
-          # here can be unbounded number of elements jm:Kind
-          # with various internal structure to deliver various type of meteorological data
-
           # name of tropical depression
           element jm:Kind {
-            element jm:Name { xsd:NMTOKEN }?,
             element jm:Property {
               element jm:Type { "呼称" },
               element jm:TyphoonNamePart {
@@ -218,22 +315,6 @@ start = element jx:Report {
             }
           }?,
 
-          element jm:Kind {
-            element jm:Name { xsd:string { pattern = ".*日" }},
-            element jm:Code { xsd:positiveInteger },
-            element jm:ClassName { xsd:token },
-            element jm:Condition { "通常" }
-          }?,
-
-          element jm:Station {
-            element jm:Name { xsd:NMTOKEN }?,
-            element jm:Code {
-              attribute type { "国際地点番号" },
-              xsd:positiveInteger }?,
-            element jm:Location { xsd:NMTOKEN }?,
-            element jm:Status { "付近" | "構内" }?
-          }?,
-
           ## Item について、
           ## (17) 実況・推定には常に強風域 Area が存在
           ## (18) 予報・延長予報には常に予報円 Area が存在
@@ -259,17 +340,11 @@ start = element jx:Report {
 
         } # jm:Item
       }+
-    }, # jm:MeteorologicalInfos
-
-          element jm:AdditionalInfo {
-            element jm:ObservationAddition {
-              element jm:DeviationFromNormal { xsd:integer }?,
-              element jm:DeviationFromLastYear { xsd:integer },
-              element jm:Text { xsd:token }?
-            }
-          }?
+    } # jm:MeteorologicalInfos
   } # jm:Body
-}
+
+
+### === complex data types ===
 
 # basepoint_pair と酷似構造であることを見やすくするため別ルール建て
 coordinate_pair =
@@ -384,9 +459,7 @@ radii_yohouen =
     }
   }
 
-#
-# 以下はデータ型
-#
+### === simple data types ===
 
 typhoon_class =
   "台風(TY)"
@@ -479,11 +552,7 @@ list_infokind =
   | "台風解析・予報情報（３日予報）"
   | "特殊気象報"
   | "生物季節観測報告気象報"
-list_jmtype =
-  "季節観測"
-  | "台風情報"
-  | "生物季節観測"
-list_datetime_type =
+list_typh_datetime =
   "実況"
   | "推定　１時間後"
   | "予報　３時間後"
@@ -504,3 +573,4 @@ list_title = "台風解析・予報情報（５日予報）"
       | "台風解析・予報情報（３日予報）"
       | "季節観測"
       | "生物季節観測"
+      | "特殊気象報"
