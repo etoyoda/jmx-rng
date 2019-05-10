@@ -221,7 +221,9 @@ start = element jx:Report {
 
           element jm:Station {
             element jm:Name { xsd:NMTOKEN }?,
-            element jm:Code { xsd:NMTOKEN }?,
+            element jm:Code {
+              attribute type { "国際地点番号" },
+              xsd:positiveInteger }?,
             element jm:Location { xsd:NMTOKEN }?
           }?,
 
@@ -246,12 +248,19 @@ start = element jx:Report {
                 radii_yohouen
               }
             )
-          }
+          }? # jm:Area
 
-        }
+        } # jm:Item
       }+
-    }
-  }
+    }, # jm:MeteorologicalInfos
+
+          element jm:AdditionalInfo {
+            element jm:ObservationAddition {
+              element jm:DeviationFromNormal { xsd:integer },
+              element jm:DeviationFromLastYear { xsd:integer }
+            }
+          }?
+  } # jm:Body
 }
 
 # basepoint_pair と酷似構造であることを見やすくするため別ルール建て

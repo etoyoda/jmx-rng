@@ -2,381 +2,384 @@
 <grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:jm="http://xml.kishou.go.jp/jmaxml1/body/meteorology1/" xmlns:jb="http://xml.kishou.go.jp/jmaxml1/informationBasis1/" xmlns:je="http://xml.kishou.go.jp/jmaxml1/elementBasis1/" xmlns:jx="http://xml.kishou.go.jp/jmaxml1/" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <start>
     <element name="jx:Report">
-      <element name="jx:Control">
-        <element name="jx:Title">
-          <choice>
-            <value>台風解析・予報情報（５日予報）</value>
-            <value>台風解析・予報情報（３日予報）</value>
-            <value>季節観測</value>
-          </choice>
-        </element>
-        <element name="jx:DateTime">
-          <ref name="utc_date_time"/>
-        </element>
-        <element name="jx:Status">
-          <choice>
-            <value>通常</value>
-            <value>訓練</value>
-            <value>試験</value>
-          </choice>
-        </element>
-        <element name="jx:EditorialOffice">
-          <ref name="list_edof"/>
-        </element>
-        <element name="jx:PublishingOffice">
-          <ref name="list_pbof"/>
-        </element>
-      </element>
-      <element name="jb:Head">
-        <element name="jb:Title">
-          <data type="string"/>
-        </element>
-        <!-- 発表時刻 -->
-        <element name="jb:ReportDateTime">
-          <ref name="jst_date_time"/>
-        </element>
-        <!-- 解析時刻 -->
-        <element name="jb:TargetDateTime">
-          <ref name="jst_date_time"/>
-        </element>
-        <optional>
-          <element name="jb:TargetDuration">
+      <group>
+        <element name="jx:Control">
+          <element name="jx:Title">
             <choice>
-              <value>PT120H</value>
-              <value>PT72H</value>
+              <value>台風解析・予報情報（５日予報）</value>
+              <value>台風解析・予報情報（３日予報）</value>
+              <value>季節観測</value>
             </choice>
           </element>
-        </optional>
-        <!-- TC番号 -->
-        <element name="jb:EventID">
-          <data type="NMTOKEN"/>
-        </element>
-        <element name="jb:InfoType">
-          <choice>
-            <value>発表</value>
-            <value>訂正</value>
-            <value>取消</value>
-          </choice>
-        </element>
-        <!-- 情報番号というが起算・加算条件は未詳 -->
-        <element name="jb:Serial">
-          <optional>
-            <data type="nonNegativeInteger"/>
-          </optional>
-        </element>
-        <element name="jb:InfoKind">
-          <ref name="list_infokind"/>
-        </element>
-        <element name="jb:InfoKindVersion">
-          <value>1.0_0</value>
-        </element>
-        <element name="jb:Headline">
-          <element name="jb:Text">
-            <empty/>
+          <element name="jx:DateTime">
+            <ref name="utc_date_time"/>
+          </element>
+          <element name="jx:Status">
+            <choice>
+              <value>通常</value>
+              <value>訓練</value>
+              <value>試験</value>
+            </choice>
+          </element>
+          <element name="jx:EditorialOffice">
+            <ref name="list_edof"/>
+          </element>
+          <element name="jx:PublishingOffice">
+            <ref name="list_pbof"/>
           </element>
         </element>
-      </element>
-      <element name="jm:Body">
-        <element name="jm:MeteorologicalInfos">
-          <a:documentation>(3) 内部に jm:MeteorologicalInfo/jm:DateTime/@type=実況 は必ず存在する</a:documentation>
-          <attribute name="type">
-            <ref name="list_jmtype"/>
-          </attribute>
-          <oneOrMore>
-            <element name="jm:MeteorologicalInfo">
-              <element name="jm:DateTime">
-                <a:documentation>(4) text() は一意
+        <element name="jb:Head">
+          <element name="jb:Title">
+            <data type="string"/>
+          </element>
+          <!-- 発表時刻 -->
+          <element name="jb:ReportDateTime">
+            <ref name="jst_date_time"/>
+          </element>
+          <!-- 解析時刻 -->
+          <element name="jb:TargetDateTime">
+            <ref name="jst_date_time"/>
+          </element>
+          <optional>
+            <element name="jb:TargetDuration">
+              <choice>
+                <value>PT120H</value>
+                <value>PT72H</value>
+              </choice>
+            </element>
+          </optional>
+          <!-- TC番号 -->
+          <element name="jb:EventID">
+            <data type="NMTOKEN"/>
+          </element>
+          <element name="jb:InfoType">
+            <choice>
+              <value>発表</value>
+              <value>訂正</value>
+              <value>取消</value>
+            </choice>
+          </element>
+          <!-- 情報番号というが起算・加算条件は未詳 -->
+          <element name="jb:Serial">
+            <optional>
+              <data type="nonNegativeInteger"/>
+            </optional>
+          </element>
+          <element name="jb:InfoKind">
+            <ref name="list_infokind"/>
+          </element>
+          <element name="jb:InfoKindVersion">
+            <value>1.0_0</value>
+          </element>
+          <element name="jb:Headline">
+            <element name="jb:Text">
+              <empty/>
+            </element>
+          </element>
+        </element>
+        <element name="jm:Body">
+          <element name="jm:MeteorologicalInfos">
+            <a:documentation>(3) 内部に jm:MeteorologicalInfo/jm:DateTime/@type=実況 は必ず存在する</a:documentation>
+            <attribute name="type">
+              <ref name="list_jmtype"/>
+            </attribute>
+            <oneOrMore>
+              <element name="jm:MeteorologicalInfo">
+                <group>
+                  <element name="jm:DateTime">
+                    <a:documentation>(4) text() は一意
 (5) @type は一意</a:documentation>
-                <optional>
-                  <attribute name="significant">
-                    <value>yyyy-mm-dd</value>
-                  </attribute>
-                </optional>
-                <optional>
-                  <attribute name="type">
-                    <ref name="list_datetime_type"/>
-                  </attribute>
-                </optional>
-                <ref name="jst_date_time"/>
-              </element>
-              <element name="jm:Item">
-                <optional>
-                  <element name="jm:Kind">
                     <optional>
-                      <element name="jm:Name">
-                        <data type="NMTOKEN"/>
-                      </element>
+                      <attribute name="significant">
+                        <value>yyyy-mm-dd</value>
+                      </attribute>
                     </optional>
                     <optional>
-                      <element name="jm:Property">
-                        <element name="jm:Type">
-                          <value>呼称</value>
-                        </element>
-                        <element name="jm:TyphoonNamePart">
-                          <element name="jm:Name">
-                            <data type="string">
-                              <param name="pattern">[\-A-Z]*</param>
-                            </data>
-                          </element>
-                          <element name="jm:NameKana">
-                            <ref name="all_katakana_or_empty"/>
-                          </element>
-                          <element name="jm:Number">
-                            <optional>
-                              <data type="nonNegativeInteger"/>
-                            </optional>
-                          </element>
-                          <element name="jm:Remark">
-                            <choice>
-                              <empty/>
-                              <value>台風発生</value>
-                              <value>台風発生（域外から入る）</value>
-                              <value>台風消滅（域外へ出る）</value>
-                              <value>台風消滅（温帯低気圧化）</value>
-                              <value>台風消滅（熱帯低気圧化）</value>
-                              <value>台風発生の可能性が小さくなった</value>
-                              <value>発表間隔変更（毎時から３時間毎）</value>
-                              <value>発表間隔変更（３時間毎から毎時）</value>
-                              <value>台風発生予想</value>
-                              <value>温帯低気圧化しつつある</value>
-                            </choice>
-                          </element>
-                        </element>
-                      </element>
+                      <attribute name="type">
+                        <ref name="list_datetime_type"/>
+                      </attribute>
                     </optional>
+                    <ref name="jst_date_time"/>
                   </element>
-                </optional>
-                <optional>
-                  <element name="jm:Kind">
-                    <element name="jm:Property">
-                      <element name="jm:Type">
-                        <value>階級</value>
-                      </element>
-                      <element name="jm:ClassPart">
-                        <a:documentation>(8) 後述</a:documentation>
-                        <element name="je:TyphoonClass">
-                          <a:documentation>(7) 空になるのは延長予報だけ</a:documentation>
-                          <attribute name="type">
-                            <value>熱帯擾乱種類</value>
-                          </attribute>
-                          <choice>
-                            <empty/>
-                            <ref name="typhoon_class"/>
-                          </choice>
+                  <element name="jm:Item">
+                    <group>
+                      <optional>
+                        <element name="jm:Kind">
+                          <optional>
+                            <element name="jm:Name">
+                              <data type="NMTOKEN"/>
+                            </element>
+                          </optional>
+                          <optional>
+                            <element name="jm:Property">
+                              <element name="jm:Type">
+                                <value>呼称</value>
+                              </element>
+                              <element name="jm:TyphoonNamePart">
+                                <element name="jm:Name">
+                                  <data type="string">
+                                    <param name="pattern">[\-A-Z]*</param>
+                                  </data>
+                                </element>
+                                <element name="jm:NameKana">
+                                  <ref name="all_katakana_or_empty"/>
+                                </element>
+                                <element name="jm:Number">
+                                  <optional>
+                                    <data type="nonNegativeInteger"/>
+                                  </optional>
+                                </element>
+                                <element name="jm:Remark">
+                                  <choice>
+                                    <empty/>
+                                    <value>台風発生</value>
+                                    <value>台風発生（域外から入る）</value>
+                                    <value>台風消滅（域外へ出る）</value>
+                                    <value>台風消滅（温帯低気圧化）</value>
+                                    <value>台風消滅（熱帯低気圧化）</value>
+                                    <value>台風発生の可能性が小さくなった</value>
+                                    <value>発表間隔変更（毎時から３時間毎）</value>
+                                    <value>発表間隔変更（３時間毎から毎時）</value>
+                                    <value>台風発生予想</value>
+                                    <value>温帯低気圧化しつつある</value>
+                                  </choice>
+                                </element>
+                              </element>
+                            </element>
+                          </optional>
                         </element>
-                        <optional>
-                          <element name="je:AreaClass">
-                            <a:documentation>(8-1) 実況・推定では常に AreaClass がある</a:documentation>
-                            <attribute name="type">
-                              <value>大きさ階級</value>
-                            </attribute>
-                            <!-- 実況・推定で大きさ階級を決定しないときは空になる -->
-                            <choice>
-                              <empty/>
-                              <ref name="typhoon_size_class"/>
-                            </choice>
+                      </optional>
+                      <optional>
+                        <element name="jm:Kind">
+                          <element name="jm:Property">
+                            <element name="jm:Type">
+                              <value>階級</value>
+                            </element>
+                            <element name="jm:ClassPart">
+                              <a:documentation>(8) 後述</a:documentation>
+                              <element name="je:TyphoonClass">
+                                <a:documentation>(7) 空になるのは延長予報だけ</a:documentation>
+                                <attribute name="type">
+                                  <value>熱帯擾乱種類</value>
+                                </attribute>
+                                <choice>
+                                  <empty/>
+                                  <ref name="typhoon_class"/>
+                                </choice>
+                              </element>
+                              <optional>
+                                <element name="je:AreaClass">
+                                  <a:documentation>(8-1) 実況・推定では常に AreaClass がある</a:documentation>
+                                  <attribute name="type">
+                                    <value>大きさ階級</value>
+                                  </attribute>
+                                  <!-- 実況・推定で大きさ階級を決定しないときは空になる -->
+                                  <choice>
+                                    <empty/>
+                                    <ref name="typhoon_size_class"/>
+                                  </choice>
+                                </element>
+                              </optional>
+                              <optional>
+                                <element name="je:IntensityClass">
+                                  <a:documentation>(8-2) 実況・推定・予報では常に IntensityClass がある</a:documentation>
+                                  <attribute name="type">
+                                    <value>強さ階級</value>
+                                  </attribute>
+                                  <choice>
+                                    <empty/>
+                                    <ref name="typhoon_intensity_class"/>
+                                  </choice>
+                                </element>
+                              </optional>
+                            </element>
                           </element>
-                        </optional>
-                        <optional>
-                          <element name="je:IntensityClass">
-                            <a:documentation>(8-2) 実況・推定・予報では常に IntensityClass がある</a:documentation>
-                            <attribute name="type">
-                              <value>強さ階級</value>
-                            </attribute>
-                            <choice>
-                              <empty/>
-                              <ref name="typhoon_intensity_class"/>
-                            </choice>
-                          </element>
-                        </optional>
-                      </element>
-                    </element>
-                  </element>
-                </optional>
-                <optional>
-                  <element name="jm:Kind">
-                    <element name="jm:Property">
-                      <element name="jm:Type">
-                        <value>中心</value>
-                      </element>
-                      <element name="jm:CenterPart">
-                        <a:documentation>(9) 予報・延長予報には常に予報円 ProbabilityCircle がある
+                        </element>
+                      </optional>
+                      <optional>
+                        <element name="jm:Kind">
+                          <element name="jm:Property">
+                            <element name="jm:Type">
+                              <value>中心</value>
+                            </element>
+                            <element name="jm:CenterPart">
+                              <a:documentation>(9) 予報・延長予報には常に予報円 ProbabilityCircle がある
 (10) 実況・推定には常に Coordinate 2つがある</a:documentation>
-                        <choice>
-                          <element name="jm:ProbabilityCircle">
-                            <attribute name="type">
-                              <value>予報円</value>
-                            </attribute>
-                            <ref name="basepoint_pair"/>
-                            <ref name="radii_yohouen"/>
-                          </element>
-                          <ref name="coordinate_pair"/>
-                        </choice>
-                        <optional>
-                          <element name="jm:Location">
-                            <a:documentation>(11) 予報のうち、予報時間が２４未満で１２でないものでは欠く</a:documentation>
-                            <text/>
-                          </element>
-                        </optional>
-                        <element name="je:Direction">
-                          <attribute name="type">
-                            <value>移動方向</value>
-                          </attribute>
-                          <attribute name="unit">
-                            <value>１６方位漢字</value>
-                          </attribute>
-                          <optional>
-                            <attribute name="condition">
-                              <value>不定</value>
-                            </attribute>
-                          </optional>
-                          <optional>
-                            <attribute name="description">
-                              <value>不定</value>
-                            </attribute>
-                          </optional>
-                          <!-- 空の実例はないが、予想される -->
-                          <choice>
-                            <empty/>
-                            <ref name="direction_sixteen"/>
-                          </choice>
-                        </element>
-                        <element name="je:Speed">
-                          <attribute name="type">
-                            <value>移動速度</value>
-                          </attribute>
-                          <attribute name="unit">
-                            <value>ノット</value>
-                          </attribute>
-                          <attribute name="description"/>
-                          <optional>
-                            <attribute name="condition">
                               <choice>
-                                <value>ゆっくり</value>
-                                <value>ほとんど停滞</value>
+                                <element name="jm:ProbabilityCircle">
+                                  <attribute name="type">
+                                    <value>予報円</value>
+                                  </attribute>
+                                  <ref name="basepoint_pair"/>
+                                  <ref name="radii_yohouen"/>
+                                </element>
+                                <ref name="coordinate_pair"/>
                               </choice>
-                            </attribute>
-                          </optional>
-                          <choice>
-                            <empty/>
-                            <data type="positiveInteger"/>
-                          </choice>
-                        </element>
-                        <element name="je:Speed">
-                          <a:documentation>(25) km/h単位の移動速度は ノット 単位の移動速度の関数</a:documentation>
-                          <attribute name="type">
-                            <value>移動速度</value>
-                          </attribute>
-                          <attribute name="unit">
-                            <value>km/h</value>
-                          </attribute>
-                          <attribute name="description"/>
-                          <optional>
-                            <attribute name="condition">
-                              <choice>
-                                <value>ゆっくり</value>
-                                <value>ほとんど停滞</value>
-                              </choice>
-                            </attribute>
-                          </optional>
-                          <choice>
-                            <empty/>
-                            <data type="positiveInteger"/>
-                          </choice>
-                        </element>
-                        <optional>
-                          <element name="je:Pressure">
-                            <a:documentation>(12) 実況・推定・予報では常に Pressure がある</a:documentation>
-                            <attribute name="type">
-                              <value>中心気圧</value>
-                            </attribute>
-                            <attribute name="unit">
-                              <value>hPa</value>
-                            </attribute>
-                            <attribute name="description"/>
-                            <data type="positiveInteger"/>
+                              <optional>
+                                <element name="jm:Location">
+                                  <a:documentation>(11) 予報のうち、予報時間が２４未満で１２でないものでは欠く</a:documentation>
+                                  <text/>
+                                </element>
+                              </optional>
+                              <element name="je:Direction">
+                                <attribute name="type">
+                                  <value>移動方向</value>
+                                </attribute>
+                                <attribute name="unit">
+                                  <value>１６方位漢字</value>
+                                </attribute>
+                                <optional>
+                                  <attribute name="condition">
+                                    <value>不定</value>
+                                  </attribute>
+                                </optional>
+                                <optional>
+                                  <attribute name="description">
+                                    <value>不定</value>
+                                  </attribute>
+                                </optional>
+                                <!-- 空の実例はないが、予想される -->
+                                <choice>
+                                  <empty/>
+                                  <ref name="direction_sixteen"/>
+                                </choice>
+                              </element>
+                              <element name="je:Speed">
+                                <attribute name="type">
+                                  <value>移動速度</value>
+                                </attribute>
+                                <attribute name="unit">
+                                  <value>ノット</value>
+                                </attribute>
+                                <attribute name="description"/>
+                                <optional>
+                                  <attribute name="condition">
+                                    <choice>
+                                      <value>ゆっくり</value>
+                                      <value>ほとんど停滞</value>
+                                    </choice>
+                                  </attribute>
+                                </optional>
+                                <choice>
+                                  <empty/>
+                                  <data type="positiveInteger"/>
+                                </choice>
+                              </element>
+                              <element name="je:Speed">
+                                <a:documentation>(25) km/h単位の移動速度は ノット 単位の移動速度の関数</a:documentation>
+                                <attribute name="type">
+                                  <value>移動速度</value>
+                                </attribute>
+                                <attribute name="unit">
+                                  <value>km/h</value>
+                                </attribute>
+                                <attribute name="description"/>
+                                <optional>
+                                  <attribute name="condition">
+                                    <choice>
+                                      <value>ゆっくり</value>
+                                      <value>ほとんど停滞</value>
+                                    </choice>
+                                  </attribute>
+                                </optional>
+                                <choice>
+                                  <empty/>
+                                  <data type="positiveInteger"/>
+                                </choice>
+                              </element>
+                              <optional>
+                                <element name="je:Pressure">
+                                  <a:documentation>(12) 実況・推定・予報では常に Pressure がある</a:documentation>
+                                  <attribute name="type">
+                                    <value>中心気圧</value>
+                                  </attribute>
+                                  <attribute name="unit">
+                                    <value>hPa</value>
+                                  </attribute>
+                                  <attribute name="description"/>
+                                  <data type="positiveInteger"/>
+                                </element>
+                              </optional>
+                            </element>
                           </element>
-                        </optional>
-                      </element>
-                    </element>
-                  </element>
-                </optional>
-                <optional>
-                  <element name="jm:Kind">
-                    <a:documentation>(13) 風は延長予報以外には常にある、ただし、Remark が
+                        </element>
+                      </optional>
+                      <optional>
+                        <element name="jm:Kind">
+                          <a:documentation>(13) 風は延長予報以外には常にある、ただし、Remark が
 "台風消滅（温帯低気圧化）"
 "台風消滅（熱帯低気圧化）"
 "台風発生の可能性が小さくなった"
 の場合はその限りでない</a:documentation>
-                    <element name="jm:Property">
-                      <element name="jm:Type">
-                        <value>風</value>
-                      </element>
-                      <element name="jm:WindPart">
-                        <!-- 最大風速と最大瞬間風速が、それぞれノット・米毎秒で書かれる -->
-                        <element name="je:WindSpeed">
-                          <a:documentation>(24) ノット単位の風速は m/s 単位の風速の関数</a:documentation>
-                          <attribute name="type">
-                            <value>最大風速</value>
-                          </attribute>
-                          <attribute name="unit">
-                            <value>ノット</value>
-                          </attribute>
-                          <!--
-                            中心の移動速度と異なり condition は
-                            最大速度が得られた位置を特定するものであるらしい。
-                            値「なし」は中心付近でない場所を示すらしく、
-                            数値欠損の印ではない。
-                          -->
-                          <attribute name="condition">
-                            <choice>
-                              <value>中心付近</value>
-                              <value>なし</value>
-                            </choice>
-                          </attribute>
-                          <attribute name="description"/>
-                          <data type="nonNegativeInteger"/>
-                        </element>
-                        <element name="je:WindSpeed">
-                          <attribute name="type">
-                            <value>最大風速</value>
-                          </attribute>
-                          <attribute name="unit">
-                            <value>m/s</value>
-                          </attribute>
-                          <attribute name="condition">
-                            <choice>
-                              <value>中心付近</value>
-                              <value>なし</value>
-                            </choice>
-                          </attribute>
-                          <attribute name="description"/>
-                          <data type="nonNegativeInteger"/>
-                        </element>
-                        <element name="je:WindSpeed">
-                          <attribute name="type">
-                            <value>最大瞬間風速</value>
-                          </attribute>
-                          <attribute name="unit">
-                            <value>ノット</value>
-                          </attribute>
-                          <attribute name="description"/>
-                          <data type="nonNegativeInteger"/>
-                        </element>
-                        <element name="je:WindSpeed">
-                          <attribute name="type">
-                            <value>最大瞬間風速</value>
-                          </attribute>
-                          <attribute name="unit">
-                            <value>m/s</value>
-                          </attribute>
-                          <attribute name="description"/>
-                          <data type="nonNegativeInteger"/>
-                        </element>
-                      </element>
-                      <zeroOrMore>
-                        <element name="jm:WarningAreaPart">
-                          <a:documentation>(19) @type は Property 内で一意
+                          <element name="jm:Property">
+                            <element name="jm:Type">
+                              <value>風</value>
+                            </element>
+                            <element name="jm:WindPart">
+                              <!-- 最大風速と最大瞬間風速が、それぞれノット・米毎秒で書かれる -->
+                              <element name="je:WindSpeed">
+                                <a:documentation>(24) ノット単位の風速は m/s 単位の風速の関数</a:documentation>
+                                <attribute name="type">
+                                  <value>最大風速</value>
+                                </attribute>
+                                <attribute name="unit">
+                                  <value>ノット</value>
+                                </attribute>
+                                <!--
+                                  中心の移動速度と異なり condition は
+                                  最大速度が得られた位置を特定するものであるらしい。
+                                  値「なし」は中心付近でない場所を示すらしく、
+                                  数値欠損の印ではない。
+                                -->
+                                <attribute name="condition">
+                                  <choice>
+                                    <value>中心付近</value>
+                                    <value>なし</value>
+                                  </choice>
+                                </attribute>
+                                <attribute name="description"/>
+                                <data type="nonNegativeInteger"/>
+                              </element>
+                              <element name="je:WindSpeed">
+                                <attribute name="type">
+                                  <value>最大風速</value>
+                                </attribute>
+                                <attribute name="unit">
+                                  <value>m/s</value>
+                                </attribute>
+                                <attribute name="condition">
+                                  <choice>
+                                    <value>中心付近</value>
+                                    <value>なし</value>
+                                  </choice>
+                                </attribute>
+                                <attribute name="description"/>
+                                <data type="nonNegativeInteger"/>
+                              </element>
+                              <element name="je:WindSpeed">
+                                <attribute name="type">
+                                  <value>最大瞬間風速</value>
+                                </attribute>
+                                <attribute name="unit">
+                                  <value>ノット</value>
+                                </attribute>
+                                <attribute name="description"/>
+                                <data type="nonNegativeInteger"/>
+                              </element>
+                              <element name="je:WindSpeed">
+                                <attribute name="type">
+                                  <value>最大瞬間風速</value>
+                                </attribute>
+                                <attribute name="unit">
+                                  <value>m/s</value>
+                                </attribute>
+                                <attribute name="description"/>
+                                <data type="nonNegativeInteger"/>
+                              </element>
+                            </element>
+                            <zeroOrMore>
+                              <element name="jm:WarningAreaPart">
+                                <a:documentation>(19) @type は Property 内で一意
 (14) 実況・推定には常に強風域がある
 (15) 暴風域はあるとすれば実況または推定
 (20) 実況・推定において
@@ -384,98 +387,122 @@
 (16) 暴風警戒域はあるとすれば予報
 (21) 予報において
      最大風速が 25 m/s に達していれば常に暴風警戒域がある</a:documentation>
-                          <attribute name="type">
-                            <choice>
-                              <value>暴風域</value>
-                              <value>強風域</value>
-                              <value>暴風警戒域</value>
-                            </choice>
-                          </attribute>
-                          <element name="je:WindSpeed">
-                            <attribute name="type">
-                              <value>風速</value>
-                            </attribute>
-                            <attribute name="unit">
-                              <value>ノット</value>
-                            </attribute>
-                            <attribute name="condition">
-                              <value>以上</value>
-                            </attribute>
-                            <attribute name="description"/>
-                            <data type="positiveInteger"/>
-                          </element>
-                          <element name="je:WindSpeed">
-                            <attribute name="type">
-                              <value>風速</value>
-                            </attribute>
-                            <attribute name="unit">
-                              <value>m/s</value>
-                            </attribute>
-                            <attribute name="condition">
-                              <value>以上</value>
-                            </attribute>
-                            <attribute name="description"/>
-                            <data type="positiveInteger"/>
-                          </element>
-                          <element name="je:Circle">
-                            <ref name="radii_of_wind"/>
+                                <attribute name="type">
+                                  <choice>
+                                    <value>暴風域</value>
+                                    <value>強風域</value>
+                                    <value>暴風警戒域</value>
+                                  </choice>
+                                </attribute>
+                                <element name="je:WindSpeed">
+                                  <attribute name="type">
+                                    <value>風速</value>
+                                  </attribute>
+                                  <attribute name="unit">
+                                    <value>ノット</value>
+                                  </attribute>
+                                  <attribute name="condition">
+                                    <value>以上</value>
+                                  </attribute>
+                                  <attribute name="description"/>
+                                  <data type="positiveInteger"/>
+                                </element>
+                                <element name="je:WindSpeed">
+                                  <attribute name="type">
+                                    <value>風速</value>
+                                  </attribute>
+                                  <attribute name="unit">
+                                    <value>m/s</value>
+                                  </attribute>
+                                  <attribute name="condition">
+                                    <value>以上</value>
+                                  </attribute>
+                                  <attribute name="description"/>
+                                  <data type="positiveInteger"/>
+                                </element>
+                                <element name="je:Circle">
+                                  <ref name="radii_of_wind"/>
+                                </element>
+                              </element>
+                            </zeroOrMore>
                           </element>
                         </element>
-                      </zeroOrMore>
-                    </element>
-                  </element>
-                </optional>
-                <optional>
-                  <element name="jm:Station">
-                    <optional>
-                      <element name="jm:Name">
-                        <data type="NMTOKEN"/>
-                      </element>
-                    </optional>
-                    <optional>
-                      <element name="jm:Code">
-                        <data type="NMTOKEN"/>
-                      </element>
-                    </optional>
-                    <optional>
-                      <element name="jm:Location">
-                        <data type="NMTOKEN"/>
-                      </element>
-                    </optional>
-                  </element>
-                </optional>
-                <element name="jm:Area">
-                  <a:documentation>Item について、
+                      </optional>
+                      <optional>
+                        <element name="jm:Station">
+                          <optional>
+                            <element name="jm:Name">
+                              <data type="NMTOKEN"/>
+                            </element>
+                          </optional>
+                          <optional>
+                            <element name="jm:Code">
+                              <attribute name="type">
+                                <value>国際地点番号</value>
+                              </attribute>
+                              <data type="positiveInteger"/>
+                            </element>
+                          </optional>
+                          <optional>
+                            <element name="jm:Location">
+                              <data type="NMTOKEN"/>
+                            </element>
+                          </optional>
+                        </element>
+                      </optional>
+                      <optional>
+                        <element name="jm:Area">
+                          <a:documentation>Item について、
 (17) 実況・推定には常に強風域 Area が存在
 (18) 予報・延長予報には常に予報円 Area が存在
 都合、 Area は必ず一つ存在する</a:documentation>
-                  <element name="jm:Name">
-                    <value>熱帯低気圧</value>
+                          <element name="jm:Name">
+                            <value>熱帯低気圧</value>
+                          </element>
+                          <choice>
+                            <element name="je:Circle">
+                              <a:documentation>(22) 強風域 Area/Circle は WarningAreaPart/Circle と同一内容</a:documentation>
+                              <attribute name="type">
+                                <value>強風域</value>
+                              </attribute>
+                              <ref name="basepoint_pair"/>
+                              <ref name="radii_of_wind"/>
+                            </element>
+                            <element name="je:Circle">
+                              <a:documentation>(23) 予報円 Area/Circle は ProbabilityCircle と同一内容</a:documentation>
+                              <attribute name="type">
+                                <value>予報円</value>
+                              </attribute>
+                              <ref name="basepoint_pair"/>
+                              <ref name="radii_yohouen"/>
+                            </element>
+                          </choice>
+                        </element>
+                      </optional>
+                    </group>
+                    <!-- jm:Area -->
                   </element>
-                  <choice>
-                    <element name="je:Circle">
-                      <a:documentation>(22) 強風域 Area/Circle は WarningAreaPart/Circle と同一内容</a:documentation>
-                      <attribute name="type">
-                        <value>強風域</value>
-                      </attribute>
-                      <ref name="basepoint_pair"/>
-                      <ref name="radii_of_wind"/>
-                    </element>
-                    <element name="je:Circle">
-                      <a:documentation>(23) 予報円 Area/Circle は ProbabilityCircle と同一内容</a:documentation>
-                      <attribute name="type">
-                        <value>予報円</value>
-                      </attribute>
-                      <ref name="basepoint_pair"/>
-                      <ref name="radii_yohouen"/>
-                    </element>
-                  </choice>
+                </group>
+                <!-- jm:Item -->
+              </element>
+            </oneOrMore>
+          </element>
+          <optional>
+            <!-- jm:MeteorologicalInfos -->
+            <element name="jm:AdditionalInfo">
+              <element name="jm:ObservationAddition">
+                <element name="jm:DeviationFromNormal">
+                  <data type="integer"/>
+                </element>
+                <element name="jm:DeviationFromLastYear">
+                  <data type="integer"/>
                 </element>
               </element>
             </element>
-          </oneOrMore>
+          </optional>
         </element>
-      </element>
+      </group>
+      <!-- jm:Body -->
     </element>
   </start>
   <!-- basepoint_pair と酷似構造であることを見やすくするため別ルール建て -->
