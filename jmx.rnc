@@ -18,22 +18,22 @@ start = element jx:Report {
     # 解析時刻
     element jb:TargetDateTime { jst_date_time },
     element jb:TargetDuration {
-      "PT120H" | "PT72H"
+      "PT120H" | "PT72H" | "PT1H"
     }?,
     # TC番号
     element jb:EventID { empty | xsd:token },
     element jb:InfoType { "発表" | "訂正" | "取消" },
     # 情報番号というが起算・加算条件は未詳
-    element jb:Serial { xsd:nonNegativeInteger? },
+    element jb:Serial { empty | xsd:token },
     element jb:InfoKind { list_infokind },
     # we can simply ignore this
-    element jb:InfoKindVersion { "1.0_0" },
+    element jb:InfoKindVersion { "1.0_0" | "1.0_1" },
     element jb:Headline {
-      element jb:Text { empty }
+      element jb:Text { xsd:string }
     }
   },
   (content_vgsk50_kisetsu |content_vgsk55_seibutsu |content_vgsk60_tokushu
-  |content_vguv50_shigaisen )
+  |content_vguv50_shigaisen |content_vpti50_joho |content_vptw40_typhoon)
 }
 
 content_vgsk50_kisetsu =
@@ -193,7 +193,18 @@ content_vguv50_shigaisen =
     } # jm:MeteorologicalInfos
   }
 
-content_vptxxx_typhoon =
+content_vpti50_joho =
+  element jm:Body {
+    element jm:Notice { empty }
+    ,element jm:Comment {
+      element jm:Text {
+        attribute type { "本文" }
+        ,xsd:string
+      }
+    }
+  }
+
+content_vptw40_typhoon =
   element jm:Body {
     element jm:MeteorologicalInfos {
       attribute type { "台風情報" }
@@ -204,7 +215,7 @@ content_vptxxx_typhoon =
         },
         element jm:Item {
 
-          # name of tropical depression
+          # name of tropical depression, present only at the first MeteorologicalInfo
           element jm:Kind {
             element jm:Property {
               element jm:Type { "呼称" },
@@ -226,7 +237,7 @@ content_vptxxx_typhoon =
                   | "温帯低気圧化しつつある"
                 }
               }
-            }?
+            }
           }?,
 
           # class of tropical depression
@@ -253,7 +264,7 @@ content_vptxxx_typhoon =
                 }?
               }
             }
-          }?,
+          },
 
           # center location of tropical depression
           element jm:Kind {
@@ -282,15 +293,17 @@ content_vptxxx_typhoon =
                   attribute type { "移動速度" },
                   attribute unit { "ノット" },
                   attribute description { text },
-                  attribute condition { "ゆっくり" | "ほとんど停滞" }?,
+                  attribute condition { "ゆっくり" | "ほとんど停滞" | "停滞" }?,
                   (empty | xsd:positiveInteger)
                 },
                 ## (25) km/h単位の移動速度は ノット 単位の移動速度の関数
                 element je:Speed {
                   attribute type { "移動速度" },
-                  attribute unit { "km/h" },
+                  # there is a VPTW50 example having unit="ノット" here,
+                  # which is probably error but tolerated just in case. boo!
+                  attribute unit { "km/h" | "ノット" },
                   attribute description { text },
-                  attribute condition { "ゆっくり" | "ほとんど停滞" }?,
+                  attribute condition { "ゆっくり" | "ほとんど停滞" | "停滞" }?,
                   (empty | xsd:positiveInteger)
                 },
                 ## (12) 実況・推定・予報では常に Pressure がある
@@ -302,9 +315,9 @@ content_vptxxx_typhoon =
                 }?
               }
             }
-          }?,
+          },
 
-          # wind associated with tropical depression
+          # wind associated with tropical depression, can be missing ft72h and later
           element jm:Kind {
             element jm:Property {
               element jm:Type { "風" },
@@ -318,14 +331,14 @@ content_vptxxx_typhoon =
                   # 最大速度が得られた位置を特定するものであるらしい。
                   # 値「なし」は中心付近でない場所を示すらしく、
                   # 数値欠損の印ではない。
-                  attribute condition { "中心付近" | "なし" },
+                  attribute condition { "中心付近" | "なし" }?,
                   attribute description { text },
                   xsd:nonNegativeInteger
                 },
                 element je:WindSpeed {
                   attribute type { "最大風速" },
                   attribute unit { "m/s" },
-                  attribute condition { "中心付近" | "なし" },
+                  attribute condition { "中心付近" | "なし" }?,
                   attribute description { text },
                   xsd:nonNegativeInteger
                 },
@@ -394,7 +407,7 @@ content_vptxxx_typhoon =
                 radii_yohouen
               }
             )
-          }? # jm:Area
+          } # jm:Area
 
         } # jm:Item
       }+
@@ -619,6 +632,7 @@ list_infokind =
   | "特殊気象報"
   | "生物季節観測報告気象報"
   | "環境気象情報"
+  | "同一現象用平文情報"
 
 list_typh_datetime =
   "実況"
@@ -635,12 +649,20 @@ list_typh_datetime =
   | "予報　４８時間後"
   | "予報　６９時間後"
   | "予報　７２時間後"
+  | "予報　９６時間後"
+  | "予報　９３時間後"
+  | "予報　１１７時間後"
+  | "予報　１２０時間後"
   | "延長予報　９６時間後"
   | "延長予報　１２０時間後"
 
-list_title = "台風解析・予報情報（５日予報）"
-      | "台風解析・予報情報（３日予報）"
-      | "季節観測"
-      | "生物季節観測"
-      | "特殊気象報"
-      | "紫外線観測データ"
+list_title = "季節観測"
+  | "生物季節観測"
+  | "特殊気象報"
+  | "紫外線観測データ"
+  | "全般台風情報"
+  | "全般台風情報（定型）"
+  | "全般台風情報（詳細）"
+  | "台風解析・予報情報（３日予報）"
+  | "台風解析・予報情報（５日予報）"
+  | "台風解析・予報情報（５日予報）（Ｈ３０）"
