@@ -8,5 +8,8 @@ jmx.rng: jmx.rnc
 samples:
 	bash getsamp.sh
 
-clean:
+clean: reset
 	rm -rf samples
+
+reset:
+	rm -f .hush.*

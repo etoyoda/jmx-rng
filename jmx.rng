@@ -88,6 +88,7 @@
           <choice>
             <empty/>
             <ref name="info_vpzu50_kaijou"/>
+            <ref name="info_vpzu50_kaijou_clear"/>
           </choice>
         </element>
       </element>
@@ -98,6 +99,7 @@
         <ref name="body_vguv50_shigaisen"/>
         <ref name="body_vpti50_joho"/>
         <ref name="body_vptw40_typhoon"/>
+        <ref name="body_vpzu50_kaijou"/>
       </choice>
     </element>
   </start>
@@ -120,35 +122,123 @@
             <attribute name="codeType">
               <value>全般海上海域名</value>
             </attribute>
-            <element name="jb:Area">
-              <element name="jb:Name">
-                <text/>
-              </element>
-              <choice>
-                <element name="jb:Code">
-                  <text/>
-                </element>
-                <element name="je:Circle">
-                  <attribute name="type"/>
-                  <oneOrMore>
-                    <ref name="anyElement"/>
-                  </oneOrMore>
-                </element>
-                <element name="je:Coordinate">
-                  <attribute name="type"/>
-                  <attribute name="description"/>
-                  <text/>
-                </element>
-                <element name="je:Polygon">
-                  <attribute name="type"/>
-                  <attribute name="description"/>
-                  <text/>
-                </element>
-              </choice>
-            </element>
+            <choice>
+              <ref name="area_teikiatsu"/>
+              <ref name="area_nettei"/>
+              <ref name="area_polygon"/>
+              <ref name="area_by_code"/>
+            </choice>
           </element>
         </element>
       </oneOrMore>
+    </element>
+  </define>
+  <define name="area_teikiatsu">
+    <element name="jb:Area">
+      <element name="jb:Name">
+        <choice>
+          <value>低気圧</value>
+          <value>熱帯低気圧</value>
+        </choice>
+      </element>
+      <oneOrMore>
+        <element name="je:Circle">
+          <attribute name="type"/>
+          <oneOrMore>
+            <ref name="anyElement"/>
+          </oneOrMore>
+        </element>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="area_nettei">
+    <element name="jb:Area">
+      <element name="jb:Name">
+        <value>熱帯低気圧</value>
+      </element>
+      <element name="je:Coordinate">
+        <attribute name="type"/>
+        <attribute name="description"/>
+        <text/>
+      </element>
+    </element>
+  </define>
+  <define name="area_by_code">
+    <oneOrMore>
+      <element name="jb:Area">
+        <element name="jb:Name">
+          <data type="token"/>
+        </element>
+        <element name="jb:Code">
+          <text/>
+        </element>
+      </element>
+    </oneOrMore>
+  </define>
+  <define name="area_polygon">
+    <element name="jb:Area">
+      <element name="jb:Name">
+        <value>緯度経度領域</value>
+      </element>
+      <element name="je:Polygon">
+        <attribute name="type"/>
+        <attribute name="description"/>
+        <text/>
+      </element>
+    </element>
+  </define>
+  <define name="info_vpzu50_kaijou_clear">
+    <element name="jb:Information">
+      <attribute name="type">
+        <value>全般海上警報</value>
+      </attribute>
+      <element name="jb:Item">
+        <element name="jb:Kind">
+          <element name="jb:Name">
+            <value>海上警報なし</value>
+          </element>
+        </element>
+        <element name="jb:Areas">
+          <attribute name="codeType">
+            <value>全般海上海域名</value>
+          </attribute>
+          <element name="jb:Area">
+            <element name="jb:Name">
+              <value>全般海上予報区</value>
+            </element>
+          </element>
+        </element>
+      </element>
+    </element>
+  </define>
+  <define name="body_vpzu50_kaijou">
+    <element name="jm:Body">
+      <element name="jm:Notice">
+        <choice>
+          <value/>
+          <value>警報は６時間毎に更新します。</value>
+        </choice>
+      </element>
+      <zeroOrMore>
+        <element name="jm:MeteorologicalInfos">
+          <attribute name="type">
+            <value>全般海上警報</value>
+          </attribute>
+          <oneOrMore>
+            <ref name="anyElement"/>
+          </oneOrMore>
+        </element>
+      </zeroOrMore>
+      <zeroOrMore>
+        <element name="jm:MeteorologicalInfos">
+          <attribute name="type">
+            <value>概況</value>
+          </attribute>
+          <oneOrMore>
+            <ref name="anyElement"/>
+          </oneOrMore>
+        </element>
+      </zeroOrMore>
     </element>
   </define>
   <define name="body_vgsk50_kisetsu">
@@ -1157,15 +1247,19 @@
   </define>
   <define name="list_kaijou_keihoumei">
     <choice>
+      <value>海上台風警報</value>
       <value>海上暴風警報</value>
       <value>海上強風警報</value>
+      <value>海上風警報</value>
       <value>海上濃霧警報</value>
     </choice>
   </define>
   <define name="list_kaijou_keihoucode">
     <choice>
+      <value>23</value>
       <value>22</value>
       <value>21</value>
+      <value>20</value>
       <value>11</value>
     </choice>
   </define>
@@ -1193,6 +1287,9 @@
       <value>台風解析・予報情報（５日予報）</value>
       <value>台風解析・予報情報（５日予報）（Ｈ３０）</value>
       <value>全般海上警報（定時）</value>
+      <value>全般海上警報（定時）（Ｈ２９）</value>
+      <value>全般海上警報（臨時）</value>
+      <value>全般海上警報（臨時）（Ｈ２９）</value>
     </choice>
   </define>
   <define name="anyElement">

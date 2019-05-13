@@ -32,44 +32,88 @@ start = element jx:Report {
     element jb:InfoKindVersion { "1.0_0" | "1.0_1" },
     element jb:Headline {
       element jb:Text { xsd:string },
-      (empty | info_vpzu50_kaijou)
+      (empty | info_vpzu50_kaijou | info_vpzu50_kaijou_clear)
     }
   },
   (body_vgsk50_kisetsu |body_vgsk55_seibutsu |body_vgsk60_tokushu
-  |body_vguv50_shigaisen |body_vpti50_joho |body_vptw40_typhoon)
+  |body_vguv50_shigaisen |body_vpti50_joho |body_vptw40_typhoon
+  |body_vpzu50_kaijou)
 }
 
 info_vpzu50_kaijou =
   element jb:Information {
     attribute type { "全般海上警報" }
-    ,element jb:Item {
+   ,element jb:Item {
       element jb:Kind {
         element jb:Name { list_kaijou_keihoumei }
-        ,element jb:Code { list_kaijou_keihoucode }
+       ,element jb:Code { list_kaijou_keihoucode }
       }
-      ,element jb:Areas {
+     ,element jb:Areas {
         attribute codeType { "全般海上海域名" }
-        ,element jb:Area {
-          element jb:Name { text }
-          ,(element jb:Code { text }
-            |element je:Circle {
-              attribute type { text }
-              ,anyElement+
-              }
-            |element je:Coordinate {
-              attribute type { text }
-              ,attribute description { text }
-              ,text
-            }
-            |element je:Polygon {
-              attribute type { text }
-              ,attribute description { text }
-              ,text
-            }
-          )
-        }
+       ,( area_teikiatsu
+        | area_nettei
+        | area_polygon
+        | area_by_code
+        )
       }
     }+
+  }
+
+area_teikiatsu =
+  element jb:Area {
+    element jb:Name { "低気圧" | "熱帯低気圧" }
+   ,element je:Circle { attribute type { text }, anyElement+ }+
+  }
+
+area_nettei =
+  element jb:Area {
+    element jb:Name { "熱帯低気圧" }
+   ,element je:Coordinate {
+      attribute type { text }
+     ,attribute description { text }
+     ,text
+    }
+  }
+
+area_by_code =
+  element jb:Area {
+    element jb:Name { xsd:token }
+   ,element jb:Code { text }
+  }+
+
+area_polygon =
+  element jb:Area {
+    element jb:Name { "緯度経度領域" }
+   ,element je:Polygon {
+      attribute type { text }
+     ,attribute description { text }
+     ,text
+    }
+  }
+
+info_vpzu50_kaijou_clear =
+  element jb:Information {
+    attribute type { "全般海上警報" }
+   ,element jb:Item {
+      element jb:Kind { element jb:Name { "海上警報なし" } }
+     ,element jb:Areas {
+        attribute codeType { "全般海上海域名" }
+       ,element jb:Area { element jb:Name { "全般海上予報区" } }
+      }
+    }
+  }
+
+body_vpzu50_kaijou =
+  element jm:Body {
+    element jm:Notice { "" | "警報は６時間毎に更新します。" }
+    ,element jm:MeteorologicalInfos {
+      attribute type { "全般海上警報" }
+      ,anyElement+
+    }*
+    ,element jm:MeteorologicalInfos {
+      attribute type { "概況" }
+      ,anyElement+
+    }*
   }
 
 body_vgsk50_kisetsu =
@@ -678,13 +722,17 @@ list_typh_datetime =
   | "延長予報　１２０時間後"
 
 list_kaijou_keihoumei =
-  "海上暴風警報"
+  "海上台風警報"
+  | "海上暴風警報"
   | "海上強風警報"
+  | "海上風警報"
   | "海上濃霧警報"
 
 list_kaijou_keihoucode =
-  "22"
+  "23"
+  | "22"
   | "21"
+  | "20"
   | "11"
 
 list_infokind =
@@ -707,6 +755,9 @@ list_title = "季節観測"
   | "台風解析・予報情報（５日予報）"
   | "台風解析・予報情報（５日予報）（Ｈ３０）"
   | "全般海上警報（定時）"
+  | "全般海上警報（定時）（Ｈ２９）"
+  | "全般海上警報（臨時）"
+  | "全般海上警報（臨時）（Ｈ２９）"
 
 anyElement =
   element * | je:* {
