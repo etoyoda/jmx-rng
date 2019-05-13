@@ -99,7 +99,7 @@ kaijou_area_polygon =
   element jb:Area {
     element jb:Name { "緯度経度領域" }
    ,element je:Polygon {
-      attribute type { text }
+      attribute type { "位置（度）" }
      ,attribute description { latlon_multi_ja }
      ,latlon_multi_ascii
     }
@@ -120,13 +120,57 @@ info_vpzu50_kaijou_clear =
 body_vpzu50_kaijou =
   element jm:Body {
     element jm:Notice { "" | "警報は６時間毎に更新します。" }
-    ,element jm:MeteorologicalInfos {
+   ,element jm:MeteorologicalInfos {
       attribute type { "全般海上警報" }
-      ,anyElement+
+     ,element jm:MeteorologicalInfo {
+        element jm:DateTime { dateTime_si }
+       ,element jm:Item {
+          element jm:Kind {
+            element jm:Name { xsd:token }?
+           ,element jm:Code { xsd:positiveInteger }?
+           ,element jm:Status { text }?
+           ,element jm:ClassName { "じょう乱" | "緯度経度領域" | "領域" | "低気圧"
+            | "熱帯低気圧"
+            | "熱帯じょう乱"
+           }?
+           ,element jm:Condition { text }?
+           ,element jm:DateTime { attribute type { text }, dateTime_si }?
+           ,element jm:Property {
+              element jm:Type { text }
+             ,element jm:WindPart { anyElement+ }?
+             ,element jm:WarningAreaPart { attribute type { text }, anyElement+ }*
+             ,element jm:ClassPart { anyElement+ }?
+             ,element jm:TyphoonNamePart { anyElement+ }?
+             ,element jm:CenterPart { anyElement+ }?
+             ,element jm:CoordinatePart { anyElement+ }?
+             ,element jm:Text { text }?
+            }*
+          }+
+         ,element jm:Area {
+            anyElement+
+          }
+        }
+      }+
     }*
-    ,element jm:MeteorologicalInfos {
+   ,element jm:MeteorologicalInfos {
       attribute type { "概況" }
-      ,anyElement+
+     ,element jm:MeteorologicalInfo {
+        element jm:DateTime { dateTime_si }
+       ,element jm:Item {
+          element jm:Kind {
+            element jm:ClassName { "気圧系" | "前線" }
+           ,element jm:Property {
+              element jm:Type { text }
+             ,element jm:ClassPart { anyElement+ }?
+             ,element jm:CenterPart { anyElement+ }?
+             ,element jm:Text { text }?
+            }*
+          }+
+         ,element jm:Area {
+            anyElement+
+          }
+        }
+      }
     }*
   }
 

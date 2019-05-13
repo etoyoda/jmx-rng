@@ -233,7 +233,9 @@
         <value>緯度経度領域</value>
       </element>
       <element name="je:Polygon">
-        <attribute name="type"/>
+        <attribute name="type">
+          <value>位置（度）</value>
+        </attribute>
         <attribute name="description">
           <ref name="latlon_multi_ja"/>
         </attribute>
@@ -279,7 +281,115 @@
             <value>全般海上警報</value>
           </attribute>
           <oneOrMore>
-            <ref name="anyElement"/>
+            <element name="jm:MeteorologicalInfo">
+              <element name="jm:DateTime">
+                <ref name="dateTime_si"/>
+              </element>
+              <element name="jm:Item">
+                <oneOrMore>
+                  <element name="jm:Kind">
+                    <optional>
+                      <element name="jm:Name">
+                        <data type="token"/>
+                      </element>
+                    </optional>
+                    <optional>
+                      <element name="jm:Code">
+                        <data type="positiveInteger"/>
+                      </element>
+                    </optional>
+                    <optional>
+                      <element name="jm:Status">
+                        <text/>
+                      </element>
+                    </optional>
+                    <optional>
+                      <element name="jm:ClassName">
+                        <choice>
+                          <value>じょう乱</value>
+                          <value>緯度経度領域</value>
+                          <value>領域</value>
+                          <value>低気圧</value>
+                          <value>熱帯低気圧</value>
+                          <value>熱帯じょう乱</value>
+                        </choice>
+                      </element>
+                    </optional>
+                    <optional>
+                      <element name="jm:Condition">
+                        <text/>
+                      </element>
+                    </optional>
+                    <optional>
+                      <element name="jm:DateTime">
+                        <attribute name="type"/>
+                        <ref name="dateTime_si"/>
+                      </element>
+                    </optional>
+                    <zeroOrMore>
+                      <element name="jm:Property">
+                        <element name="jm:Type">
+                          <text/>
+                        </element>
+                        <optional>
+                          <element name="jm:WindPart">
+                            <oneOrMore>
+                              <ref name="anyElement"/>
+                            </oneOrMore>
+                          </element>
+                        </optional>
+                        <zeroOrMore>
+                          <element name="jm:WarningAreaPart">
+                            <attribute name="type"/>
+                            <oneOrMore>
+                              <ref name="anyElement"/>
+                            </oneOrMore>
+                          </element>
+                        </zeroOrMore>
+                        <optional>
+                          <element name="jm:ClassPart">
+                            <oneOrMore>
+                              <ref name="anyElement"/>
+                            </oneOrMore>
+                          </element>
+                        </optional>
+                        <optional>
+                          <element name="jm:TyphoonNamePart">
+                            <oneOrMore>
+                              <ref name="anyElement"/>
+                            </oneOrMore>
+                          </element>
+                        </optional>
+                        <optional>
+                          <element name="jm:CenterPart">
+                            <oneOrMore>
+                              <ref name="anyElement"/>
+                            </oneOrMore>
+                          </element>
+                        </optional>
+                        <optional>
+                          <element name="jm:CoordinatePart">
+                            <oneOrMore>
+                              <ref name="anyElement"/>
+                            </oneOrMore>
+                          </element>
+                        </optional>
+                        <optional>
+                          <element name="jm:Text">
+                            <text/>
+                          </element>
+                        </optional>
+                      </element>
+                    </zeroOrMore>
+                  </element>
+                </oneOrMore>
+                <element name="jm:Area">
+                  <oneOrMore>
+                    <ref name="anyElement"/>
+                  </oneOrMore>
+                </element>
+              </element>
+            </element>
           </oneOrMore>
         </element>
       </zeroOrMore>
@@ -288,9 +398,54 @@
           <attribute name="type">
             <value>概況</value>
           </attribute>
-          <oneOrMore>
-            <ref name="anyElement"/>
-          </oneOrMore>
+          <element name="jm:MeteorologicalInfo">
+            <element name="jm:DateTime">
+              <ref name="dateTime_si"/>
+            </element>
+            <element name="jm:Item">
+              <oneOrMore>
+                <element name="jm:Kind">
+                  <element name="jm:ClassName">
+                    <choice>
+                      <value>気圧系</value>
+                      <value>前線</value>
+                    </choice>
+                  </element>
+                  <zeroOrMore>
+                    <element name="jm:Property">
+                      <element name="jm:Type">
+                        <text/>
+                      </element>
+                      <optional>
+                        <element name="jm:ClassPart">
+                          <oneOrMore>
+                            <ref name="anyElement"/>
+                          </oneOrMore>
+                        </element>
+                      </optional>
+                      <optional>
+                        <element name="jm:CenterPart">
+                          <oneOrMore>
+                            <ref name="anyElement"/>
+                          </oneOrMore>
+                        </element>
+                      </optional>
+                      <optional>
+                        <element name="jm:Text">
+                          <text/>
+                        </element>
+                      </optional>
+                    </element>
+                  </zeroOrMore>
+                </element>
+              </oneOrMore>
+              <element name="jm:Area">
+                <oneOrMore>
+                  <ref name="anyElement"/>
+                </oneOrMore>
+              </element>
+            </element>
+          </element>
         </element>
       </zeroOrMore>
     </element>
