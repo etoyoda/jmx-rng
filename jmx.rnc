@@ -20,6 +20,8 @@ start = element jx:Report {
     element jb:TargetDuration {
       "PT120H" | "PT72H" | "PT1H"
     }?,
+    # yuukou kigen
+    element jb:ValidDateTime { dateTime_si }?,
     # TC番号
     element jb:EventID { empty | xsd:token },
     element jb:InfoType { "発表" | "訂正" | "取消" },
@@ -29,12 +31,46 @@ start = element jx:Report {
     # we can simply ignore this
     element jb:InfoKindVersion { "1.0_0" | "1.0_1" },
     element jb:Headline {
-      element jb:Text { xsd:string }
+      element jb:Text { xsd:string },
+      (empty | info_vpzu50_kaijou)
     }
   },
   (body_vgsk50_kisetsu |body_vgsk55_seibutsu |body_vgsk60_tokushu
   |body_vguv50_shigaisen |body_vpti50_joho |body_vptw40_typhoon)
 }
+
+info_vpzu50_kaijou =
+  element jb:Information {
+    attribute type { "全般海上警報" }
+    ,element jb:Item {
+      element jb:Kind {
+        element jb:Name { list_kaijou_keihoumei }
+        ,element jb:Code { list_kaijou_keihoucode }
+      }
+      ,element jb:Areas {
+        attribute codeType { "全般海上海域名" }
+        ,element jb:Area {
+          element jb:Name { text }
+          ,(element jb:Code { text }
+            |element je:Circle {
+              attribute type { text }
+              ,anyElement+
+              }
+            |element je:Coordinate {
+              attribute type { text }
+              ,attribute description { text }
+              ,text
+            }
+            |element je:Polygon {
+              attribute type { text }
+              ,attribute description { text }
+              ,text
+            }
+          )
+        }
+      }
+    }+
+  }
 
 body_vgsk50_kisetsu =
   element jm:Body {
@@ -619,14 +655,6 @@ list_pbof =
     pattern = "気象庁予報部|気象庁地球環境・海洋部|気象庁本庁|.*気象台"
   }
 
-list_infokind =
-  "台風解析・予報情報（５日予報）"
-  | "台風解析・予報情報（３日予報）"
-  | "特殊気象報"
-  | "生物季節観測報告気象報"
-  | "環境気象情報"
-  | "同一現象用平文情報"
-
 list_typh_datetime =
   "実況"
   | "推定　１時間後"
@@ -649,6 +677,25 @@ list_typh_datetime =
   | "延長予報　９６時間後"
   | "延長予報　１２０時間後"
 
+list_kaijou_keihoumei =
+  "海上暴風警報"
+  | "海上強風警報"
+  | "海上濃霧警報"
+
+list_kaijou_keihoucode =
+  "22"
+  | "21"
+  | "11"
+
+list_infokind =
+  "台風解析・予報情報（５日予報）"
+  | "台風解析・予報情報（３日予報）"
+  | "特殊気象報"
+  | "生物季節観測報告気象報"
+  | "環境気象情報"
+  | "同一現象用平文情報"
+  | "全般海上警報"
+
 list_title = "季節観測"
   | "生物季節観測"
   | "特殊気象報"
@@ -659,3 +706,11 @@ list_title = "季節観測"
   | "台風解析・予報情報（３日予報）"
   | "台風解析・予報情報（５日予報）"
   | "台風解析・予報情報（５日予報）（Ｈ３０）"
+  | "全般海上警報（定時）"
+
+anyElement =
+  element * | je:* {
+    (attribute * { text }
+    | text
+    | anyElement) *
+  }

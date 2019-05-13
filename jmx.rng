@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:jm="http://xml.kishou.go.jp/jmaxml1/body/meteorology1/" xmlns:jb="http://xml.kishou.go.jp/jmaxml1/informationBasis1/" xmlns:je="http://xml.kishou.go.jp/jmaxml1/elementBasis1/" xmlns:jx="http://xml.kishou.go.jp/jmaxml1/" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<grammar ns="http://xml.kishou.go.jp/jmaxml1/elementBasis1/" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:jm="http://xml.kishou.go.jp/jmaxml1/body/meteorology1/" xmlns:jb="http://xml.kishou.go.jp/jmaxml1/informationBasis1/" xmlns:je="http://xml.kishou.go.jp/jmaxml1/elementBasis1/" xmlns:jx="http://xml.kishou.go.jp/jmaxml1/" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <start>
     <element name="jx:Report">
       <element name="jx:Control">
@@ -44,6 +44,12 @@
             </choice>
           </element>
         </optional>
+        <optional>
+          <!-- yuukou kigen -->
+          <element name="jb:ValidDateTime">
+            <ref name="dateTime_si"/>
+          </element>
+        </optional>
         <!-- TC番号 -->
         <element name="jb:EventID">
           <choice>
@@ -79,6 +85,10 @@
           <element name="jb:Text">
             <data type="string"/>
           </element>
+          <choice>
+            <empty/>
+            <ref name="info_vpzu50_kaijou"/>
+          </choice>
         </element>
       </element>
       <choice>
@@ -91,6 +101,56 @@
       </choice>
     </element>
   </start>
+  <define name="info_vpzu50_kaijou">
+    <element name="jb:Information">
+      <attribute name="type">
+        <value>全般海上警報</value>
+      </attribute>
+      <oneOrMore>
+        <element name="jb:Item">
+          <element name="jb:Kind">
+            <element name="jb:Name">
+              <ref name="list_kaijou_keihoumei"/>
+            </element>
+            <element name="jb:Code">
+              <ref name="list_kaijou_keihoucode"/>
+            </element>
+          </element>
+          <element name="jb:Areas">
+            <attribute name="codeType">
+              <value>全般海上海域名</value>
+            </attribute>
+            <element name="jb:Area">
+              <element name="jb:Name">
+                <text/>
+              </element>
+              <choice>
+                <element name="jb:Code">
+                  <text/>
+                </element>
+                <element name="je:Circle">
+                  <attribute name="type"/>
+                  <oneOrMore>
+                    <ref name="anyElement"/>
+                  </oneOrMore>
+                </element>
+                <element name="je:Coordinate">
+                  <attribute name="type"/>
+                  <attribute name="description"/>
+                  <text/>
+                </element>
+                <element name="je:Polygon">
+                  <attribute name="type"/>
+                  <attribute name="description"/>
+                  <text/>
+                </element>
+              </choice>
+            </element>
+          </element>
+        </element>
+      </oneOrMore>
+    </element>
+  </define>
   <define name="body_vgsk50_kisetsu">
     <element name="jm:Body">
       <element name="jm:MeteorologicalInfos">
@@ -1071,16 +1131,6 @@
       <param name="pattern">気象庁予報部|気象庁地球環境・海洋部|気象庁本庁|.*気象台</param>
     </data>
   </define>
-  <define name="list_infokind">
-    <choice>
-      <value>台風解析・予報情報（５日予報）</value>
-      <value>台風解析・予報情報（３日予報）</value>
-      <value>特殊気象報</value>
-      <value>生物季節観測報告気象報</value>
-      <value>環境気象情報</value>
-      <value>同一現象用平文情報</value>
-    </choice>
-  </define>
   <define name="list_typh_datetime">
     <choice>
       <value>実況</value>
@@ -1105,6 +1155,31 @@
       <value>延長予報　１２０時間後</value>
     </choice>
   </define>
+  <define name="list_kaijou_keihoumei">
+    <choice>
+      <value>海上暴風警報</value>
+      <value>海上強風警報</value>
+      <value>海上濃霧警報</value>
+    </choice>
+  </define>
+  <define name="list_kaijou_keihoucode">
+    <choice>
+      <value>22</value>
+      <value>21</value>
+      <value>11</value>
+    </choice>
+  </define>
+  <define name="list_infokind">
+    <choice>
+      <value>台風解析・予報情報（５日予報）</value>
+      <value>台風解析・予報情報（３日予報）</value>
+      <value>特殊気象報</value>
+      <value>生物季節観測報告気象報</value>
+      <value>環境気象情報</value>
+      <value>同一現象用平文情報</value>
+      <value>全般海上警報</value>
+    </choice>
+  </define>
   <define name="list_title">
     <choice>
       <value>季節観測</value>
@@ -1117,6 +1192,24 @@
       <value>台風解析・予報情報（３日予報）</value>
       <value>台風解析・予報情報（５日予報）</value>
       <value>台風解析・予報情報（５日予報）（Ｈ３０）</value>
+      <value>全般海上警報（定時）</value>
     </choice>
+  </define>
+  <define name="anyElement">
+    <element>
+      <choice>
+        <anyName/>
+        <nsName/>
+      </choice>
+      <zeroOrMore>
+        <choice>
+          <attribute>
+            <anyName/>
+          </attribute>
+          <text/>
+          <ref name="anyElement"/>
+        </choice>
+      </zeroOrMore>
+    </element>
   </define>
 </grammar>
