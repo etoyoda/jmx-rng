@@ -202,7 +202,12 @@
         <value>熱帯低気圧</value>
       </element>
       <element name="je:Coordinate">
-        <attribute name="type"/>
+        <attribute name="type">
+          <choice>
+            <value>中心位置（度）</value>
+            <value>実況位置（度）</value>
+          </choice>
+        </attribute>
         <attribute name="description">
           <ref name="latlon_decimal_ja"/>
         </attribute>
@@ -229,8 +234,10 @@
       </element>
       <element name="je:Polygon">
         <attribute name="type"/>
-        <attribute name="description"/>
-        <text/>
+        <attribute name="description">
+          <ref name="latlon_multi_ja"/>
+        </attribute>
+        <ref name="latlon_multi_ascii"/>
       </element>
     </element>
   </define>
@@ -1254,6 +1261,11 @@
       <param name="pattern">\+\d\d?[\-+]\d\d\d/</param>
     </data>
   </define>
+  <define name="latlon_multi_ascii">
+    <data type="string">
+      <param name="pattern">/?(\+\d\d[\-+]\d\d\d/)+</param>
+    </data>
+  </define>
   <define name="latlon_decimal_ja">
     <data type="string">
       <param name="pattern">北緯[０-９]+．[０-９]度[東西]経[０-９]+．[０-９]度</param>
@@ -1262,6 +1274,11 @@
   <define name="latlon_deg_ja">
     <data type="string">
       <param name="pattern">北緯[０-９]+度[東西]経[０-９]+度</param>
+    </data>
+  </define>
+  <define name="latlon_multi_ja">
+    <data type="string">
+      <param name="pattern">(北緯[０-９]+度[東西]経[０-９]+度(、)?)+</param>
     </data>
   </define>
   <define name="latlon_sexagesimal_ascii">
