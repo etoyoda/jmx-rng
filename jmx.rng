@@ -181,8 +181,20 @@
     </element>
   </define>
   <define name="kaijou_point">
-    <attribute name="description"/>
-    <text/>
+    <choice>
+      <group>
+        <attribute name="description">
+          <ref name="latlon_deg_ja"/>
+        </attribute>
+        <ref name="latlon_deg_ascii"/>
+      </group>
+      <group>
+        <attribute name="description">
+          <ref name="latlon_decimal_ja"/>
+        </attribute>
+        <ref name="latlon_decimal_ascii"/>
+      </group>
+    </choice>
   </define>
   <define name="kaijou_area_point">
     <element name="jb:Area">
@@ -191,8 +203,10 @@
       </element>
       <element name="je:Coordinate">
         <attribute name="type"/>
-        <attribute name="description"/>
-        <text/>
+        <attribute name="description">
+          <ref name="latlon_decimal_ja"/>
+        </attribute>
+        <ref name="latlon_decimal_ascii"/>
       </element>
     </element>
   </define>
@@ -203,7 +217,7 @@
           <data type="token"/>
         </element>
         <element name="jb:Code">
-          <text/>
+          <data type="positiveInteger"/>
         </element>
       </element>
     </oneOrMore>
@@ -1232,12 +1246,22 @@
   </define>
   <define name="latlon_decimal_ascii">
     <data type="string">
-      <param name="pattern">\+\d\d\.\d[\-+]\d\d\d\.\d/</param>
+      <param name="pattern">\+\d\d?\.\d[\-+]\d\d\d\.\d/</param>
+    </data>
+  </define>
+  <define name="latlon_deg_ascii">
+    <data type="string">
+      <param name="pattern">\+\d\d?[\-+]\d\d\d/</param>
     </data>
   </define>
   <define name="latlon_decimal_ja">
     <data type="string">
       <param name="pattern">北緯[０-９]+．[０-９]度[東西]経[０-９]+．[０-９]度</param>
+    </data>
+  </define>
+  <define name="latlon_deg_ja">
+    <data type="string">
+      <param name="pattern">北緯[０-９]+度[東西]経[０-９]+度</param>
     </data>
   </define>
   <define name="latlon_sexagesimal_ascii">

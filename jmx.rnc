@@ -73,22 +73,26 @@ kaijou_area_circles =
   }
 
 kaijou_point =
-  attribute description { text }, text
+  (
+    (attribute description { latlon_deg_ja },  latlon_deg_ascii)
+  |
+    (attribute description { latlon_decimal_ja }, latlon_decimal_ascii)
+  )
 
 kaijou_area_point =
   element jb:Area {
     element jb:Name { "熱帯低気圧" }
    ,element je:Coordinate {
       attribute type { text }
-     ,attribute description { text }
-     ,text
+     ,attribute description { latlon_decimal_ja }
+     ,latlon_decimal_ascii
     }
   }
 
 kaijou_area_codes =
   element jb:Area {
     element jb:Name { xsd:token }
-   ,element jb:Code { text }
+   ,element jb:Code { xsd:positiveInteger }
   }+
 
 kaijou_area_polygon =
@@ -683,12 +687,22 @@ latlon_decimal3_ascii =
 
 latlon_decimal_ascii =
   xsd:string {
-    pattern = "\+\d\d\.\d[\-+]\d\d\d\.\d/"
+    pattern = "\+\d\d?\.\d[\-+]\d\d\d\.\d/"
+  }
+
+latlon_deg_ascii =
+  xsd:string {
+    pattern = "\+\d\d?[\-+]\d\d\d/"
   }
 
 latlon_decimal_ja =
   xsd:string {
     pattern = "北緯[０-９]+．[０-９]度[東西]経[０-９]+．[０-９]度"
+  }
+
+latlon_deg_ja =
+  xsd:string {
+    pattern = "北緯[０-９]+度[東西]経[０-９]+度"
   }
 
 latlon_sexagesimal_ascii =
