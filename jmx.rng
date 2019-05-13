@@ -123,17 +123,17 @@
               <value>全般海上海域名</value>
             </attribute>
             <choice>
-              <ref name="area_teikiatsu"/>
-              <ref name="area_nettei"/>
-              <ref name="area_polygon"/>
-              <ref name="area_by_code"/>
+              <ref name="kaijou_area_circles"/>
+              <ref name="kaijou_area_point"/>
+              <ref name="kaijou_area_polygon"/>
+              <ref name="kaijou_area_codes"/>
             </choice>
           </element>
         </element>
       </oneOrMore>
     </element>
   </define>
-  <define name="area_teikiatsu">
+  <define name="kaijou_area_circles">
     <element name="jb:Area">
       <element name="jb:Name">
         <choice>
@@ -143,15 +143,48 @@
       </element>
       <oneOrMore>
         <element name="je:Circle">
-          <attribute name="type"/>
-          <oneOrMore>
-            <ref name="anyElement"/>
-          </oneOrMore>
+          <attribute name="type">
+            <value>影響範囲</value>
+          </attribute>
+          <optional>
+            <!-- either analysis or 24 hour forecast present -->
+            <element name="je:BasePoint">
+              <attribute name="type">
+                <value>実況位置（度）</value>
+              </attribute>
+              <ref name="kaijou_point"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="je:BasePoint">
+              <attribute name="type">
+                <value>１２時間後位置（度）</value>
+              </attribute>
+              <ref name="kaijou_point"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="je:BasePoint">
+              <attribute name="type">
+                <value>２４時間後位置（度）</value>
+              </attribute>
+              <optional>
+                <ref name="kaijou_point"/>
+              </optional>
+            </element>
+          </optional>
+          <optional>
+            <ref name="radii_of_wind"/>
+          </optional>
         </element>
       </oneOrMore>
     </element>
   </define>
-  <define name="area_nettei">
+  <define name="kaijou_point">
+    <attribute name="description"/>
+    <text/>
+  </define>
+  <define name="kaijou_area_point">
     <element name="jb:Area">
       <element name="jb:Name">
         <value>熱帯低気圧</value>
@@ -163,7 +196,7 @@
       </element>
     </element>
   </define>
-  <define name="area_by_code">
+  <define name="kaijou_area_codes">
     <oneOrMore>
       <element name="jb:Area">
         <element name="jb:Name">
@@ -175,7 +208,7 @@
       </element>
     </oneOrMore>
   </define>
-  <define name="area_polygon">
+  <define name="kaijou_area_polygon">
     <element name="jb:Area">
       <element name="jb:Name">
         <value>緯度経度領域</value>
@@ -1026,23 +1059,26 @@
           <data type="integer"/>
         </optional>
       </element>
-      <element name="je:Radius">
-        <attribute name="type">
-          <value>半径</value>
-        </attribute>
-        <attribute name="unit">
-          <value>km</value>
-        </attribute>
-        <attribute name="description"/>
-        <optional>
-          <attribute name="condition">
-            <value>なし</value>
+      <optional>
+        <!-- kilometer Radius missing in kaijou keihou -->
+        <element name="je:Radius">
+          <attribute name="type">
+            <value>半径</value>
           </attribute>
-        </optional>
-        <optional>
-          <data type="integer"/>
-        </optional>
-      </element>
+          <attribute name="unit">
+            <value>km</value>
+          </attribute>
+          <attribute name="description"/>
+          <optional>
+            <attribute name="condition">
+              <value>なし</value>
+            </attribute>
+          </optional>
+          <optional>
+            <data type="integer"/>
+          </optional>
+        </element>
+      </optional>
     </element>
   </define>
   <!-- 偏心円の場合の Axes の中身のひとつ -->
@@ -1067,16 +1103,19 @@
         <attribute name="description"/>
         <data type="positiveInteger"/>
       </element>
-      <element name="je:Radius">
-        <attribute name="type">
-          <value>半径</value>
-        </attribute>
-        <attribute name="unit">
-          <value>km</value>
-        </attribute>
-        <attribute name="description"/>
-        <data type="positiveInteger"/>
-      </element>
+      <optional>
+        <!-- kilometer Radius missing in kaijou keihou -->
+        <element name="je:Radius">
+          <attribute name="type">
+            <value>半径</value>
+          </attribute>
+          <attribute name="unit">
+            <value>km</value>
+          </attribute>
+          <attribute name="description"/>
+          <data type="positiveInteger"/>
+        </element>
+      </optional>
     </element>
   </define>
   <!-- Area/Circle[@type=予報円] と Kind[Property/Type='予報円'] で使う -->

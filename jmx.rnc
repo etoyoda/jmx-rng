@@ -50,22 +50,32 @@ info_vpzu50_kaijou =
       }
      ,element jb:Areas {
         attribute codeType { "全般海上海域名" }
-       ,( area_teikiatsu
-        | area_nettei
-        | area_polygon
-        | area_by_code
+       ,( kaijou_area_circles
+        | kaijou_area_point
+        | kaijou_area_polygon
+        | kaijou_area_codes
         )
       }
     }+
   }
 
-area_teikiatsu =
+kaijou_area_circles =
   element jb:Area {
     element jb:Name { "低気圧" | "熱帯低気圧" }
-   ,element je:Circle { attribute type { text }, anyElement+ }+
+   ,element je:Circle {
+      attribute type { "影響範囲" }
+      # either analysis or 24 hour forecast present
+     ,element je:BasePoint { attribute type { "実況位置（度）" }, kaijou_point }?
+     ,element je:BasePoint { attribute type { "１２時間後位置（度）" }, kaijou_point }?
+     ,element je:BasePoint { attribute type { "２４時間後位置（度）" }, kaijou_point? }?
+     ,radii_of_wind?
+    }+
   }
 
-area_nettei =
+kaijou_point =
+  attribute description { text }, text
+
+kaijou_area_point =
   element jb:Area {
     element jb:Name { "熱帯低気圧" }
    ,element je:Coordinate {
@@ -75,13 +85,13 @@ area_nettei =
     }
   }
 
-area_by_code =
+kaijou_area_codes =
   element jb:Area {
     element jb:Name { xsd:token }
    ,element jb:Code { text }
   }+
 
-area_polygon =
+kaijou_area_polygon =
   element jb:Area {
     element jb:Name { "緯度経度領域" }
    ,element je:Polygon {
@@ -553,13 +563,14 @@ all_round_axis =
       attribute condition { "なし" }?,
       xsd:integer?
     },
+    # kilometer Radius missing in kaijou keihou
     element je:Radius {
       attribute type { "半径" },
       attribute unit { "km" },
       attribute description { text },
       attribute condition { "なし" }?,
       xsd:integer?
-    }
+    }?
   }
 
 # 偏心円の場合の Axes の中身のひとつ
@@ -576,12 +587,13 @@ ordinary_axis =
       attribute description { text },
       xsd:positiveInteger
     },
+    # kilometer Radius missing in kaijou keihou
     element je:Radius {
       attribute type { "半径" },
       attribute unit { "km" },
       attribute description { text },
       xsd:positiveInteger
-    }
+    }?
   }
 
 # Area/Circle[@type=予報円] と Kind[Property/Type='予報円'] で使う
