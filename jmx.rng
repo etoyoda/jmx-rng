@@ -7,7 +7,7 @@
           <ref name="list_title"/>
         </element>
         <element name="jx:DateTime">
-          <ref name="utc_date_time"/>
+          <ref name="dateTime_sz"/>
         </element>
         <element name="jx:Status">
           <choice>
@@ -29,11 +29,11 @@
         </element>
         <!-- 発表時刻 -->
         <element name="jb:ReportDateTime">
-          <ref name="jst_date_time"/>
+          <ref name="dateTime_si"/>
         </element>
         <!-- 解析時刻 -->
         <element name="jb:TargetDateTime">
-          <ref name="jst_date_time"/>
+          <ref name="dateTime_si"/>
         </element>
         <optional>
           <element name="jb:TargetDuration">
@@ -82,16 +82,16 @@
         </element>
       </element>
       <choice>
-        <ref name="content_vgsk50_kisetsu"/>
-        <ref name="content_vgsk55_seibutsu"/>
-        <ref name="content_vgsk60_tokushu"/>
-        <ref name="content_vguv50_shigaisen"/>
-        <ref name="content_vpti50_joho"/>
-        <ref name="content_vptw40_typhoon"/>
+        <ref name="body_vgsk50_kisetsu"/>
+        <ref name="body_vgsk55_seibutsu"/>
+        <ref name="body_vgsk60_tokushu"/>
+        <ref name="body_vguv50_shigaisen"/>
+        <ref name="body_vpti50_joho"/>
+        <ref name="body_vptw40_typhoon"/>
       </choice>
     </element>
   </start>
-  <define name="content_vgsk50_kisetsu">
+  <define name="body_vgsk50_kisetsu">
     <element name="jm:Body">
       <element name="jm:MeteorologicalInfos">
         <attribute name="type">
@@ -102,7 +102,7 @@
             <attribute name="significant">
               <value>yyyy-mm-dd</value>
             </attribute>
-            <ref name="jst_date_time"/>
+            <ref name="dateTime_si"/>
           </element>
           <element name="jm:Item">
             <element name="jm:Kind">
@@ -141,7 +141,7 @@
       </element>
     </element>
   </define>
-  <define name="content_vgsk55_seibutsu">
+  <define name="body_vgsk55_seibutsu">
     <element name="jm:Body">
       <element name="jm:MeteorologicalInfos">
         <attribute name="type">
@@ -152,7 +152,7 @@
             <attribute name="significant">
               <value>yyyy-mm-dd</value>
             </attribute>
-            <ref name="jst_date_time"/>
+            <ref name="dateTime_si"/>
           </element>
           <element name="jm:Item">
             <element name="jm:Kind">
@@ -210,7 +210,7 @@
       </element>
     </element>
   </define>
-  <define name="content_vgsk60_tokushu">
+  <define name="body_vgsk60_tokushu">
     <element name="jm:Body">
       <element name="jm:MeteorologicalInfos">
         <attribute name="type">
@@ -221,7 +221,7 @@
             <attribute name="significant">
               <value>yyyy-mm-ddThh:mm</value>
             </attribute>
-            <ref name="jst_date_time"/>
+            <ref name="dateTime_si"/>
           </element>
           <element name="jm:Item">
             <element name="jm:Kind">
@@ -257,7 +257,7 @@
       </element>
     </element>
   </define>
-  <define name="content_vguv50_shigaisen">
+  <define name="body_vguv50_shigaisen">
     <element name="jm:Body">
       <element name="jm:MeteorologicalInfos">
         <group>
@@ -273,7 +273,7 @@
                       <data type="positiveInteger"/>
                     </attribute>
                     <element name="jm:DateTime">
-                      <ref name="jst_date_time"/>
+                      <ref name="dateTime_si"/>
                     </element>
                   </element>
                 </oneOrMore>
@@ -360,7 +360,7 @@
       <!-- jm:MeteorologicalInfos -->
     </element>
   </define>
-  <define name="content_vpti50_joho">
+  <define name="body_vpti50_joho">
     <element name="jm:Body">
       <element name="jm:Notice">
         <empty/>
@@ -375,7 +375,7 @@
       </element>
     </element>
   </define>
-  <define name="content_vptw40_typhoon">
+  <define name="body_vptw40_typhoon">
     <element name="jm:Body">
       <element name="jm:MeteorologicalInfos">
         <attribute name="type">
@@ -388,7 +388,7 @@
                 <attribute name="type">
                   <ref name="list_typh_datetime"/>
                 </attribute>
-                <ref name="jst_date_time"/>
+                <ref name="dateTime_si"/>
               </element>
               <element name="jm:Item">
                 <group>
@@ -406,7 +406,7 @@
                             </data>
                           </element>
                           <element name="jm:NameKana">
-                            <ref name="all_katakana_or_empty"/>
+                            <ref name="pat_katakana"/>
                           </element>
                           <element name="jm:Number">
                             <optional>
@@ -447,7 +447,7 @@
                           </attribute>
                           <choice>
                             <empty/>
-                            <ref name="typhoon_class"/>
+                            <ref name="list_typhoon_class"/>
                           </choice>
                         </element>
                         <optional>
@@ -459,7 +459,7 @@
                             <!-- 実況・推定で大きさ階級を決定しないときは空になる -->
                             <choice>
                               <empty/>
-                              <ref name="typhoon_size_class"/>
+                              <ref name="list_typhoon_size_class"/>
                             </choice>
                           </element>
                         </optional>
@@ -471,7 +471,7 @@
                             </attribute>
                             <choice>
                               <empty/>
-                              <ref name="typhoon_intensity_class"/>
+                              <ref name="list_typhoon_intensity_class"/>
                             </choice>
                           </element>
                         </optional>
@@ -523,7 +523,7 @@
                           <!-- 空の実例はないが、予想される -->
                           <choice>
                             <empty/>
-                            <ref name="direction_sixteen"/>
+                            <ref name="list_direction16"/>
                           </choice>
                         </element>
                         <element name="je:Speed">
@@ -855,7 +855,7 @@
           </attribute>
         </optional>
         <optional>
-          <ref name="direction_eight"/>
+          <ref name="list_direction8"/>
         </optional>
       </element>
       <!-- 偏心していない例が与えられていないが、意味的に用意すべき -->
@@ -905,7 +905,7 @@
         <attribute name="unit">
           <value>８方位漢字</value>
         </attribute>
-        <ref name="direction_eight"/>
+        <ref name="list_direction8"/>
       </element>
       <element name="je:Radius">
         <attribute name="type">
@@ -971,7 +971,7 @@
       </element>
     </element>
   </define>
-  <define name="typhoon_class">
+  <define name="list_typhoon_class">
     <a:documentation>=== simple data types ===</a:documentation>
     <choice>
       <value>台風(TY)</value>
@@ -983,20 +983,20 @@
       <value>温帯低気圧(LOW)</value>
     </choice>
   </define>
-  <define name="typhoon_size_class">
+  <define name="list_typhoon_size_class">
     <choice>
       <value>大型</value>
       <value>超大型</value>
     </choice>
   </define>
-  <define name="typhoon_intensity_class">
+  <define name="list_typhoon_intensity_class">
     <choice>
       <value>強い</value>
       <value>非常に強い</value>
       <value>猛烈な</value>
     </choice>
   </define>
-  <define name="direction_eight">
+  <define name="list_direction8">
     <choice>
       <value>北</value>
       <value>北東</value>
@@ -1008,37 +1008,30 @@
       <value>北西</value>
     </choice>
   </define>
-  <define name="direction_sixteen">
+  <define name="list_direction16">
     <choice>
-      <value>北</value>
+      <ref name="list_direction8"/>
       <value>北北東</value>
-      <value>北東</value>
       <value>東北東</value>
-      <value>東</value>
       <value>東南東</value>
-      <value>南東</value>
       <value>南南東</value>
-      <value>南</value>
       <value>南南西</value>
-      <value>南西</value>
       <value>西南西</value>
-      <value>西</value>
       <value>西北西</value>
-      <value>北西</value>
       <value>北北西</value>
     </choice>
   </define>
-  <define name="all_katakana_or_empty">
+  <define name="pat_katakana">
     <data type="string">
       <param name="pattern">[ァ-ー]*</param>
     </data>
   </define>
-  <define name="utc_date_time">
+  <define name="dateTime_sz">
     <data type="dateTime">
       <param name="pattern">\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ</param>
     </data>
   </define>
-  <define name="jst_date_time">
+  <define name="dateTime_si">
     <data type="dateTime">
       <param name="pattern">\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\+09:00</param>
     </data>

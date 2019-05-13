@@ -6,7 +6,7 @@ namespace je = "http://xml.kishou.go.jp/jmaxml1/elementBasis1/"
 start = element jx:Report {
   element jx:Control {
     element jx:Title { list_title },
-    element jx:DateTime { utc_date_time },
+    element jx:DateTime { dateTime_sz },
     element jx:Status { "通常" | "訓練" | "試験" },
     element jx:EditorialOffice { list_edof },
     element jx:PublishingOffice { list_pbof }
@@ -14,9 +14,9 @@ start = element jx:Report {
   element jb:Head {
     element jb:Title { xsd:token },
     # 発表時刻
-    element jb:ReportDateTime { jst_date_time },
+    element jb:ReportDateTime { dateTime_si },
     # 解析時刻
-    element jb:TargetDateTime { jst_date_time },
+    element jb:TargetDateTime { dateTime_si },
     element jb:TargetDuration {
       "PT120H" | "PT72H" | "PT1H"
     }?,
@@ -32,18 +32,18 @@ start = element jx:Report {
       element jb:Text { xsd:string }
     }
   },
-  (content_vgsk50_kisetsu |content_vgsk55_seibutsu |content_vgsk60_tokushu
-  |content_vguv50_shigaisen |content_vpti50_joho |content_vptw40_typhoon)
+  (body_vgsk50_kisetsu |body_vgsk55_seibutsu |body_vgsk60_tokushu
+  |body_vguv50_shigaisen |body_vpti50_joho |body_vptw40_typhoon)
 }
 
-content_vgsk50_kisetsu =
+body_vgsk50_kisetsu =
   element jm:Body {
     element jm:MeteorologicalInfos {
       attribute type { "季節観測" }
       ,element jm:MeteorologicalInfo {
         element jm:DateTime {
           attribute significant { "yyyy-mm-dd" }
-          ,jst_date_time
+          ,dateTime_si
         }
         ,element jm:Item {
           element jm:Kind {
@@ -68,14 +68,14 @@ content_vgsk50_kisetsu =
     }
   }
 
-content_vgsk55_seibutsu =
+body_vgsk55_seibutsu =
   element jm:Body {
     element jm:MeteorologicalInfos {
       attribute type { "生物季節観測" }
       ,element jm:MeteorologicalInfo {
         element jm:DateTime {
           attribute significant { "yyyy-mm-dd" }
-          ,jst_date_time
+          ,dateTime_si
         }
         ,element jm:Item {
           element jm:Kind {
@@ -105,14 +105,14 @@ content_vgsk55_seibutsu =
     }
   }
 
-content_vgsk60_tokushu =
+body_vgsk60_tokushu =
   element jm:Body {
     element jm:MeteorologicalInfos {
       attribute type { "特殊気象報（各種現象）" }
       ,element jm:MeteorologicalInfo {
         element jm:DateTime {
           attribute significant { "yyyy-mm-ddThh:mm" }
-          ,jst_date_time
+          ,dateTime_si
         }
         ,element jm:Item {
           element jm:Kind {
@@ -136,7 +136,7 @@ content_vgsk60_tokushu =
     }
   }
 
-content_vguv50_shigaisen =
+body_vguv50_shigaisen =
   element jm:Body {
     element jm:MeteorologicalInfos {
       attribute type { "紫外線観測データ" }
@@ -144,7 +144,7 @@ content_vguv50_shigaisen =
         element jm:TimeDefines {
           element jm:TimeDefine {
             attribute timeId { xsd:positiveInteger }
-            ,element jm:DateTime { jst_date_time }
+            ,element jm:DateTime { dateTime_si }
           }+
         }
         ,element jm:Item {
@@ -193,7 +193,7 @@ content_vguv50_shigaisen =
     } # jm:MeteorologicalInfos
   }
 
-content_vpti50_joho =
+body_vpti50_joho =
   element jm:Body {
     element jm:Notice { empty }
     ,element jm:Comment {
@@ -204,14 +204,14 @@ content_vpti50_joho =
     }
   }
 
-content_vptw40_typhoon =
+body_vptw40_typhoon =
   element jm:Body {
     element jm:MeteorologicalInfos {
       attribute type { "台風情報" }
       ,element jm:MeteorologicalInfo {
         element jm:DateTime {
           attribute type { list_typh_datetime },
-          jst_date_time
+          dateTime_si
         },
         element jm:Item {
 
@@ -221,7 +221,7 @@ content_vptw40_typhoon =
               element jm:Type { "呼称" },
               element jm:TyphoonNamePart {
                 element jm:Name { xsd:string { pattern = "[\-A-Z]*" } },
-                element jm:NameKana { all_katakana_or_empty },
+                element jm:NameKana { pat_katakana },
                 element jm:Number { xsd:nonNegativeInteger? },
                 element jm:Remark {
                   empty
@@ -249,18 +249,18 @@ content_vptw40_typhoon =
                 ## (7) 空になるのは延長予報だけ
                 element je:TyphoonClass {
                   attribute type { "熱帯擾乱種類" },
-                  (empty | typhoon_class)
+                  (empty | list_typhoon_class)
                 },
                 ## (8-1) 実況・推定では常に AreaClass がある
                 element je:AreaClass {
                   attribute type { "大きさ階級" },
                   # 実況・推定で大きさ階級を決定しないときは空になる
-                  (empty | typhoon_size_class)
+                  (empty | list_typhoon_size_class)
                 }?,
                 ## (8-2) 実況・推定・予報では常に IntensityClass がある
                 element je:IntensityClass {
                   attribute type { "強さ階級" },
-                  (empty | typhoon_intensity_class)
+                  (empty | list_typhoon_intensity_class)
                 }?
               }
             }
@@ -287,7 +287,7 @@ content_vptw40_typhoon =
                   attribute condition { "不定" }?,
                   attribute description { "不定" }?,
                   # 空の実例はないが、予想される
-                  (empty | direction_sixteen)
+                  (empty | list_direction16)
                 },
                 element je:Speed {
                   attribute type { "移動速度" },
@@ -463,7 +463,7 @@ all_round_axis =
       attribute unit { "８方位漢字" },
       attribute description { "全域" },
       attribute condition { "全域" }?,
-      direction_eight?
+      list_direction8?
     },
     # 偏心していない例が与えられていないが、意味的に用意すべき
     element je:Radius {
@@ -488,7 +488,7 @@ ordinary_axis =
     element je:Direction {
       attribute type { "方向" },
       attribute unit { "８方位漢字" },
-      direction_eight
+      list_direction8
     },
     element je:Radius {
       attribute type { "半径" },
@@ -532,7 +532,7 @@ radii_yohouen =
 
 ### === simple data types ===
 
-typhoon_class =
+list_typhoon_class =
   "台風(TY)"
   | "台風(STS)"
   | "台風(TS)"
@@ -541,16 +541,16 @@ typhoon_class =
   | "発達した熱帯低気圧(Tropical Storm)"
   | "温帯低気圧(LOW)"
 
-typhoon_size_class =
+list_typhoon_size_class =
   "大型"
   | "超大型"
 
-typhoon_intensity_class =
+list_typhoon_intensity_class =
   "強い"
   | "非常に強い"
   | "猛烈な"
 
-direction_eight =
+list_direction8 =
   "北"
   | "北東"
   | "東"
@@ -560,33 +560,26 @@ direction_eight =
   | "西"
   | "北西"
 
-direction_sixteen =
-  "北"
+list_direction16 =
+  list_direction8
   | "北北東"
-  | "北東"
   | "東北東"
-  | "東"
   | "東南東"
-  | "南東"
   | "南南東"
-  | "南"
   | "南南西"
-  | "南西"
   | "西南西"
-  | "西"
   | "西北西"
-  | "北西"
   | "北北西"
 
-all_katakana_or_empty =
+pat_katakana =
   xsd:string { pattern = "[ァ-ー]*" }
 
-utc_date_time =
+dateTime_sz =
   xsd:dateTime {
     pattern = "\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ"
   }
 
-jst_date_time =
+dateTime_si =
   xsd:dateTime {
     pattern = "\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\+09:00"
   }
