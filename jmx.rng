@@ -84,6 +84,7 @@
             <ref name="info_vpzu50_kaijou_clear"/>
             <ref name="info_vpcu50_kaijou"/>
             <ref name="infos_vpww50_keihou"/>
+            <ref name="info_vxko_kasen"/>
           </choice>
         </element>
       </element>
@@ -98,6 +99,8 @@
         <ref name="body_vpcu50_kaijou"/>
         <ref name="body_vpcy50_umiyoho"/>
         <ref name="body_vpww50_keihou"/>
+        <ref name="body_vxko_kasen"/>
+        <ref name="body_vxko_emptybody"/>
       </choice>
     </element>
   </start>
@@ -106,6 +109,32 @@
     - - - jb:Information rules - - -
     
   -->
+  <define name="info_vxko_kasen">
+    <element name="jb:Information">
+      <attribute name="type">
+        <value>指定河川洪水予報（予報区域）</value>
+      </attribute>
+      <oneOrMore>
+        <ref name="anyElement"/>
+      </oneOrMore>
+    </element>
+    <element name="jb:Information">
+      <attribute name="type">
+        <value>指定河川洪水予報（河川）</value>
+      </attribute>
+      <oneOrMore>
+        <ref name="anyElement"/>
+      </oneOrMore>
+    </element>
+    <element name="jb:Information">
+      <attribute name="type">
+        <value>指定河川洪水予報（府県予報区等）</value>
+      </attribute>
+      <oneOrMore>
+        <ref name="anyElement"/>
+      </oneOrMore>
+    </element>
+  </define>
   <define name="infos_vpww50_keihou">
     <element name="jb:Information">
       <attribute name="type">
@@ -342,6 +371,64 @@
     </element>
   </define>
   <!-- === Body rules === -->
+  <define name="body_vxko_emptybody">
+    <element name="jm:Body">
+      <empty/>
+    </element>
+  </define>
+  <define name="body_vxko_kasen">
+    <element name="jm:Body">
+      <optional>
+        <element name="jm:Notice">
+          <text/>
+        </element>
+      </optional>
+      <element name="jm:Warning">
+        <attribute name="type">
+          <value>指定河川洪水予報</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <optional>
+        <element name="jm:MeteorologicalInfos">
+          <attribute name="type">
+            <value>氾濫水の予報</value>
+          </attribute>
+          <oneOrMore>
+            <ref name="anyElement"/>
+          </oneOrMore>
+        </element>
+      </optional>
+      <element name="jm:MeteorologicalInfos">
+        <attribute name="type">
+          <value>雨量情報</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <element name="jm:MeteorologicalInfos">
+        <attribute name="type">
+          <value>水位・流量情報</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <element name="jm:OfficeInfo">
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <element name="jm:AdditionalInfo">
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+    </element>
+  </define>
   <define name="body_vpww50_keihou">
     <element name="jm:Body">
       <zeroOrMore>
@@ -2026,6 +2113,7 @@
       <value>地方海上警報</value>
       <value>地方海上予報</value>
       <value>気象警報・注意報</value>
+      <value>指定河川洪水予報</value>
     </choice>
   </define>
   <define name="list_title">

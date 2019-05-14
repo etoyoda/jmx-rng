@@ -34,7 +34,8 @@ start = element jx:Report {
       |info_vpzu50_kaijou
       |info_vpzu50_kaijou_clear
       |info_vpcu50_kaijou
-      |infos_vpww50_keihou)
+      |infos_vpww50_keihou
+      |info_vxko_kasen)
     }
   },
   (body_vgsk50_kisetsu
@@ -46,12 +47,28 @@ start = element jx:Report {
   |body_vpzu50_kaijou
   |body_vpcu50_kaijou
   |body_vpcy50_umiyoho
-  |body_vpww50_keihou)
+  |body_vpww50_keihou
+  |body_vxko_kasen
+  |body_vxko_emptybody)
 }
 
 #
 # --- jb:Information rules ---
 #
+
+info_vxko_kasen =
+  element jb:Information {
+    attribute type { "指定河川洪水予報（予報区域）" }
+   ,anyElement+
+  }
+ ,element jb:Information {
+    attribute type { "指定河川洪水予報（河川）" }
+   ,anyElement+
+  }
+ ,element jb:Information {
+    attribute type { "指定河川洪水予報（府県予報区等）" }
+   ,anyElement+
+  }
 
 infos_vpww50_keihou =
   element jb:Information {
@@ -177,6 +194,35 @@ info_vpzu50_kaijou_clear =
   }
 
 # === Body rules ===
+
+body_vxko_emptybody = element jm:Body { empty }
+
+body_vxko_kasen =
+  element jm:Body {
+    element jm:Notice { text }?
+   ,element jm:Warning {
+      attribute type { "指定河川洪水予報" }
+     ,anyElement+
+    }
+   ,element jm:MeteorologicalInfos {
+      attribute type { "氾濫水の予報" }
+     ,anyElement+
+    }?
+   ,element jm:MeteorologicalInfos {
+      attribute type { "雨量情報" }
+     ,anyElement+
+    }
+   ,element jm:MeteorologicalInfos {
+      attribute type { "水位・流量情報" }
+     ,anyElement+
+    }
+   ,element jm:OfficeInfo {
+      anyElement+
+    }
+   ,element jm:AdditionalInfo {
+      anyElement+
+    }
+  }
 
 body_vpww50_keihou =
   element jm:Body {
@@ -1127,6 +1173,7 @@ list_infokind =
 |"地方海上警報"
 |"地方海上予報"
 |"気象警報・注意報"
+|"指定河川洪水予報"
 
 list_title="季節観測"
 |"生物季節観測"
