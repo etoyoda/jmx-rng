@@ -13,3 +13,6 @@ clean: reset
 
 reset:
 	rm -f .hush.*
+
+reset-kaijou:
+	rm -f .hush.11* .hush.12*

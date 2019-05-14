@@ -305,37 +305,38 @@
                     </optional>
                     <optional>
                       <element name="jm:ClassName">
-                        <choice>
-                          <value>じょう乱</value>
-                          <value>緯度経度領域</value>
-                          <value>領域</value>
-                          <value>低気圧</value>
-                          <value>熱帯低気圧</value>
-                          <value>熱帯じょう乱</value>
-                        </choice>
+                        <ref name="list_kaijou_classname"/>
                       </element>
                     </optional>
                     <optional>
                       <element name="jm:Condition">
-                        <text/>
+                        <ref name="list_kaijou_condition"/>
                       </element>
                     </optional>
                     <optional>
                       <element name="jm:DateTime">
-                        <attribute name="type"/>
+                        <attribute name="type">
+                          <ref name="list_typh_datetime"/>
+                        </attribute>
                         <ref name="dateTime_si"/>
                       </element>
                     </optional>
                     <zeroOrMore>
                       <element name="jm:Property">
                         <element name="jm:Type">
-                          <text/>
+                          <ref name="list_kaijou_proptype"/>
                         </element>
                         <optional>
                           <element name="jm:WindPart">
-                            <oneOrMore>
-                              <ref name="anyElement"/>
-                            </oneOrMore>
+                            <choice>
+                              <element name="jm:Becoming">
+                                <element name="jm:TimeModifier">
+                                  <ref name="list_kaijou_timemodifier"/>
+                                </element>
+                                <ref name="kaijou_windpart"/>
+                              </element>
+                              <ref name="kaijou_windpart"/>
+                            </choice>
                           </element>
                         </optional>
                         <zeroOrMore>
@@ -414,7 +415,7 @@
                   <zeroOrMore>
                     <element name="jm:Property">
                       <element name="jm:Type">
-                        <text/>
+                        <ref name="list_kaijou_proptype2"/>
                       </element>
                       <optional>
                         <element name="jm:ClassPart">
@@ -449,6 +450,43 @@
         </element>
       </zeroOrMore>
     </element>
+  </define>
+  <define name="kaijou_windpart">
+    <zeroOrMore>
+      <element name="je:WindDirection">
+        <attribute name="type">
+          <value>風向</value>
+        </attribute>
+        <attribute name="unit">
+          <value>８方位漢字</value>
+        </attribute>
+        <ref name="list_direction8"/>
+      </element>
+    </zeroOrMore>
+    <oneOrMore>
+      <element name="je:WindSpeed">
+        <attribute name="type">
+          <choice>
+            <value>最大風速</value>
+            <value>風速</value>
+          </choice>
+        </attribute>
+        <attribute name="unit">
+          <value>ノット</value>
+        </attribute>
+        <optional>
+          <attribute name="condition">
+            <choice>
+              <value/>
+              <value>以上</value>
+              <value>中心付近</value>
+            </choice>
+          </attribute>
+        </optional>
+        <attribute name="description"/>
+        <data type="positiveInteger"/>
+      </element>
+    </oneOrMore>
   </define>
   <define name="body_vgsk50_kisetsu">
     <element name="jm:Body">
@@ -1496,6 +1534,58 @@
       <value>21</value>
       <value>20</value>
       <value>11</value>
+    </choice>
+  </define>
+  <define name="list_kaijou_classname">
+    <choice>
+      <value>じょう乱</value>
+      <value>緯度経度領域</value>
+      <value>領域</value>
+      <value>低気圧</value>
+      <value>熱帯低気圧</value>
+      <value>熱帯じょう乱</value>
+    </choice>
+  </define>
+  <define name="list_kaijou_proptype">
+    <choice>
+      <value>風</value>
+      <value>低気圧</value>
+      <value>温暖前線</value>
+      <value>寒冷前線</value>
+      <value>別の低気圧</value>
+      <value>濃霧</value>
+      <value>閉塞前線</value>
+      <value>停滞前線</value>
+      <value>熱帯低気圧</value>
+      <value>呼称</value>
+    </choice>
+  </define>
+  <define name="list_kaijou_proptype2">
+    <choice>
+      <value>低気圧</value>
+      <value>高気圧</value>
+      <value>温暖前線</value>
+      <value>寒冷前線</value>
+      <value>停滞前線</value>
+      <value>熱帯低気圧</value>
+      <value>低圧部</value>
+    </choice>
+  </define>
+  <define name="list_kaijou_condition">
+    <choice>
+      <value>発達した</value>
+      <value>発達中</value>
+      <value>温帯低気圧に変わる見込み</value>
+      <value>熱帯低気圧に変わる見込み</value>
+      <value>発生予想</value>
+    </choice>
+  </define>
+  <define name="list_kaijou_timemodifier">
+    <choice>
+      <value>今後１２時間以内に</value>
+      <value>今後２４時間以内に</value>
+      <value>今後１８時間以内は</value>
+      <value>今後２４時間以内は</value>
     </choice>
   </define>
   <define name="list_infokind">

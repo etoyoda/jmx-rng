@@ -129,15 +129,18 @@ body_vpzu50_kaijou =
             element jm:Name { xsd:token }?
            ,element jm:Code { xsd:positiveInteger }?
            ,element jm:Status { text }?
-           ,element jm:ClassName { "じょう乱" | "緯度経度領域" | "領域" | "低気圧"
-            | "熱帯低気圧"
-            | "熱帯じょう乱"
-           }?
-           ,element jm:Condition { text }?
-           ,element jm:DateTime { attribute type { text }, dateTime_si }?
+           ,element jm:ClassName { list_kaijou_classname }?
+           ,element jm:Condition { list_kaijou_condition }?
+           ,element jm:DateTime { attribute type { list_typh_datetime }, dateTime_si }?
            ,element jm:Property {
-              element jm:Type { text }
-             ,element jm:WindPart { anyElement+ }?
+              element jm:Type { list_kaijou_proptype }
+             ,element jm:WindPart {
+               (element jm:Becoming {
+                  element jm:TimeModifier { list_kaijou_timemodifier },
+                  kaijou_windpart
+                }
+               |kaijou_windpart)
+             }?
              ,element jm:WarningAreaPart { attribute type { text }, anyElement+ }*
              ,element jm:ClassPart { anyElement+ }?
              ,element jm:TyphoonNamePart { anyElement+ }?
@@ -160,7 +163,7 @@ body_vpzu50_kaijou =
           element jm:Kind {
             element jm:ClassName { "気圧系" | "前線" }
            ,element jm:Property {
-              element jm:Type { text }
+              element jm:Type { list_kaijou_proptype2 }
              ,element jm:ClassPart { anyElement+ }?
              ,element jm:CenterPart { anyElement+ }?
              ,element jm:Text { text }?
@@ -173,6 +176,20 @@ body_vpzu50_kaijou =
       }
     }*
   }
+
+kaijou_windpart =
+  element je:WindDirection {
+    attribute type { "風向" }
+   ,attribute unit { "８方位漢字" }
+   ,list_direction8
+  }*
+ ,element je:WindSpeed {
+    attribute type { "最大風速" | "風速" },
+    attribute unit { "ノット" },
+    attribute condition { "" | "以上" | "中心付近" }?,
+    attribute description { text },
+    xsd:positiveInteger
+  }+
 
 body_vgsk50_kisetsu =
   element jm:Body {
@@ -814,6 +831,30 @@ list_kaijou_keihoucode =
   | "21"
   | "20"
   | "11"
+
+list_kaijou_classname =
+  "じょう乱" | "緯度経度領域" | "領域" | "低気圧" | "熱帯低気圧" | "熱帯じょう乱"
+
+list_kaijou_proptype =
+  "風" | "低気圧" | "温暖前線" | "寒冷前線" | "別の低気圧" | "濃霧"
+  | "閉塞前線"
+  | "停滞前線"
+  | "熱帯低気圧"
+  | "呼称"
+
+list_kaijou_proptype2 =
+  "低気圧" | "高気圧" | "温暖前線" | "寒冷前線"
+  | "停滞前線"
+  | "熱帯低気圧"
+  | "低圧部"
+
+list_kaijou_condition =
+  "発達した" | "発達中" | "温帯低気圧に変わる見込み" | "熱帯低気圧に変わる見込み"
+  | "発生予想"
+
+list_kaijou_timemodifier = "今後１２時間以内に" | "今後２４時間以内に"
+ | "今後１８時間以内は"
+ | "今後２４時間以内は"
 
 list_infokind =
   "台風解析・予報情報（５日予報）"
