@@ -32,12 +32,13 @@ start = element jx:Report {
     element jb:InfoKindVersion { "1.0_0" | "1.0_1" },
     element jb:Headline {
       element jb:Text { xsd:string },
-      (empty | info_vpzu50_kaijou | info_vpzu50_kaijou_clear)
+      (empty |info_vpzu50_kaijou
+      |info_vpzu50_kaijou_clear |info_vpcu50_kaijou)
     }
   },
   (body_vgsk50_kisetsu |body_vgsk55_seibutsu |body_vgsk60_tokushu
   |body_vguv50_shigaisen |body_vpti50_joho |body_vptw40_typhoon
-  |body_vpzu50_kaijou)
+  |body_vpzu50_kaijou |body_vpcu50_kaijou)
 }
 
 info_vpzu50_kaijou =
@@ -55,6 +56,21 @@ info_vpzu50_kaijou =
         | kaijou_area_polygon
         | kaijou_area_codes
         )
+      }
+    }+
+  }
+
+info_vpcu50_kaijou =
+  element jb:Information {
+    attribute type { "地方海上警報" }
+   ,element jb:Item {
+      element jb:Kind {
+        element jb:Name { list_kaijou_keihoumei }
+       ,element jb:Code { list_kaijou_keihoucode }
+      }
+     ,element jb:Areas {
+        attribute codeType { "地方海上予報区" }
+       ,kaijou_area_codes
       }
     }+
   }
@@ -109,7 +125,10 @@ info_vpzu50_kaijou_clear =
   element jb:Information {
     attribute type { "全般海上警報" }
    ,element jb:Item {
-      element jb:Kind { element jb:Name { "海上警報なし" } }
+      element jb:Kind {
+        element jb:Name { "海上警報なし" }
+        # this time jb:Code missing
+      }
      ,element jb:Areas {
         attribute codeType { "全般海上海域名" }
        ,element jb:Area { element jb:Name { "全般海上予報区" } }
@@ -136,12 +155,16 @@ body_vpzu50_kaijou =
               element jm:Type { list_kaijou_proptype }
              ,element jm:WindPart {
                (element jm:Becoming {
-                  element jm:TimeModifier { list_kaijou_timemodifier },
+                  element jm:TimeModifier {
+                    list_kaijou_timemodifier
+                  },
                   kaijou_windpart
                 }
                |kaijou_windpart)
              }?
-             ,element jm:WarningAreaPart { attribute type { text }, anyElement+ }*
+             ,element jm:WarningAreaPart {
+                kaijou_windcircle
+              }*
              ,element jm:ClassPart { anyElement+ }?
              ,element jm:TyphoonNamePart { anyElement+ }?
              ,element jm:CenterPart { anyElement+ }?
@@ -184,12 +207,60 @@ kaijou_windpart =
    ,list_direction8
   }*
  ,element je:WindSpeed {
-    attribute type { "最大風速" | "風速" },
-    attribute unit { "ノット" },
-    attribute condition { "" | "以上" | "中心付近" }?,
-    attribute description { text },
-    xsd:positiveInteger
+    attribute type { "最大風速" | "風速" }
+   ,attribute unit { "ノット" }
+   ,attribute condition { "" | "中心付近" | "以上"
+    }?
+   ,attribute description { text }
+   ,xsd:nonNegativeInteger
   }+
+
+kaijou_windcircle =
+    attribute type { "強風域" | "暴風域" }
+   ,element je:WindSpeed {
+      attribute type { "風速" }
+     ,attribute unit { "ノット" }
+     ,attribute condition { "以上" }
+     ,attribute description {
+       "５０ノット以上" | "３０ノット以上"
+     }
+     ,("30" | "50")
+    }
+   ,element je:Circle {
+      radii_of_wind
+    }
+
+body_vpcu50_kaijou =
+  element jm:Body {
+    element jm:Warning {
+      attribute type { "地方海上警報" }
+     ,anyElement
+    }
+   ,element jm:MeteorologicalInfos {
+      attribute type { "気象要因" }
+     ,element jm:MeteorologicalInfo {
+        element jm:DateTime { dateTime_si }
+       ,element jm:Name { xsd:token }
+       ,element jm:Item {
+          element jm:Kind {
+            element jm:Property {
+              element jm:Type { "概況" }
+             ,element jm:SynopsisPart {
+                element je:Synopsis {
+                  attribute type { "気象要因" }
+                 ,text
+                }+
+              }
+            }
+          }
+         ,element jm:Area {
+            element jm:Name { xsd:token }
+           ,element jm:Code { xsd:positiveInteger }
+          }
+        }
+      }
+    }
+  }
 
 body_vgsk50_kisetsu =
   element jm:Body {
@@ -788,7 +859,7 @@ latlon_sexagesimal_ja =
 
 list_edof =
   xsd:string {
-    pattern = "気象庁本庁|.*気象台"
+    pattern = "気象庁本庁|.*気象台|大阪管区気象台（舞鶴）"
   }
 
 list_pbof =
@@ -824,6 +895,8 @@ list_kaijou_keihoumei =
   | "海上強風警報"
   | "海上風警報"
   | "海上濃霧警報"
+  | "海上着氷警報"
+  | "海上警報解除"
 
 list_kaijou_keihoucode =
   "23"
@@ -831,6 +904,8 @@ list_kaijou_keihoucode =
   | "21"
   | "20"
   | "11"
+  | "10"
+  | "00"
 
 list_kaijou_classname =
   "じょう乱" | "緯度経度領域" | "領域" | "低気圧" | "熱帯低気圧" | "熱帯じょう乱"
@@ -864,6 +939,7 @@ list_infokind =
   | "環境気象情報"
   | "同一現象用平文情報"
   | "全般海上警報"
+  | "地方海上警報"
 
 list_title = "季節観測"
   | "生物季節観測"
@@ -879,6 +955,7 @@ list_title = "季節観測"
   | "全般海上警報（定時）（Ｈ２９）"
   | "全般海上警報（臨時）"
   | "全般海上警報（臨時）（Ｈ２９）"
+  | "地方海上警報"
 
 anyElement =
   element * | je:* {

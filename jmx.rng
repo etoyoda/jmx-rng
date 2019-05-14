@@ -89,6 +89,7 @@
             <empty/>
             <ref name="info_vpzu50_kaijou"/>
             <ref name="info_vpzu50_kaijou_clear"/>
+            <ref name="info_vpcu50_kaijou"/>
           </choice>
         </element>
       </element>
@@ -100,6 +101,7 @@
         <ref name="body_vpti50_joho"/>
         <ref name="body_vptw40_typhoon"/>
         <ref name="body_vpzu50_kaijou"/>
+        <ref name="body_vpcu50_kaijou"/>
       </choice>
     </element>
   </start>
@@ -128,6 +130,31 @@
               <ref name="kaijou_area_polygon"/>
               <ref name="kaijou_area_codes"/>
             </choice>
+          </element>
+        </element>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="info_vpcu50_kaijou">
+    <element name="jb:Information">
+      <attribute name="type">
+        <value>地方海上警報</value>
+      </attribute>
+      <oneOrMore>
+        <element name="jb:Item">
+          <element name="jb:Kind">
+            <element name="jb:Name">
+              <ref name="list_kaijou_keihoumei"/>
+            </element>
+            <element name="jb:Code">
+              <ref name="list_kaijou_keihoucode"/>
+            </element>
+          </element>
+          <element name="jb:Areas">
+            <attribute name="codeType">
+              <value>地方海上予報区</value>
+            </attribute>
+            <ref name="kaijou_area_codes"/>
           </element>
         </element>
       </oneOrMore>
@@ -253,6 +280,7 @@
           <element name="jb:Name">
             <value>海上警報なし</value>
           </element>
+          <!-- this time jb:Code missing -->
         </element>
         <element name="jb:Areas">
           <attribute name="codeType">
@@ -341,10 +369,7 @@
                         </optional>
                         <zeroOrMore>
                           <element name="jm:WarningAreaPart">
-                            <attribute name="type"/>
-                            <oneOrMore>
-                              <ref name="anyElement"/>
-                            </oneOrMore>
+                            <ref name="kaijou_windcircle"/>
                           </element>
                         </zeroOrMore>
                         <optional>
@@ -478,15 +503,97 @@
           <attribute name="condition">
             <choice>
               <value/>
-              <value>以上</value>
               <value>中心付近</value>
+              <value>以上</value>
             </choice>
           </attribute>
         </optional>
         <attribute name="description"/>
-        <data type="positiveInteger"/>
+        <data type="nonNegativeInteger"/>
       </element>
     </oneOrMore>
+  </define>
+  <define name="kaijou_windcircle">
+    <attribute name="type">
+      <choice>
+        <value>強風域</value>
+        <value>暴風域</value>
+      </choice>
+    </attribute>
+    <element name="je:WindSpeed">
+      <attribute name="type">
+        <value>風速</value>
+      </attribute>
+      <attribute name="unit">
+        <value>ノット</value>
+      </attribute>
+      <attribute name="condition">
+        <value>以上</value>
+      </attribute>
+      <attribute name="description">
+        <choice>
+          <value>５０ノット以上</value>
+          <value>３０ノット以上</value>
+        </choice>
+      </attribute>
+      <choice>
+        <value>30</value>
+        <value>50</value>
+      </choice>
+    </element>
+    <element name="je:Circle">
+      <ref name="radii_of_wind"/>
+    </element>
+  </define>
+  <define name="body_vpcu50_kaijou">
+    <element name="jm:Body">
+      <element name="jm:Warning">
+        <attribute name="type">
+          <value>地方海上警報</value>
+        </attribute>
+        <ref name="anyElement"/>
+      </element>
+      <element name="jm:MeteorologicalInfos">
+        <attribute name="type">
+          <value>気象要因</value>
+        </attribute>
+        <element name="jm:MeteorologicalInfo">
+          <element name="jm:DateTime">
+            <ref name="dateTime_si"/>
+          </element>
+          <element name="jm:Name">
+            <data type="token"/>
+          </element>
+          <element name="jm:Item">
+            <element name="jm:Kind">
+              <element name="jm:Property">
+                <element name="jm:Type">
+                  <value>概況</value>
+                </element>
+                <element name="jm:SynopsisPart">
+                  <oneOrMore>
+                    <element name="je:Synopsis">
+                      <attribute name="type">
+                        <value>気象要因</value>
+                      </attribute>
+                      <text/>
+                    </element>
+                  </oneOrMore>
+                </element>
+              </element>
+            </element>
+            <element name="jm:Area">
+              <element name="jm:Name">
+                <data type="token"/>
+              </element>
+              <element name="jm:Code">
+                <data type="positiveInteger"/>
+              </element>
+            </element>
+          </element>
+        </element>
+      </element>
+    </element>
   </define>
   <define name="body_vgsk50_kisetsu">
     <element name="jm:Body">
@@ -1486,7 +1593,7 @@
   </define>
   <define name="list_edof">
     <data type="string">
-      <param name="pattern">気象庁本庁|.*気象台</param>
+      <param name="pattern">気象庁本庁|.*気象台|大阪管区気象台（舞鶴）</param>
     </data>
   </define>
   <define name="list_pbof">
@@ -1525,6 +1632,8 @@
       <value>海上強風警報</value>
       <value>海上風警報</value>
       <value>海上濃霧警報</value>
+      <value>海上着氷警報</value>
+      <value>海上警報解除</value>
     </choice>
   </define>
   <define name="list_kaijou_keihoucode">
@@ -1534,6 +1643,8 @@
       <value>21</value>
       <value>20</value>
       <value>11</value>
+      <value>10</value>
+      <value>00</value>
     </choice>
   </define>
   <define name="list_kaijou_classname">
@@ -1597,6 +1708,7 @@
       <value>環境気象情報</value>
       <value>同一現象用平文情報</value>
       <value>全般海上警報</value>
+      <value>地方海上警報</value>
     </choice>
   </define>
   <define name="list_title">
@@ -1615,6 +1727,7 @@
       <value>全般海上警報（定時）（Ｈ２９）</value>
       <value>全般海上警報（臨時）</value>
       <value>全般海上警報（臨時）（Ｈ２９）</value>
+      <value>地方海上警報</value>
     </choice>
   </define>
   <define name="anyElement">
