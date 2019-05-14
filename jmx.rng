@@ -72,10 +72,7 @@
         </element>
         <!-- we can simply ignore this -->
         <element name="jb:InfoKindVersion">
-          <choice>
-            <value>1.0_0</value>
-            <value>1.0_1</value>
-          </choice>
+          <data type="token"/>
         </element>
         <element name="jb:Headline">
           <element name="jb:Text">
@@ -86,6 +83,7 @@
             <ref name="info_vpzu50_kaijou"/>
             <ref name="info_vpzu50_kaijou_clear"/>
             <ref name="info_vpcu50_kaijou"/>
+            <ref name="infos_vpww50_keihou"/>
           </choice>
         </element>
       </element>
@@ -99,9 +97,60 @@
         <ref name="body_vpzu50_kaijou"/>
         <ref name="body_vpcu50_kaijou"/>
         <ref name="body_vpcy50_umiyoho"/>
+        <ref name="body_vpww50_keihou"/>
       </choice>
     </element>
   </start>
+  <!--
+    
+    - - - jb:Information rules - - -
+    
+  -->
+  <define name="infos_vpww50_keihou">
+    <element name="jb:Information">
+      <attribute name="type">
+        <value>気象警報・注意報（府県予報区等）</value>
+      </attribute>
+      <oneOrMore>
+        <ref name="anyElement"/>
+      </oneOrMore>
+    </element>
+    <element name="jb:Information">
+      <attribute name="type">
+        <value>気象警報・注意報（一次細分区域等）</value>
+      </attribute>
+      <oneOrMore>
+        <ref name="anyElement"/>
+      </oneOrMore>
+    </element>
+    <element name="jb:Information">
+      <attribute name="type">
+        <value>気象警報・注意報（市町村等をまとめた地域等）</value>
+      </attribute>
+      <oneOrMore>
+        <ref name="anyElement"/>
+      </oneOrMore>
+    </element>
+    <element name="jb:Information">
+      <attribute name="type">
+        <value>気象警報・注意報（市町村等）</value>
+      </attribute>
+      <oneOrMore>
+        <ref name="anyElement"/>
+      </oneOrMore>
+    </element>
+    <optional>
+      <element name="jb:Information">
+        <attribute name="type">
+          <value>気象警報・注意報（警報注意報種別毎）</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+    </optional>
+  </define>
+  <!-- may be missing in case of lifting -->
   <define name="info_vpzu50_kaijou">
     <element name="jb:Information">
       <attribute name="type">
@@ -293,6 +342,57 @@
     </element>
   </define>
   <!-- === Body rules === -->
+  <define name="body_vpww50_keihou">
+    <element name="jm:Body">
+      <zeroOrMore>
+        <element name="jm:Notice">
+          <text/>
+        </element>
+      </zeroOrMore>
+      <element name="jm:Warning">
+        <attribute name="type">
+          <value>気象警報・注意報（府県予報区等）</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <element name="jm:Warning">
+        <attribute name="type">
+          <value>気象警報・注意報（一次細分区域等）</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <element name="jm:Warning">
+        <attribute name="type">
+          <value>気象警報・注意報（市町村等をまとめた地域等）</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <element name="jm:Warning">
+        <attribute name="type">
+          <value>気象警報・注意報（市町村等）</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <optional>
+        <element name="jm:MeteorologicalInfos">
+          <attribute name="type">
+            <value>量的予想時系列（市町村等）</value>
+          </attribute>
+          <oneOrMore>
+            <ref name="anyElement"/>
+          </oneOrMore>
+        </element>
+      </optional>
+    </element>
+  </define>
   <define name="body_vpcy50_umiyoho">
     <element name="jm:Body">
       <element name="jm:Warning">
@@ -1808,7 +1908,7 @@
   </define>
   <define name="list_edof">
     <data type="string">
-      <param name="pattern">気象庁本庁|.*気象台|大阪管区気象台（舞鶴）</param>
+      <param name="pattern">気象庁予報部|気象庁本庁|.*気象台|大阪管区気象台（舞鶴）</param>
     </data>
   </define>
   <define name="list_pbof">
@@ -1925,6 +2025,7 @@
       <value>全般海上警報</value>
       <value>地方海上警報</value>
       <value>地方海上予報</value>
+      <value>気象警報・注意報</value>
     </choice>
   </define>
   <define name="list_title">
@@ -1947,6 +2048,10 @@
       <value>地方海上警報（Ｈ２８）</value>
       <value>地方海上予報</value>
       <value>地方海上予報（Ｈ２８）</value>
+      <value>気象警報・注意報</value>
+      <value>気象特別警報・警報・注意報</value>
+      <value>気象警報・注意報（Ｈ２７）</value>
+      <value>指定河川洪水予報</value>
     </choice>
   </define>
   <define name="anyElement">

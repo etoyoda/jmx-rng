@@ -27,13 +27,14 @@ start = element jx:Report {
     element jb:Serial { empty | xsd:token },
     element jb:InfoKind { list_infokind },
     # we can simply ignore this
-    element jb:InfoKindVersion { "1.0_0" | "1.0_1" },
+    element jb:InfoKindVersion { xsd:token },
     element jb:Headline {
       element jb:Text { xsd:string },
       (empty
       |info_vpzu50_kaijou
       |info_vpzu50_kaijou_clear
-      |info_vpcu50_kaijou)
+      |info_vpcu50_kaijou
+      |infos_vpww50_keihou)
     }
   },
   (body_vgsk50_kisetsu
@@ -44,8 +45,41 @@ start = element jx:Report {
   |body_vptw40_typhoon
   |body_vpzu50_kaijou
   |body_vpcu50_kaijou
-  |body_vpcy50_umiyoho)
+  |body_vpcy50_umiyoho
+  |body_vpww50_keihou)
 }
+
+#
+# --- jb:Information rules ---
+#
+
+infos_vpww50_keihou =
+  element jb:Information {
+    attribute type {
+      "気象警報・注意報（府県予報区等）"}
+   ,anyElement+
+  }
+ ,element jb:Information {
+    attribute type {
+      "気象警報・注意報（一次細分区域等）"}
+   ,anyElement+
+  }
+ ,element jb:Information {
+    attribute type {
+      "気象警報・注意報（市町村等をまとめた地域等）"}
+   ,anyElement+
+  }
+ ,element jb:Information {
+    attribute type {
+      "気象警報・注意報（市町村等）"}
+   ,anyElement+
+  }
+ ,element jb:Information {
+    attribute type {
+      "気象警報・注意報（警報注意報種別毎）"}
+   ,anyElement+
+  }?
+  # may be missing in case of lifting
 
 info_vpzu50_kaijou =
   element jb:Information {
@@ -143,6 +177,36 @@ info_vpzu50_kaijou_clear =
   }
 
 # === Body rules ===
+
+body_vpww50_keihou =
+  element jm:Body {
+    element jm:Notice { text }*
+   ,element jm:Warning {
+      attribute type {
+        "気象警報・注意報（府県予報区等）"}
+     ,anyElement+
+    }
+   ,element jm:Warning {
+      attribute type {
+        "気象警報・注意報（一次細分区域等）"}
+     ,anyElement+
+    }
+   ,element jm:Warning {
+      attribute type {
+        "気象警報・注意報（市町村等をまとめた地域等）"}
+     ,anyElement+
+    }
+   ,element jm:Warning {
+      attribute type {
+        "気象警報・注意報（市町村等）"}
+     ,anyElement+
+    }
+   ,element jm:MeteorologicalInfos {
+      attribute type { "量的予想時系列（市町村等）" }
+     ,anyElement+
+    }?
+  }
+
 
 body_vpcy50_umiyoho =
   element jm:Body {
@@ -978,7 +1042,7 @@ latlon_sexagesimal_ja =
 
 list_edof =
   xsd:string {
-    pattern = "気象庁本庁|.*気象台|大阪管区気象台（舞鶴）"
+    pattern = "気象庁予報部|気象庁本庁|.*気象台|大阪管区気象台（舞鶴）"
   }
 
 list_pbof =
@@ -1046,39 +1110,46 @@ list_kaijou_condition =
   "発達した" | "発達中" | "温帯低気圧に変わる見込み" | "熱帯低気圧に変わる見込み"
   | "発生予想"
 
-list_kaijou_timemodifier = "今後１２時間以内に" | "今後２４時間以内に"
- | "今後１８時間以内は"
- | "今後２４時間以内は"
+list_kaijou_timemodifier =
+"今後１２時間以内に"
+|"今後２４時間以内に"
+|"今後１８時間以内は"
+|"今後２４時間以内は"
 
 list_infokind =
-  "台風解析・予報情報（５日予報）"
-  | "台風解析・予報情報（３日予報）"
-  | "特殊気象報"
-  | "生物季節観測報告気象報"
-  | "環境気象情報"
-  | "同一現象用平文情報"
-  | "全般海上警報"
-  | "地方海上警報"
-| "地方海上予報"
+"台風解析・予報情報（５日予報）"
+|"台風解析・予報情報（３日予報）"
+|"特殊気象報"
+|"生物季節観測報告気象報"
+|"環境気象情報"
+|"同一現象用平文情報"
+|"全般海上警報"
+|"地方海上警報"
+|"地方海上予報"
+|"気象警報・注意報"
 
-list_title = "季節観測"
-  | "生物季節観測"
-  | "特殊気象報"
-  | "紫外線観測データ"
-  | "全般台風情報"
-  | "全般台風情報（定型）"
-  | "全般台風情報（詳細）"
-  | "台風解析・予報情報（３日予報）"
-  | "台風解析・予報情報（５日予報）"
-  | "台風解析・予報情報（５日予報）（Ｈ３０）"
-  | "全般海上警報（定時）"
-  | "全般海上警報（定時）（Ｈ２９）"
-  | "全般海上警報（臨時）"
-  | "全般海上警報（臨時）（Ｈ２９）"
-  | "地方海上警報"
-  | "地方海上警報（Ｈ２８）"
-  | "地方海上予報"
-  | "地方海上予報（Ｈ２８）"
+list_title="季節観測"
+|"生物季節観測"
+|"特殊気象報"
+|"紫外線観測データ"
+|"全般台風情報"
+|"全般台風情報（定型）"
+|"全般台風情報（詳細）"
+|"台風解析・予報情報（３日予報）"
+|"台風解析・予報情報（５日予報）"
+|"台風解析・予報情報（５日予報）（Ｈ３０）"
+|"全般海上警報（定時）"
+|"全般海上警報（定時）（Ｈ２９）"
+|"全般海上警報（臨時）"
+|"全般海上警報（臨時）（Ｈ２９）"
+|"地方海上警報"
+|"地方海上警報（Ｈ２８）"
+|"地方海上予報"
+|"地方海上予報（Ｈ２８）"
+|"気象警報・注意報"
+|"気象特別警報・警報・注意報"
+|"気象警報・注意報（Ｈ２７）"
+|"指定河川洪水予報"
 
 anyElement =
   element * | je:* {
