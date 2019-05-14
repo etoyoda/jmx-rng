@@ -17,9 +17,7 @@ start = element jx:Report {
     element jb:ReportDateTime { dateTime_si },
     # 解析時刻
     element jb:TargetDateTime { dateTime_si },
-    element jb:TargetDuration {
-      "PT120H" | "PT72H" | "PT1H"
-    }?,
+    element jb:TargetDuration { xsd:duration }?,
     # yuukou kigen
     element jb:ValidDateTime { dateTime_si }?,
     # TC番号
@@ -32,13 +30,21 @@ start = element jx:Report {
     element jb:InfoKindVersion { "1.0_0" | "1.0_1" },
     element jb:Headline {
       element jb:Text { xsd:string },
-      (empty |info_vpzu50_kaijou
-      |info_vpzu50_kaijou_clear |info_vpcu50_kaijou)
+      (empty
+      |info_vpzu50_kaijou
+      |info_vpzu50_kaijou_clear
+      |info_vpcu50_kaijou)
     }
   },
-  (body_vgsk50_kisetsu |body_vgsk55_seibutsu |body_vgsk60_tokushu
-  |body_vguv50_shigaisen |body_vpti50_joho |body_vptw40_typhoon
-  |body_vpzu50_kaijou |body_vpcu50_kaijou)
+  (body_vgsk50_kisetsu
+  |body_vgsk55_seibutsu
+  |body_vgsk60_tokushu
+  |body_vguv50_shigaisen
+  |body_vpti50_joho
+  |body_vptw40_typhoon
+  |body_vpzu50_kaijou
+  |body_vpcu50_kaijou
+  |body_vpcy50_umiyoho)
 }
 
 info_vpzu50_kaijou =
@@ -136,6 +142,151 @@ info_vpzu50_kaijou_clear =
     }
   }
 
+# === Body rules ===
+
+body_vpcy50_umiyoho =
+  element jm:Body {
+    element jm:Warning {
+      attribute type { "地方海上警報発表状況" }
+     ,element jm:Item {
+        element jm:Kind {
+        ((element jm:Name { xsd:token }
+         ,element jm:Code { xsd:nonNegativeInteger })
+         |element jm:Status { "海上警報なし" })
+        }+
+       ,element jm:Area {
+          element jm:Name { xsd:token }
+         ,element jm:Code { xsd:nonNegativeInteger }
+        }
+      }+
+    }
+   ,kaijou_kishouyouin
+   ,umiyoho_jikkyou
+   ,umiyoho_kaiiki
+  }
+
+umiyoho_jikkyou =
+  element jm:MeteorologicalInfos {
+    attribute type { "観測実況" }
+    ,anyElement+
+  }
+
+umiyoho_kaiiki =
+  element jm:MeteorologicalInfos {
+    attribute type { "地方海域の予報" }
+   ,element jm:MeteorologicalInfo {
+      element jm:DateTime { dateTime_si }
+     ,element jm:Duration { xsd:duration }
+     # name of forecast time range duration
+     ,element jm:Name { xsd:token }
+     ,element jm:Item {
+        element jm:Kind {
+         (kaijou_propwind
+         |umiyoho_tenki
+         |umiyoho_propfog
+         |kaijou_propuneri
+         |umiyoho_propice)?
+        }+
+       ,element jm:Area {
+          element jm:Name { xsd:token }
+         ,element jm:Code { xsd:nonNegativeInteger }
+        }
+      }+
+    }+
+  }
+
+umiyoho_tenki =
+  element jm:Property {
+    element jm:Type { "天気" }
+   ,element jm:WeatherPart { anyElement+ }
+  }
+
+umiyoho_propfog =
+  element jm:Property {
+    element jm:Type { "視程" }
+   ,element jm:VisibilityPart { anyElement+ }
+  }
+
+umiyoho_propice =
+  element jm:Property {
+    element jm:Type { "流氷" }
+   ,element jm:SeaIcePart { anyElement+ }
+  }
+
+body_vpcu50_kaijou =
+  element jm:Body {
+    element jm:Warning {
+      attribute type { "地方海上警報" }
+     ,element jm:Item {
+        element jm:Kind {
+          element jm:Name { xsd:token }?
+         ,element jm:Code { xsd:nonNegativeInteger }?
+        ,(kaijou_propwind
+         |kaijou_propfog
+         |kaijou_propuneri
+         |kaijou_propicing)?
+        }+
+       ,element jm:Area {
+          element jm:Name { xsd:token }
+         ,element jm:Code { xsd:nonNegativeInteger }
+        }
+      }+
+    }
+   ,kaijou_kishouyouin
+  }
+
+kaijou_propwind =
+  element jm:Property {
+    element jm:Type { "風" }
+   ,element jm:WindPart { anyElement+ }
+  }
+
+kaijou_propfog =
+  element jm:Property {
+    element jm:Type { "濃霧" }
+   ,element jm:VisibilityPart { anyElement+ }
+  }
+
+kaijou_propuneri =
+  element jm:Property {
+    element jm:Type { "波" }
+   ,element jm:WaveHeightPart { anyElement+ }
+  }
+
+kaijou_propicing =
+  element jm:Property {
+    element jm:Type { "着氷" }
+   ,element jm:IcingPart { anyElement+ }
+  }
+
+
+kaijou_kishouyouin =
+  element jm:MeteorologicalInfos {
+    attribute type { "気象要因" }
+   ,element jm:MeteorologicalInfo {
+      element jm:DateTime { dateTime_si }
+     ,element jm:Name { xsd:token }
+     ,element jm:Item {
+        element jm:Kind {
+          element jm:Property {
+            element jm:Type { "概況" }
+           ,element jm:SynopsisPart {
+              element je:Synopsis {
+                attribute type { "気象要因" }
+               ,text
+              }+
+            }
+          }
+        }
+       ,element jm:Area {
+          element jm:Name { xsd:token }
+         ,element jm:Code { xsd:positiveInteger }
+        }
+      }
+    }
+  }
+
+
 body_vpzu50_kaijou =
   element jm:Body {
     element jm:Notice { "" | "警報は６時間毎に更新します。" }
@@ -229,38 +380,6 @@ kaijou_windcircle =
    ,element je:Circle {
       radii_of_wind
     }
-
-body_vpcu50_kaijou =
-  element jm:Body {
-    element jm:Warning {
-      attribute type { "地方海上警報" }
-     ,anyElement
-    }
-   ,element jm:MeteorologicalInfos {
-      attribute type { "気象要因" }
-     ,element jm:MeteorologicalInfo {
-        element jm:DateTime { dateTime_si }
-       ,element jm:Name { xsd:token }
-       ,element jm:Item {
-          element jm:Kind {
-            element jm:Property {
-              element jm:Type { "概況" }
-             ,element jm:SynopsisPart {
-                element je:Synopsis {
-                  attribute type { "気象要因" }
-                 ,text
-                }+
-              }
-            }
-          }
-         ,element jm:Area {
-            element jm:Name { xsd:token }
-           ,element jm:Code { xsd:positiveInteger }
-          }
-        }
-      }
-    }
-  }
 
 body_vgsk50_kisetsu =
   element jm:Body {
@@ -940,6 +1059,7 @@ list_infokind =
   | "同一現象用平文情報"
   | "全般海上警報"
   | "地方海上警報"
+| "地方海上予報"
 
 list_title = "季節観測"
   | "生物季節観測"
@@ -956,6 +1076,9 @@ list_title = "季節観測"
   | "全般海上警報（臨時）"
   | "全般海上警報（臨時）（Ｈ２９）"
   | "地方海上警報"
+  | "地方海上警報（Ｈ２８）"
+  | "地方海上予報"
+  | "地方海上予報（Ｈ２８）"
 
 anyElement =
   element * | je:* {
