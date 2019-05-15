@@ -25,7 +25,8 @@ start = element jx:Report {
   |body_vxko_emptybody
   |body_vxww50_dosha
   |body_vpoa50_kirokuame
-  |body_vphw50_tatsuchu)
+  |body_vphw50_tatsuchu
+  |body_vpfg50_gaikyou)
 }
 
 head_common =
@@ -39,6 +40,30 @@ head_common =
 ,   element jb:Serial { empty | xsd:token }
 
 # === Body rules ===
+
+body_vpfg50_gaikyou =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "平文情報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { xsd:string }
+    }
+  }
+, element jm:Body {
+    element jm:TargetArea {
+      attribute codeType { "気象情報／府県予報区・細分区域等" }
+,     element jm:Name { xsd:token }
+,     element jm:Code { xsd:positiveInteger { totalDigits = "6" } }
+    }
+,   element jm:Notice { empty }
+,   element jm:Comment {
+      element jm:Text {
+        attribute type { "本文" }
+        ,xsd:string
+      }
+    }
+  }
 
 body_vphw50_tatsuchu =
   element jb:Head {
@@ -1411,6 +1436,7 @@ list_title="季節観測"
 |"全般気象情報"
 |"地方気象情報"
 |"府県気象情報"
+|"府県天気概況"
 
 anyElement =
   element * | je:* {

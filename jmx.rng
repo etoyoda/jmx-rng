@@ -39,6 +39,7 @@
         <ref name="body_vxww50_dosha"/>
         <ref name="body_vpoa50_kirokuame"/>
         <ref name="body_vphw50_tatsuchu"/>
+        <ref name="body_vpfg50_gaikyou"/>
       </choice>
     </element>
   </start>
@@ -83,6 +84,48 @@
     </element>
   </define>
   <!-- === Body rules === -->
+  <define name="body_vpfg50_gaikyou">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>平文情報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+      </element>
+    </element>
+    <element name="jm:Body">
+      <element name="jm:TargetArea">
+        <attribute name="codeType">
+          <value>気象情報／府県予報区・細分区域等</value>
+        </attribute>
+        <element name="jm:Name">
+          <data type="token"/>
+        </element>
+        <element name="jm:Code">
+          <data type="positiveInteger">
+            <param name="totalDigits">6</param>
+          </data>
+        </element>
+      </element>
+      <element name="jm:Notice">
+        <empty/>
+      </element>
+      <element name="jm:Comment">
+        <element name="jm:Text">
+          <attribute name="type">
+            <value>本文</value>
+          </attribute>
+          <data type="string"/>
+        </element>
+      </element>
+    </element>
+  </define>
   <define name="body_vphw50_tatsuchu">
     <element name="jb:Head">
       <ref name="head_common"/>
@@ -2527,6 +2570,7 @@
       <value>全般気象情報</value>
       <value>地方気象情報</value>
       <value>府県気象情報</value>
+      <value>府県天気概況</value>
     </choice>
   </define>
   <define name="anyElement">
