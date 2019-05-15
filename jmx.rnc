@@ -5,32 +5,20 @@ namespace je = "http://xml.kishou.go.jp/jmaxml1/elementBasis1/"
 
 start = element jx:Report {
   element jx:Control {
-    element jx:Title { list_title },
-    element jx:DateTime { dateTime_sz },
-    element jx:Status { "通常" | "訓練" | "試験" },
-    element jx:EditorialOffice { list_edof },
-    element jx:PublishingOffice { list_pbof }
-  },
-  element jb:Head {
-    element jb:Title { xsd:token },
-    # 発表時刻
-    element jb:ReportDateTime { dateTime_si },
-    # 解析時刻
-    element jb:TargetDateTime { dateTime_si },
-    element jb:TargetDuration { xsd:duration }?,
-    # yuukou kigen
-    element jb:ValidDateTime { dateTime_si }?,
-    # TC番号
-    element jb:EventID { empty | xsd:token },
-    element jb:InfoType { "発表" | "訂正" | "取消" },
-    # 情報番号というが起算・加算条件は未詳
-    element jb:Serial { empty | xsd:token },
-    element jb:InfoKind { list_infokind },
+    element jx:Title { list_title }
+   ,element jx:DateTime { dateTime_sz }
+   ,element jx:Status { "通常" | "訓練" | "試験" }
+   ,element jx:EditorialOffice { list_edof }
+   ,element jx:PublishingOffice { list_pbof }
+  }
+, element jb:Head {
+    head_common
+,   element jb:InfoKind { list_infokind }
     # we can simply ignore this
-    element jb:InfoKindVersion { xsd:token },
-    element jb:Headline {
-      element jb:Text { xsd:string },
-      (empty
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { xsd:string }
+,     (empty
       |info_vpzu50_kaijou
       |info_vpzu50_kaijou_clear
       |info_vpcu50_kaijou
@@ -53,6 +41,16 @@ start = element jx:Report {
   |body_vxko_emptybody
   |body_vxww50_dosha)
 }
+
+head_common =
+    element jb:Title { xsd:token }
+,   element jb:ReportDateTime { dateTime_si }
+,   element jb:TargetDateTime { dateTime_si }
+,   element jb:TargetDuration { xsd:duration }?
+,   element jb:ValidDateTime { dateTime_si }?
+,   element jb:EventID { empty | xsd:token }
+,   element jb:InfoType { "発表" | "訂正" | "取消" }
+,   element jb:Serial { empty | xsd:token }
 
 #
 # --- jb:Information rules ---

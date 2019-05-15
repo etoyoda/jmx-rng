@@ -24,49 +24,7 @@
         </element>
       </element>
       <element name="jb:Head">
-        <element name="jb:Title">
-          <data type="token"/>
-        </element>
-        <!-- 発表時刻 -->
-        <element name="jb:ReportDateTime">
-          <ref name="dateTime_si"/>
-        </element>
-        <!-- 解析時刻 -->
-        <element name="jb:TargetDateTime">
-          <ref name="dateTime_si"/>
-        </element>
-        <optional>
-          <element name="jb:TargetDuration">
-            <data type="duration"/>
-          </element>
-        </optional>
-        <optional>
-          <!-- yuukou kigen -->
-          <element name="jb:ValidDateTime">
-            <ref name="dateTime_si"/>
-          </element>
-        </optional>
-        <!-- TC番号 -->
-        <element name="jb:EventID">
-          <choice>
-            <empty/>
-            <data type="token"/>
-          </choice>
-        </element>
-        <element name="jb:InfoType">
-          <choice>
-            <value>発表</value>
-            <value>訂正</value>
-            <value>取消</value>
-          </choice>
-        </element>
-        <!-- 情報番号というが起算・加算条件は未詳 -->
-        <element name="jb:Serial">
-          <choice>
-            <empty/>
-            <data type="token"/>
-          </choice>
-        </element>
+        <ref name="head_common"/>
         <element name="jb:InfoKind">
           <ref name="list_infokind"/>
         </element>
@@ -106,6 +64,46 @@
       </choice>
     </element>
   </start>
+  <define name="head_common">
+    <element name="jb:Title">
+      <data type="token"/>
+    </element>
+    <element name="jb:ReportDateTime">
+      <ref name="dateTime_si"/>
+    </element>
+    <element name="jb:TargetDateTime">
+      <ref name="dateTime_si"/>
+    </element>
+    <optional>
+      <element name="jb:TargetDuration">
+        <data type="duration"/>
+      </element>
+    </optional>
+    <optional>
+      <element name="jb:ValidDateTime">
+        <ref name="dateTime_si"/>
+      </element>
+    </optional>
+    <element name="jb:EventID">
+      <choice>
+        <empty/>
+        <data type="token"/>
+      </choice>
+    </element>
+    <element name="jb:InfoType">
+      <choice>
+        <value>発表</value>
+        <value>訂正</value>
+        <value>取消</value>
+      </choice>
+    </element>
+    <element name="jb:Serial">
+      <choice>
+        <empty/>
+        <data type="token"/>
+      </choice>
+    </element>
+  </define>
   <!--
     
     - - - jb:Information rules - - -
