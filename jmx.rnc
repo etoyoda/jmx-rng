@@ -35,7 +35,8 @@ start = element jx:Report {
       |info_vpzu50_kaijou_clear
       |info_vpcu50_kaijou
       |infos_vpww50_keihou
-      |info_vxko_kasen)
+      |info_vxko_kasen
+      |info_vxww50_dosha)
     }
   },
   (body_vgsk50_kisetsu
@@ -49,12 +50,40 @@ start = element jx:Report {
   |body_vpcy50_umiyoho
   |body_vpww50_keihou
   |body_vxko_kasen
-  |body_vxko_emptybody)
+  |body_vxko_emptybody
+  |body_vxww50_dosha)
 }
 
 #
 # --- jb:Information rules ---
 #
+
+info_vxww50_dosha =
+  element jb:Information {
+    attribute type { "土砂災害警戒情報" }
+   ,element jb:Item {
+      dosha_state
+     ,element jb:Areas {
+        attribute codeType { "気象・地震・火山情報／市町村等" }
+       ,dosha_area+
+      }
+    }+
+  }
+
+dosha_state =
+  element jb:Kind {
+    element jb:Name { xsd:token }
+   ,element jb:Code { "0" | "1" | "3" }
+   ,element jb:Condition { xsd:token }
+  }
+
+dosha_area =
+  element jb:Area {
+    element jb:Name { xsd:token }
+   ,element jb:Code {
+     xsd:positiveInteger { totalDigits = "7" }
+    }
+  }
 
 info_vxko_kasen =
   element jb:Information {
@@ -165,7 +194,7 @@ kaijou_area_point =
 kaijou_area_codes =
   element jb:Area {
     element jb:Name { xsd:token }
-   ,element jb:Code { xsd:positiveInteger }
+   ,element jb:Code { xsd:positiveInteger { totalDigits = "4" } }
   }+
 
 kaijou_area_polygon =
@@ -194,6 +223,21 @@ info_vpzu50_kaijou_clear =
   }
 
 # === Body rules ===
+
+body_vxww50_dosha =
+  element jm:Body {
+    element jm:TargetArea {
+      element jm:Name { xsd:token }
+     ,element jm:Code { xsd:positiveInteger { totalDigits = "6" } }
+    }
+   ,element jm:Warning {
+      attribute type { "土砂災害警戒情報" }
+     ,anyElement+
+    }
+   ,element jm:OfficeInfo {
+      anyElement+
+    }
+  }
 
 body_vxko_emptybody = element jm:Body { empty }
 
@@ -1174,6 +1218,7 @@ list_infokind =
 |"地方海上予報"
 |"気象警報・注意報"
 |"指定河川洪水予報"
+|"土砂災害警戒情報"
 
 list_title="季節観測"
 |"生物季節観測"
@@ -1197,6 +1242,7 @@ list_title="季節観測"
 |"気象特別警報・警報・注意報"
 |"気象警報・注意報（Ｈ２７）"
 |"指定河川洪水予報"
+|"土砂災害警戒情報"
 
 anyElement =
   element * | je:* {

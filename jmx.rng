@@ -85,6 +85,7 @@
             <ref name="info_vpcu50_kaijou"/>
             <ref name="infos_vpww50_keihou"/>
             <ref name="info_vxko_kasen"/>
+            <ref name="info_vxww50_dosha"/>
           </choice>
         </element>
       </element>
@@ -101,6 +102,7 @@
         <ref name="body_vpww50_keihou"/>
         <ref name="body_vxko_kasen"/>
         <ref name="body_vxko_emptybody"/>
+        <ref name="body_vxww50_dosha"/>
       </choice>
     </element>
   </start>
@@ -109,6 +111,55 @@
     - - - jb:Information rules - - -
     
   -->
+  <define name="info_vxww50_dosha">
+    <element name="jb:Information">
+      <attribute name="type">
+        <value>土砂災害警戒情報</value>
+      </attribute>
+      <oneOrMore>
+        <element name="jb:Item">
+          <ref name="dosha_state"/>
+          <element name="jb:Areas">
+            <attribute name="codeType">
+              <value>気象・地震・火山情報／市町村等</value>
+            </attribute>
+            <oneOrMore>
+              <ref name="dosha_area"/>
+            </oneOrMore>
+          </element>
+        </element>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="dosha_state">
+    <element name="jb:Kind">
+      <element name="jb:Name">
+        <data type="token"/>
+      </element>
+      <element name="jb:Code">
+        <choice>
+          <value>0</value>
+          <value>1</value>
+          <value>3</value>
+        </choice>
+      </element>
+      <element name="jb:Condition">
+        <data type="token"/>
+      </element>
+    </element>
+  </define>
+  <define name="dosha_area">
+    <element name="jb:Area">
+      <element name="jb:Name">
+        <data type="token"/>
+      </element>
+      <element name="jb:Code">
+        <data type="positiveInteger">
+          <param name="totalDigits">7</param>
+        </data>
+      </element>
+    </element>
+  </define>
   <define name="info_vxko_kasen">
     <element name="jb:Information">
       <attribute name="type">
@@ -324,7 +375,9 @@
           <data type="token"/>
         </element>
         <element name="jb:Code">
-          <data type="positiveInteger"/>
+          <data type="positiveInteger">
+            <param name="totalDigits">4</param>
+          </data>
         </element>
       </element>
     </oneOrMore>
@@ -371,6 +424,33 @@
     </element>
   </define>
   <!-- === Body rules === -->
+  <define name="body_vxww50_dosha">
+    <element name="jm:Body">
+      <element name="jm:TargetArea">
+        <element name="jm:Name">
+          <data type="token"/>
+        </element>
+        <element name="jm:Code">
+          <data type="positiveInteger">
+            <param name="totalDigits">6</param>
+          </data>
+        </element>
+      </element>
+      <element name="jm:Warning">
+        <attribute name="type">
+          <value>土砂災害警戒情報</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <element name="jm:OfficeInfo">
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+    </element>
+  </define>
   <define name="body_vxko_emptybody">
     <element name="jm:Body">
       <empty/>
@@ -2114,6 +2194,7 @@
       <value>地方海上予報</value>
       <value>気象警報・注意報</value>
       <value>指定河川洪水予報</value>
+      <value>土砂災害警戒情報</value>
     </choice>
   </define>
   <define name="list_title">
@@ -2140,6 +2221,7 @@
       <value>気象特別警報・警報・注意報</value>
       <value>気象警報・注意報（Ｈ２７）</value>
       <value>指定河川洪水予報</value>
+      <value>土砂災害警戒情報</value>
     </choice>
   </define>
   <define name="anyElement">
