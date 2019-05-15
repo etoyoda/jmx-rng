@@ -38,6 +38,7 @@
         <ref name="body_vxko_emptybody"/>
         <ref name="body_vxww50_dosha"/>
         <ref name="body_vpoa50_kirokuame"/>
+        <ref name="body_vphw50_tatsuchu"/>
       </choice>
     </element>
   </start>
@@ -82,6 +83,98 @@
     </element>
   </define>
   <!-- === Body rules === -->
+  <define name="body_vphw50_tatsuchu">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>竜巻注意情報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+        <element name="jb:Information">
+          <attribute name="type">
+            <value>竜巻注意情報（発表細分）</value>
+          </attribute>
+          <oneOrMore>
+            <ref name="anyElement"/>
+          </oneOrMore>
+        </element>
+        <element name="jb:Information">
+          <attribute name="type">
+            <value>竜巻注意情報（一次細分区域等）</value>
+          </attribute>
+          <oneOrMore>
+            <ref name="anyElement"/>
+          </oneOrMore>
+        </element>
+        <element name="jb:Information">
+          <attribute name="type">
+            <value>竜巻注意情報（市町村等をまとめた地域等）</value>
+          </attribute>
+          <oneOrMore>
+            <ref name="anyElement"/>
+          </oneOrMore>
+        </element>
+        <element name="jb:Information">
+          <attribute name="type">
+            <value>竜巻注意情報（市町村等）</value>
+          </attribute>
+          <oneOrMore>
+            <ref name="anyElement"/>
+          </oneOrMore>
+        </element>
+        <optional>
+          <element name="jb:Information">
+            <attribute name="type">
+              <value>竜巻注意情報（目撃情報あり）</value>
+            </attribute>
+            <oneOrMore>
+              <ref name="anyElement"/>
+            </oneOrMore>
+          </element>
+        </optional>
+      </element>
+    </element>
+    <element name="jm:Body">
+      <element name="jm:Warning">
+        <attribute name="type">
+          <value>竜巻注意情報（発表細分）</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="yohoku_item"/>
+        </oneOrMore>
+      </element>
+      <element name="jm:Warning">
+        <attribute name="type">
+          <value>竜巻注意情報（一次細分区域等）</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="yohoku_item"/>
+        </oneOrMore>
+      </element>
+      <element name="jm:Warning">
+        <attribute name="type">
+          <value>竜巻注意情報（市町村等をまとめた地域等）</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="yohoku_item"/>
+        </oneOrMore>
+      </element>
+      <element name="jm:Warning">
+        <attribute name="type">
+          <value>竜巻注意情報（市町村等）</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="yohoku_item"/>
+        </oneOrMore>
+      </element>
+    </element>
+  </define>
   <define name="body_vpoa50_kirokuame">
     <element name="jb:Head">
       <ref name="head_common"/>
@@ -111,28 +204,31 @@
           <value>記録的短時間大雨情報（発表細分）</value>
         </attribute>
         <oneOrMore>
-          <element name="jm:Item">
-            <element name="jm:Kind">
-              <element name="jm:Name">
-                <data type="token"/>
-              </element>
-              <element name="jm:Code">
-                <data type="nonNegativeInteger"/>
-              </element>
-              <element name="jm:Status">
-                <data type="token"/>
-              </element>
-            </element>
-            <element name="jm:Area">
-              <element name="jm:Name">
-                <data type="token"/>
-              </element>
-              <element name="jm:Code">
-                <data type="nonNegativeInteger"/>
-              </element>
-            </element>
-          </element>
+          <ref name="yohoku_item"/>
         </oneOrMore>
+      </element>
+    </element>
+  </define>
+  <define name="yohoku_item">
+    <element name="jm:Item">
+      <element name="jm:Kind">
+        <element name="jm:Name">
+          <data type="token"/>
+        </element>
+        <element name="jm:Code">
+          <data type="nonNegativeInteger"/>
+        </element>
+        <element name="jm:Status">
+          <data type="token"/>
+        </element>
+      </element>
+      <element name="jm:Area">
+        <element name="jm:Name">
+          <data type="token"/>
+        </element>
+        <element name="jm:Code">
+          <data type="nonNegativeInteger"/>
+        </element>
       </element>
     </element>
   </define>
@@ -2426,6 +2522,11 @@
       <value>指定河川洪水予報</value>
       <value>土砂災害警戒情報</value>
       <value>記録的短時間大雨情報</value>
+      <value>竜巻注意情報</value>
+      <value>竜巻注意情報（目撃情報付き）</value>
+      <value>全般気象情報</value>
+      <value>地方気象情報</value>
+      <value>府県気象情報</value>
     </choice>
   </define>
   <define name="anyElement">

@@ -24,7 +24,8 @@ start = element jx:Report {
   |body_vxko_kasen
   |body_vxko_emptybody
   |body_vxww50_dosha
-  |body_vpoa50_kirokuame)
+  |body_vpoa50_kirokuame
+  |body_vphw50_tatsuchu)
 }
 
 head_common =
@@ -38,6 +39,54 @@ head_common =
 ,   element jb:Serial { empty | xsd:token }
 
 # === Body rules ===
+
+body_vphw50_tatsuchu =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "竜巻注意情報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { xsd:string }
+,     element jb:Information {
+        attribute type { "竜巻注意情報（発表細分）" }
+,       anyElement+
+      }
+,     element jb:Information {
+        attribute type { "竜巻注意情報（一次細分区域等）" }
+,       anyElement+
+      }
+,     element jb:Information {
+        attribute type { "竜巻注意情報（市町村等をまとめた地域等）" }
+,       anyElement+
+      }
+,     element jb:Information {
+        attribute type { "竜巻注意情報（市町村等）" }
+,       anyElement+
+      }
+,     element jb:Information {
+        attribute type { "竜巻注意情報（目撃情報あり）" }
+,       anyElement+
+      }?
+    }
+  }
+, element jm:Body {
+    element jm:Warning {
+      attribute type { "竜巻注意情報（発表細分）" }
+,     yohoku_item+
+    }
+,   element jm:Warning {
+      attribute type { "竜巻注意情報（一次細分区域等）" }
+,     yohoku_item+
+    }
+,   element jm:Warning {
+      attribute type { "竜巻注意情報（市町村等をまとめた地域等）" }
+,     yohoku_item+
+    }
+,   element jm:Warning {
+      attribute type { "竜巻注意情報（市町村等）" }
+,     yohoku_item+
+    }
+  }
 
 body_vpoa50_kirokuame =
   element jb:Head {
@@ -55,7 +104,12 @@ body_vpoa50_kirokuame =
 , element jm:Body {
     element jm:Warning {
       attribute type { "記録的短時間大雨情報（発表細分）" }
-,     element jm:Item {
+,     yohoku_item+
+    }
+  }
+
+yohoku_item =
+      element jm:Item {
         element jm:Kind {
           element jm:Name { xsd:token }
 ,         element jm:Code { xsd:nonNegativeInteger }
@@ -65,9 +119,7 @@ body_vpoa50_kirokuame =
           element jm:Name { xsd:token }
 ,         element jm:Code { xsd:nonNegativeInteger }
         }
-      }+
-    }
-  }
+      }
 
 info_vxww50_dosha =
   element jb:Information {
@@ -1354,6 +1406,11 @@ list_title="季節観測"
 |"指定河川洪水予報"
 |"土砂災害警戒情報"
 |"記録的短時間大雨情報"
+|"竜巻注意情報"
+|"竜巻注意情報（目撃情報付き）"
+|"全般気象情報"
+|"地方気象情報"
+|"府県気象情報"
 
 anyElement =
   element * | je:* {
