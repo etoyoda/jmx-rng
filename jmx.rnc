@@ -2,6 +2,7 @@ namespace jx = "http://xml.kishou.go.jp/jmaxml1/"
 namespace jb = "http://xml.kishou.go.jp/jmaxml1/informationBasis1/"
 namespace jm = "http://xml.kishou.go.jp/jmaxml1/body/meteorology1/"
 namespace je = "http://xml.kishou.go.jp/jmaxml1/elementBasis1/"
+namespace js = "http://xml.kishou.go.jp/jmaxml1/body/seismology1/"
 
 start = element jx:Report {
   element jx:Control {
@@ -26,7 +27,11 @@ start = element jx:Report {
   |case_vxww50_dosha
   |case_vpoa50_kirokuame
   |case_vphw50_tatsuchu
-  |case_vpfg50_gaikyou)
+  |case_vpfg50_gaikyou
+  |case_vpfd50_fuken
+  |case_vpfw50_week
+  |case_vpzi50_tenkou
+  |case_vxse51_shindo)
 }
 
 head_common =
@@ -41,6 +46,130 @@ head_common =
 
 # === Head and Body rules ===
 
+case_vxse51_shindo =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "震度速報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+,     element jb:Information {
+        attribute type { "震度速報" }
+,       element jb:Item { anyElement+ }+
+      }
+    }
+  }
+, element js:Body {
+    element js:Intensity {
+      element js:Observation {
+        element js:CodeDefine { anyElement+ }
+,       element js:MaxInt { pat_shindo }
+,       element js:Pref {
+          element js:Name { xsd:token }
+,         element js:Code { xsd:positiveInteger }
+,         element js:MaxInt { pat_shindo }
+,         element js:Area {
+            element js:Name { xsd:token }
+,           element js:Code { xsd:positiveInteger }
+,           element js:MaxInt { pat_shindo }
+          }+
+        }+
+      }
+    }
+  }
+
+pat_shindo = xsd:token { pattern = "[12347]|[56][\-+]" }
+
+case_vpzi50_tenkou =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "天候情報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+    }
+  }
+, element jm:Body {
+    element jm:TargetArea {
+      attribute codeType {
+        "全国・地方予報区等"
+      | "気象情報／府県予報区・細分区域等" }
+,     element jm:Name { xsd:token }
+,     element jm:Code { xsd:positiveInteger { totalDigits = "6" } }
+    }
+,   element jm:Notice { xsd:string }
+,   element jm:MeteorologicalInfos {
+      attribute type { "天候情報" }
+,     anyElement+
+    }
+,   element jm:Comment {
+      element jm:Text {
+        attribute type { xsd:token }
+        ,xsd:string
+      }
+    }?
+  }
+
+case_vpfw50_week =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "府県週間天気予報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { empty }
+    }
+  }
+, element jm:Body {
+    element jm:MeteorologicalInfos {
+      attribute type { "区域予報" }
+,     anyElement+
+    }
+,   element jm:MeteorologicalInfos {
+      attribute type { "地点予報" }
+,     anyElement+
+    }
+,   element jm:MeteorologicalInfos {
+      attribute type { "日別平年値" }
+,     anyElement+
+    }
+,   element jm:MeteorologicalInfos {
+      attribute type { "７日間平年値" }
+,     anyElement+
+    }
+  }
+
+case_vpfd50_fuken =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "府県天気予報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { empty }
+    }
+  }
+, element jm:Body {
+    element jm:MeteorologicalInfos {
+      attribute type { "区域予報" }
+,     anyElement+
+    }
+,   element jm:MeteorologicalInfos {
+      attribute type { "地点予報" }
+,     anyElement+
+    }
+,   element jm:MeteorologicalInfos {
+      attribute type { "独自予報" }
+,     anyElement+
+    }?
+,   element jm:MeteorologicalInfos {
+      attribute type { "区域予報" }
+,     anyElement+
+    }
+,   element jm:MeteorologicalInfos {
+      attribute type { "地点予報" }
+,     anyElement+
+    }
+  }
+
 case_vpfg50_gaikyou =
   element jb:Head {
     head_common
@@ -51,11 +180,12 @@ case_vpfg50_gaikyou =
     }
   }
 , element jm:Body {
+    # if tenki-gaikyo
     element jm:TargetArea {
       attribute codeType { "気象情報／府県予報区・細分区域等" }
 ,     element jm:Name { xsd:token }
 ,     element jm:Code { xsd:positiveInteger { totalDigits = "6" } }
-    }
+    }?
 ,   element jm:Notice { empty }
 ,   element jm:Comment {
       element jm:Text {
@@ -1437,6 +1567,15 @@ list_title="季節観測"
 |"地方気象情報"
 |"府県気象情報"
 |"府県天気概況"
+|"府県天気予報"
+|"全般週間天気予報"
+|"地方週間天気予報"
+|"府県週間天気予報"
+|"スモッグ気象情報"
+|"全般天候情報"
+|"地方天候情報"
+|"府県天候情報"
+|"震度速報"
 
 anyElement =
   element * | je:* {
