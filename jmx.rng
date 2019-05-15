@@ -24,22 +24,22 @@
         </element>
       </element>
       <choice>
-        <ref name="body_vgsk50_kisetsu"/>
-        <ref name="body_vgsk55_seibutsu"/>
-        <ref name="body_vgsk60_tokushu"/>
-        <ref name="body_vguv50_shigaisen"/>
-        <ref name="body_vpti50_joho"/>
-        <ref name="body_vptw40_typhoon"/>
-        <ref name="body_vpzu50_kaijou"/>
-        <ref name="body_vpcu50_kaijou"/>
-        <ref name="body_vpcy50_umiyoho"/>
-        <ref name="body_vpww50_keihou"/>
-        <ref name="body_vxko_kasen"/>
-        <ref name="body_vxko_emptybody"/>
-        <ref name="body_vxww50_dosha"/>
-        <ref name="body_vpoa50_kirokuame"/>
-        <ref name="body_vphw50_tatsuchu"/>
-        <ref name="body_vpfg50_gaikyou"/>
+        <ref name="case_vgsk50_kisetsu"/>
+        <ref name="case_vgsk55_seibutsu"/>
+        <ref name="case_vgsk60_tokushu"/>
+        <ref name="case_vguv50_shigaisen"/>
+        <ref name="case_vpti50_joho"/>
+        <ref name="case_vptw40_typhoon"/>
+        <ref name="case_vpzu50_kaijou"/>
+        <ref name="case_vpcu50_kaijou"/>
+        <ref name="case_vpcy50_umiyoho"/>
+        <ref name="case_vpww50_keihou"/>
+        <ref name="case_vxko_kasen"/>
+        <ref name="case_vxko_emptybody"/>
+        <ref name="case_vxww50_dosha"/>
+        <ref name="case_vpoa50_kirokuame"/>
+        <ref name="case_vphw50_tatsuchu"/>
+        <ref name="case_vpfg50_gaikyou"/>
       </choice>
     </element>
   </start>
@@ -84,7 +84,7 @@
     </element>
   </define>
   <!-- === Body rules === -->
-  <define name="body_vpfg50_gaikyou">
+  <define name="case_vpfg50_gaikyou">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -126,7 +126,7 @@
       </element>
     </element>
   </define>
-  <define name="body_vphw50_tatsuchu">
+  <define name="case_vphw50_tatsuchu">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -218,7 +218,7 @@
       </element>
     </element>
   </define>
-  <define name="body_vpoa50_kirokuame">
+  <define name="case_vpoa50_kirokuame">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -324,7 +324,7 @@
       </element>
     </element>
   </define>
-  <define name="body_vxww50_dosha">
+  <define name="case_vxww50_dosha">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -392,7 +392,7 @@
       </oneOrMore>
     </element>
   </define>
-  <define name="body_vxko_emptybody">
+  <define name="case_vxko_emptybody">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -412,7 +412,7 @@
       <empty/>
     </element>
   </define>
-  <define name="body_vxko_kasen">
+  <define name="case_vxko_kasen">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -525,7 +525,7 @@
     </optional>
   </define>
   <!-- may be missing in case of lifting -->
-  <define name="body_vpww50_keihou">
+  <define name="case_vpww50_keihou">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -591,7 +591,7 @@
       </optional>
     </element>
   </define>
-  <define name="body_vpcy50_umiyoho">
+  <define name="case_vpcy50_umiyoho">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -876,7 +876,7 @@
       </element>
     </element>
   </define>
-  <define name="body_vpcu50_kaijou">
+  <define name="case_vpcu50_kaijou">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -1080,7 +1080,7 @@
       </element>
     </element>
   </define>
-  <define name="body_vpzu50_kaijou">
+  <define name="case_vpzu50_kaijou">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -1348,7 +1348,7 @@
       <ref name="radii_of_wind"/>
     </element>
   </define>
-  <define name="body_vgsk50_kisetsu">
+  <define name="case_vgsk50_kisetsu">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -1412,7 +1412,7 @@
       </element>
     </element>
   </define>
-  <define name="body_vgsk55_seibutsu">
+  <define name="case_vgsk55_seibutsu">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -1495,7 +1495,7 @@
       </element>
     </element>
   </define>
-  <define name="body_vgsk60_tokushu">
+  <define name="case_vgsk60_tokushu">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -1556,7 +1556,7 @@
       </element>
     </element>
   </define>
-  <define name="body_vguv50_shigaisen">
+  <define name="case_vguv50_shigaisen">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -1673,7 +1673,7 @@
       <!-- jm:MeteorologicalInfos -->
     </element>
   </define>
-  <define name="body_vpti50_joho">
+  <define name="case_vpti50_joho">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -1702,7 +1702,7 @@
       </element>
     </element>
   </define>
-  <define name="body_vptw40_typhoon">
+  <define name="case_vptw40_typhoon">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">

@@ -11,22 +11,22 @@ start = element jx:Report {
    ,element jx:EditorialOffice { list_edof }
    ,element jx:PublishingOffice { list_pbof }
   }
-, (body_vgsk50_kisetsu
-  |body_vgsk55_seibutsu
-  |body_vgsk60_tokushu
-  |body_vguv50_shigaisen
-  |body_vpti50_joho
-  |body_vptw40_typhoon
-  |body_vpzu50_kaijou
-  |body_vpcu50_kaijou
-  |body_vpcy50_umiyoho
-  |body_vpww50_keihou
-  |body_vxko_kasen
-  |body_vxko_emptybody
-  |body_vxww50_dosha
-  |body_vpoa50_kirokuame
-  |body_vphw50_tatsuchu
-  |body_vpfg50_gaikyou)
+, (case_vgsk50_kisetsu
+  |case_vgsk55_seibutsu
+  |case_vgsk60_tokushu
+  |case_vguv50_shigaisen
+  |case_vpti50_joho
+  |case_vptw40_typhoon
+  |case_vpzu50_kaijou
+  |case_vpcu50_kaijou
+  |case_vpcy50_umiyoho
+  |case_vpww50_keihou
+  |case_vxko_kasen
+  |case_vxko_emptybody
+  |case_vxww50_dosha
+  |case_vpoa50_kirokuame
+  |case_vphw50_tatsuchu
+  |case_vpfg50_gaikyou)
 }
 
 head_common =
@@ -39,9 +39,9 @@ head_common =
 ,   element jb:InfoType { "発表" | "訂正" | "取消" }
 ,   element jb:Serial { empty | xsd:token }
 
-# === Body rules ===
+# === Head and Body rules ===
 
-body_vpfg50_gaikyou =
+case_vpfg50_gaikyou =
   element jb:Head {
     head_common
 ,   element jb:InfoKind { "平文情報" }
@@ -65,7 +65,7 @@ body_vpfg50_gaikyou =
     }
   }
 
-body_vphw50_tatsuchu =
+case_vphw50_tatsuchu =
   element jb:Head {
     head_common
 ,   element jb:InfoKind { "竜巻注意情報" }
@@ -113,7 +113,7 @@ body_vphw50_tatsuchu =
     }
   }
 
-body_vpoa50_kirokuame =
+case_vpoa50_kirokuame =
   element jb:Head {
     head_common
 ,   element jb:InfoKind { "記録的短時間大雨情報" }
@@ -173,7 +173,7 @@ dosha_area =
     }
   }
 
-body_vxww50_dosha =
+case_vxww50_dosha =
   element jb:Head {
     head_common
 ,   element jb:InfoKind { "土砂災害警戒情報" }
@@ -211,7 +211,7 @@ info_vxko_kasen =
    ,anyElement+
   }
 
-body_vxko_emptybody =
+case_vxko_emptybody =
   element jb:Head {
     head_common
 ,   element jb:InfoKind { "指定河川洪水予報" }
@@ -223,7 +223,7 @@ body_vxko_emptybody =
   }
 , element jm:Body { empty }
 
-body_vxko_kasen =
+case_vxko_kasen =
   element jb:Head {
     head_common
 ,   element jb:InfoKind { "指定河川洪水予報" }
@@ -287,7 +287,7 @@ infos_vpww50_keihou =
   }?
   # may be missing in case of lifting
 
-body_vpww50_keihou =
+case_vpww50_keihou =
   element jb:Head {
     head_common
 ,   element jb:InfoKind { "気象警報・注意報" }
@@ -326,7 +326,7 @@ body_vpww50_keihou =
   }
 
 
-body_vpcy50_umiyoho =
+case_vpcy50_umiyoho =
   element jb:Head {
     head_common
 ,   element jb:InfoKind { "地方海上予報" }
@@ -466,7 +466,7 @@ kaijou_area_polygon =
     }
   }
 
-body_vpcu50_kaijou =
+case_vpcu50_kaijou =
   element jb:Head {
     head_common
 ,   element jb:InfoKind { "地方海上警報" }
@@ -582,7 +582,7 @@ info_vpzu50_kaijou_clear =
     }
   }
 
-body_vpzu50_kaijou =
+case_vpzu50_kaijou =
   element jb:Head {
     head_common
 ,   element jb:InfoKind { "全般海上警報" }
@@ -685,7 +685,7 @@ kaijou_windcircle =
       radii_of_wind
     }
 
-body_vgsk50_kisetsu =
+case_vgsk50_kisetsu =
   element jb:Head {
     head_common
 ,   element jb:InfoKind { "特殊気象報" }
@@ -725,7 +725,7 @@ body_vgsk50_kisetsu =
     }
   }
 
-body_vgsk55_seibutsu =
+case_vgsk55_seibutsu =
   element jb:Head {
     head_common
 ,   element jb:InfoKind { "生物季節観測報告気象報" }
@@ -770,7 +770,7 @@ body_vgsk55_seibutsu =
     }
   }
 
-body_vgsk60_tokushu =
+case_vgsk60_tokushu =
   element jb:Head {
     head_common
 ,   element jb:InfoKind { "特殊気象報" }
@@ -809,7 +809,7 @@ body_vgsk60_tokushu =
     }
   }
 
-body_vguv50_shigaisen =
+case_vguv50_shigaisen =
   element jb:Head {
     head_common
 ,   element jb:InfoKind { "環境気象情報" }
@@ -874,7 +874,7 @@ body_vguv50_shigaisen =
     } # jm:MeteorologicalInfos
   }
 
-body_vpti50_joho =
+case_vpti50_joho =
   element jb:Head {
     head_common
 ,   element jb:InfoKind { "同一現象用平文情報" }
@@ -893,7 +893,7 @@ body_vpti50_joho =
     }
   }
 
-body_vptw40_typhoon =
+case_vptw40_typhoon =
   element jb:Head {
     head_common
 ,   element jb:InfoKind {
