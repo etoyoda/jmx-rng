@@ -23,7 +23,8 @@ start = element jx:Report {
   |body_vpww50_keihou
   |body_vxko_kasen
   |body_vxko_emptybody
-  |body_vxww50_dosha)
+  |body_vxww50_dosha
+  |body_vpoa50_kirokuame)
 }
 
 head_common =
@@ -37,6 +38,36 @@ head_common =
 ,   element jb:Serial { empty | xsd:token }
 
 # === Body rules ===
+
+body_vpoa50_kirokuame =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "記録的短時間大雨情報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { xsd:string }
+,     element jb:Information {
+        attribute type { "記録的短時間大雨情報（発表細分）" }
+,       anyElement+
+      }
+    }
+  }
+, element jm:Body {
+    element jm:Warning {
+      attribute type { "記録的短時間大雨情報（発表細分）" }
+,     element jm:Item {
+        element jm:Kind {
+          element jm:Name { xsd:token }
+,         element jm:Code { xsd:nonNegativeInteger }
+,         element jm:Status { xsd:token }
+        }
+,       element jm:Area {
+          element jm:Name { xsd:token }
+,         element jm:Code { xsd:nonNegativeInteger }
+        }
+      }+
+    }
+  }
 
 info_vxww50_dosha =
   element jb:Information {
@@ -1230,7 +1261,7 @@ list_edof =
 
 list_pbof =
   xsd:string {
-    pattern = "気象庁予報部|気象庁地球環境・海洋部|気象庁本庁|.*気象台"
+    pattern = "気象庁|気象庁予報部|気象庁地球環境・海洋部|気象庁本庁|.*気象台"
   }
 
 list_typh_datetime =
@@ -1322,6 +1353,7 @@ list_title="季節観測"
 |"気象警報・注意報（Ｈ２７）"
 |"指定河川洪水予報"
 |"土砂災害警戒情報"
+|"記録的短時間大雨情報"
 
 anyElement =
   element * | je:* {
