@@ -36,9 +36,7 @@ head_common =
 ,   element jb:InfoType { "発表" | "訂正" | "取消" }
 ,   element jb:Serial { empty | xsd:token }
 
-#
-# --- jb:Information rules ---
-#
+# === Body rules ===
 
 info_vxww50_dosha =
   element jb:Information {
@@ -67,149 +65,10 @@ dosha_area =
     }
   }
 
-info_vxko_kasen =
-  element jb:Information {
-    attribute type { "指定河川洪水予報（予報区域）" }
-   ,anyElement+
-  }
- ,element jb:Information {
-    attribute type { "指定河川洪水予報（河川）" }
-   ,anyElement+
-  }
- ,element jb:Information {
-    attribute type { "指定河川洪水予報（府県予報区等）" }
-   ,anyElement+
-  }
-
-infos_vpww50_keihou =
-  element jb:Information {
-    attribute type {
-      "気象警報・注意報（府県予報区等）"}
-   ,anyElement+
-  }
- ,element jb:Information {
-    attribute type {
-      "気象警報・注意報（一次細分区域等）"}
-   ,anyElement+
-  }
- ,element jb:Information {
-    attribute type {
-      "気象警報・注意報（市町村等をまとめた地域等）"}
-   ,anyElement+
-  }
- ,element jb:Information {
-    attribute type {
-      "気象警報・注意報（市町村等）"}
-   ,anyElement+
-  }
- ,element jb:Information {
-    attribute type {
-      "気象警報・注意報（警報注意報種別毎）"}
-   ,anyElement+
-  }?
-  # may be missing in case of lifting
-
-info_vpzu50_kaijou =
-  element jb:Information {
-    attribute type { "全般海上警報" }
-   ,element jb:Item {
-      element jb:Kind {
-        element jb:Name { list_kaijou_keihoumei }
-       ,element jb:Code { list_kaijou_keihoucode }
-      }
-     ,element jb:Areas {
-        attribute codeType { "全般海上海域名" }
-       ,( kaijou_area_circles
-        | kaijou_area_point
-        | kaijou_area_polygon
-        | kaijou_area_codes
-        )
-      }
-    }+
-  }
-
-info_vpcu50_kaijou =
-  element jb:Information {
-    attribute type { "地方海上警報" }
-   ,element jb:Item {
-      element jb:Kind {
-        element jb:Name { list_kaijou_keihoumei }
-       ,element jb:Code { list_kaijou_keihoucode }
-      }
-     ,element jb:Areas {
-        attribute codeType { "地方海上予報区" }
-       ,kaijou_area_codes
-      }
-    }+
-  }
-
-kaijou_area_circles =
-  element jb:Area {
-    element jb:Name { "低気圧" | "熱帯低気圧" }
-   ,element je:Circle {
-      attribute type { "影響範囲" }
-      # either analysis or 24 hour forecast present
-     ,element je:BasePoint { attribute type { "実況位置（度）" }, kaijou_point }?
-     ,element je:BasePoint { attribute type { "１２時間後位置（度）" }, kaijou_point }?
-     ,element je:BasePoint { attribute type { "２４時間後位置（度）" }, kaijou_point? }?
-     ,radii_of_wind?
-    }+
-  }
-
-kaijou_point =
-  (
-    (attribute description { latlon_deg_ja },  latlon_deg_ascii)
-  |
-    (attribute description { latlon_decimal_ja }, latlon_decimal_ascii)
-  )
-
-kaijou_area_point =
-  element jb:Area {
-    element jb:Name { "熱帯低気圧" }
-   ,element je:Coordinate {
-      attribute type { "中心位置（度）" | "実況位置（度）" }
-     ,attribute description { latlon_decimal_ja }
-     ,latlon_decimal_ascii
-    }
-  }
-
-kaijou_area_codes =
-  element jb:Area {
-    element jb:Name { xsd:token }
-   ,element jb:Code { xsd:positiveInteger { totalDigits = "4" } }
-  }+
-
-kaijou_area_polygon =
-  element jb:Area {
-    element jb:Name { "緯度経度領域" }
-   ,element je:Polygon {
-      attribute type { "位置（度）" }
-     ,attribute description { latlon_multi_ja }
-     ,latlon_multi_ascii
-    }
-  }
-
-info_vpzu50_kaijou_clear =
-  element jb:Information {
-    attribute type { "全般海上警報" }
-   ,element jb:Item {
-      element jb:Kind {
-        element jb:Name { "海上警報なし" }
-        # this time jb:Code missing
-      }
-     ,element jb:Areas {
-        attribute codeType { "全般海上海域名" }
-       ,element jb:Area { element jb:Name { "全般海上予報区" } }
-      }
-    }
-  }
-
-# === Body rules ===
-
 body_vxww50_dosha =
   element jb:Head {
     head_common
-,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKind { "土砂災害警戒情報" }
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { xsd:string }
@@ -230,10 +89,24 @@ body_vxww50_dosha =
     }
   }
 
+info_vxko_kasen =
+  element jb:Information {
+    attribute type { "指定河川洪水予報（予報区域）" }
+   ,anyElement+
+  }
+ ,element jb:Information {
+    attribute type { "指定河川洪水予報（河川）" }
+   ,anyElement+
+  }
+ ,element jb:Information {
+    attribute type { "指定河川洪水予報（府県予報区等）" }
+   ,anyElement+
+  }
+
 body_vxko_emptybody =
   element jb:Head {
     head_common
-,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKind { "指定河川洪水予報" }
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { xsd:string }
@@ -245,7 +118,7 @@ body_vxko_emptybody =
 body_vxko_kasen =
   element jb:Head {
     head_common
-,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKind { "指定河川洪水予報" }
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { xsd:string }
@@ -278,10 +151,38 @@ body_vxko_kasen =
     }
   }
 
+infos_vpww50_keihou =
+  element jb:Information {
+    attribute type {
+      "気象警報・注意報（府県予報区等）"}
+   ,anyElement+
+  }
+ ,element jb:Information {
+    attribute type {
+      "気象警報・注意報（一次細分区域等）"}
+   ,anyElement+
+  }
+ ,element jb:Information {
+    attribute type {
+      "気象警報・注意報（市町村等をまとめた地域等）"}
+   ,anyElement+
+  }
+ ,element jb:Information {
+    attribute type {
+      "気象警報・注意報（市町村等）"}
+   ,anyElement+
+  }
+ ,element jb:Information {
+    attribute type {
+      "気象警報・注意報（警報注意報種別毎）"}
+   ,anyElement+
+  }?
+  # may be missing in case of lifting
+
 body_vpww50_keihou =
   element jb:Head {
     head_common
-,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKind { "気象警報・注意報" }
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { xsd:string }
@@ -320,11 +221,10 @@ body_vpww50_keihou =
 body_vpcy50_umiyoho =
   element jb:Head {
     head_common
-,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKind { "地方海上予報" }
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { xsd:string }
-,     info_vpcu50_kaijou
     }
   }
 , element jm:Body {
@@ -395,10 +295,73 @@ umiyoho_propice =
    ,element jm:SeaIcePart { anyElement+ }
   }
 
+# VPCU50
+
+info_vpcu50_kaijou =
+  element jb:Information {
+    attribute type { "地方海上警報" }
+   ,element jb:Item {
+      element jb:Kind {
+        element jb:Name { list_kaijou_keihoumei }
+       ,element jb:Code { list_kaijou_keihoucode }
+      }
+     ,element jb:Areas {
+        attribute codeType { "地方海上予報区" }
+       ,kaijou_area_codes
+      }
+    }+
+  }
+
+kaijou_area_circles =
+  element jb:Area {
+    element jb:Name { "低気圧" | "熱帯低気圧" }
+   ,element je:Circle {
+      attribute type { "影響範囲" }
+      # either analysis or 24 hour forecast present
+     ,element je:BasePoint { attribute type { "実況位置（度）" }, kaijou_point }?
+     ,element je:BasePoint { attribute type { "１２時間後位置（度）" }, kaijou_point }?
+     ,element je:BasePoint { attribute type { "２４時間後位置（度）" }, kaijou_point? }?
+     ,radii_of_wind?
+    }+
+  }
+
+kaijou_point =
+  (
+    (attribute description { latlon_deg_ja },  latlon_deg_ascii)
+  |
+    (attribute description { latlon_decimal_ja }, latlon_decimal_ascii)
+  )
+
+kaijou_area_point =
+  element jb:Area {
+    element jb:Name { "熱帯低気圧" }
+   ,element je:Coordinate {
+      attribute type { "中心位置（度）" | "実況位置（度）" }
+     ,attribute description { latlon_decimal_ja }
+     ,latlon_decimal_ascii
+    }
+  }
+
+kaijou_area_codes =
+  element jb:Area {
+    element jb:Name { xsd:token }
+   ,element jb:Code { xsd:positiveInteger { totalDigits = "4" } }
+  }+
+
+kaijou_area_polygon =
+  element jb:Area {
+    element jb:Name { "緯度経度領域" }
+   ,element je:Polygon {
+      attribute type { "位置（度）" }
+     ,attribute description { latlon_multi_ja }
+     ,latlon_multi_ascii
+    }
+  }
+
 body_vpcu50_kaijou =
   element jb:Head {
     head_common
-,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKind { "地方海上警報" }
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { xsd:string }
@@ -477,11 +440,44 @@ kaijou_kishouyouin =
     }
   }
 
+info_vpzu50_kaijou =
+  element jb:Information {
+    attribute type { "全般海上警報" }
+   ,element jb:Item {
+      element jb:Kind {
+        element jb:Name { list_kaijou_keihoumei }
+       ,element jb:Code { list_kaijou_keihoucode }
+      }
+     ,element jb:Areas {
+        attribute codeType { "全般海上海域名" }
+       ,( kaijou_area_circles
+        | kaijou_area_point
+        | kaijou_area_polygon
+        | kaijou_area_codes
+        )
+      }
+    }+
+  }
+
+info_vpzu50_kaijou_clear =
+  element jb:Information {
+    attribute type { "全般海上警報" }
+   ,element jb:Item {
+      element jb:Kind {
+        element jb:Name { "海上警報なし" }
+        # this time jb:Code missing
+      }
+     ,element jb:Areas {
+        attribute codeType { "全般海上海域名" }
+       ,element jb:Area { element jb:Name { "全般海上予報区" } }
+      }
+    }
+  }
 
 body_vpzu50_kaijou =
   element jb:Head {
     head_common
-,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKind { "全般海上警報" }
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { xsd:string }
@@ -584,7 +580,7 @@ kaijou_windcircle =
 body_vgsk50_kisetsu =
   element jb:Head {
     head_common
-,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKind { "特殊気象報" }
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { xsd:string }
@@ -624,7 +620,7 @@ body_vgsk50_kisetsu =
 body_vgsk55_seibutsu =
   element jb:Head {
     head_common
-,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKind { "生物季節観測報告気象報" }
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { xsd:string }
@@ -669,7 +665,7 @@ body_vgsk55_seibutsu =
 body_vgsk60_tokushu =
   element jb:Head {
     head_common
-,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKind { "特殊気象報" }
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { xsd:string }
@@ -708,7 +704,7 @@ body_vgsk60_tokushu =
 body_vguv50_shigaisen =
   element jb:Head {
     head_common
-,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKind { "環境気象情報" }
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { xsd:string }
@@ -773,7 +769,7 @@ body_vguv50_shigaisen =
 body_vpti50_joho =
   element jb:Head {
     head_common
-,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKind { "同一現象用平文情報" }
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { xsd:string }
@@ -792,7 +788,10 @@ body_vpti50_joho =
 body_vptw40_typhoon =
   element jb:Head {
     head_common
-,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKind {
+      "台風解析・予報情報（５日予報）"
+     |"台風解析・予報情報（３日予報）"
+    }
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { xsd:string }
@@ -1299,20 +1298,6 @@ list_kaijou_timemodifier =
 |"今後２４時間以内に"
 |"今後１８時間以内は"
 |"今後２４時間以内は"
-
-list_infokind =
-"台風解析・予報情報（５日予報）"
-|"台風解析・予報情報（３日予報）"
-|"特殊気象報"
-|"生物季節観測報告気象報"
-|"環境気象情報"
-|"同一現象用平文情報"
-|"全般海上警報"
-|"地方海上警報"
-|"地方海上予報"
-|"気象警報・注意報"
-|"指定河川洪水予報"
-|"土砂災害警戒情報"
 
 list_title="季節観測"
 |"生物季節観測"

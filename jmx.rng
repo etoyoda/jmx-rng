@@ -80,11 +80,7 @@
       </choice>
     </element>
   </define>
-  <!--
-    
-    - - - jb:Information rules - - -
-    
-  -->
+  <!-- === Body rules === -->
   <define name="info_vxww50_dosha">
     <element name="jb:Information">
       <attribute name="type">
@@ -134,6 +130,48 @@
       </element>
     </element>
   </define>
+  <define name="body_vxww50_dosha">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>土砂災害警戒情報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+        <ref name="info_vxww50_dosha"/>
+      </element>
+    </element>
+    <element name="jm:Body">
+      <element name="jm:TargetArea">
+        <element name="jm:Name">
+          <data type="token"/>
+        </element>
+        <element name="jm:Code">
+          <data type="positiveInteger">
+            <param name="totalDigits">6</param>
+          </data>
+        </element>
+      </element>
+      <element name="jm:Warning">
+        <attribute name="type">
+          <value>土砂災害警戒情報</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <element name="jm:OfficeInfo">
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+    </element>
+  </define>
   <define name="info_vxko_kasen">
     <element name="jb:Information">
       <attribute name="type">
@@ -158,6 +196,94 @@
       <oneOrMore>
         <ref name="anyElement"/>
       </oneOrMore>
+    </element>
+  </define>
+  <define name="body_vxko_emptybody">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>指定河川洪水予報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+        <ref name="info_vxko_kasen"/>
+      </element>
+    </element>
+    <element name="jm:Body">
+      <empty/>
+    </element>
+  </define>
+  <define name="body_vxko_kasen">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>指定河川洪水予報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+        <ref name="info_vxko_kasen"/>
+      </element>
+    </element>
+    <element name="jm:Body">
+      <optional>
+        <element name="jm:Notice">
+          <text/>
+        </element>
+      </optional>
+      <element name="jm:Warning">
+        <attribute name="type">
+          <value>指定河川洪水予報</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <optional>
+        <element name="jm:MeteorologicalInfos">
+          <attribute name="type">
+            <value>氾濫水の予報</value>
+          </attribute>
+          <oneOrMore>
+            <ref name="anyElement"/>
+          </oneOrMore>
+        </element>
+      </optional>
+      <element name="jm:MeteorologicalInfos">
+        <attribute name="type">
+          <value>雨量情報</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <element name="jm:MeteorologicalInfos">
+        <attribute name="type">
+          <value>水位・流量情報</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <element name="jm:OfficeInfo">
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <element name="jm:AdditionalInfo">
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
     </element>
   </define>
   <define name="infos_vpww50_keihou">
@@ -205,36 +331,220 @@
     </optional>
   </define>
   <!-- may be missing in case of lifting -->
-  <define name="info_vpzu50_kaijou">
-    <element name="jb:Information">
+  <define name="body_vpww50_keihou">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>気象警報・注意報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+        <ref name="infos_vpww50_keihou"/>
+      </element>
+    </element>
+    <element name="jm:Body">
+      <zeroOrMore>
+        <element name="jm:Notice">
+          <text/>
+        </element>
+      </zeroOrMore>
+      <element name="jm:Warning">
+        <attribute name="type">
+          <value>気象警報・注意報（府県予報区等）</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <element name="jm:Warning">
+        <attribute name="type">
+          <value>気象警報・注意報（一次細分区域等）</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <element name="jm:Warning">
+        <attribute name="type">
+          <value>気象警報・注意報（市町村等をまとめた地域等）</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <element name="jm:Warning">
+        <attribute name="type">
+          <value>気象警報・注意報（市町村等）</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <optional>
+        <element name="jm:MeteorologicalInfos">
+          <attribute name="type">
+            <value>量的予想時系列（市町村等）</value>
+          </attribute>
+          <oneOrMore>
+            <ref name="anyElement"/>
+          </oneOrMore>
+        </element>
+      </optional>
+    </element>
+  </define>
+  <define name="body_vpcy50_umiyoho">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>地方海上予報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+      </element>
+    </element>
+    <element name="jm:Body">
+      <element name="jm:Warning">
+        <attribute name="type">
+          <value>地方海上警報発表状況</value>
+        </attribute>
+        <oneOrMore>
+          <element name="jm:Item">
+            <oneOrMore>
+              <element name="jm:Kind">
+                <choice>
+                  <group>
+                    <element name="jm:Name">
+                      <data type="token"/>
+                    </element>
+                    <element name="jm:Code">
+                      <data type="nonNegativeInteger"/>
+                    </element>
+                  </group>
+                  <element name="jm:Status">
+                    <value>海上警報なし</value>
+                  </element>
+                </choice>
+              </element>
+            </oneOrMore>
+            <element name="jm:Area">
+              <element name="jm:Name">
+                <data type="token"/>
+              </element>
+              <element name="jm:Code">
+                <data type="nonNegativeInteger"/>
+              </element>
+            </element>
+          </element>
+        </oneOrMore>
+      </element>
+      <ref name="kaijou_kishouyouin"/>
+      <ref name="umiyoho_jikkyou"/>
+      <ref name="umiyoho_kaiiki"/>
+    </element>
+  </define>
+  <define name="umiyoho_jikkyou">
+    <element name="jm:MeteorologicalInfos">
       <attribute name="type">
-        <value>全般海上警報</value>
+        <value>観測実況</value>
       </attribute>
       <oneOrMore>
-        <element name="jb:Item">
-          <element name="jb:Kind">
-            <element name="jb:Name">
-              <ref name="list_kaijou_keihoumei"/>
-            </element>
-            <element name="jb:Code">
-              <ref name="list_kaijou_keihoucode"/>
-            </element>
+        <ref name="anyElement"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="umiyoho_kaiiki">
+    <element name="jm:MeteorologicalInfos">
+      <attribute name="type">
+        <value>地方海域の予報</value>
+      </attribute>
+      <oneOrMore>
+        <element name="jm:MeteorologicalInfo">
+          <element name="jm:DateTime">
+            <ref name="dateTime_si"/>
           </element>
-          <element name="jb:Areas">
-            <attribute name="codeType">
-              <value>全般海上海域名</value>
-            </attribute>
-            <choice>
-              <ref name="kaijou_area_circles"/>
-              <ref name="kaijou_area_point"/>
-              <ref name="kaijou_area_polygon"/>
-              <ref name="kaijou_area_codes"/>
-            </choice>
+          <element name="jm:Duration">
+            <data type="duration"/>
           </element>
+          <!-- name of forecast time range duration -->
+          <element name="jm:Name">
+            <data type="token"/>
+          </element>
+          <oneOrMore>
+            <element name="jm:Item">
+              <oneOrMore>
+                <element name="jm:Kind">
+                  <optional>
+                    <choice>
+                      <ref name="kaijou_propwind"/>
+                      <ref name="umiyoho_tenki"/>
+                      <ref name="umiyoho_propfog"/>
+                      <ref name="kaijou_propuneri"/>
+                      <ref name="umiyoho_propice"/>
+                    </choice>
+                  </optional>
+                </element>
+              </oneOrMore>
+              <element name="jm:Area">
+                <element name="jm:Name">
+                  <data type="token"/>
+                </element>
+                <element name="jm:Code">
+                  <data type="nonNegativeInteger"/>
+                </element>
+              </element>
+            </element>
+          </oneOrMore>
         </element>
       </oneOrMore>
     </element>
   </define>
+  <define name="umiyoho_tenki">
+    <element name="jm:Property">
+      <element name="jm:Type">
+        <value>天気</value>
+      </element>
+      <element name="jm:WeatherPart">
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+    </element>
+  </define>
+  <define name="umiyoho_propfog">
+    <element name="jm:Property">
+      <element name="jm:Type">
+        <value>視程</value>
+      </element>
+      <element name="jm:VisibilityPart">
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+    </element>
+  </define>
+  <define name="umiyoho_propice">
+    <element name="jm:Property">
+      <element name="jm:Type">
+        <value>流氷</value>
+      </element>
+      <element name="jm:SeaIcePart">
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+    </element>
+  </define>
+  <!-- VPCU50 -->
   <define name="info_vpcu50_kaijou">
     <element name="jb:Information">
       <attribute name="type">
@@ -372,381 +682,11 @@
       </element>
     </element>
   </define>
-  <define name="info_vpzu50_kaijou_clear">
-    <element name="jb:Information">
-      <attribute name="type">
-        <value>全般海上警報</value>
-      </attribute>
-      <element name="jb:Item">
-        <element name="jb:Kind">
-          <element name="jb:Name">
-            <value>海上警報なし</value>
-          </element>
-          <!-- this time jb:Code missing -->
-        </element>
-        <element name="jb:Areas">
-          <attribute name="codeType">
-            <value>全般海上海域名</value>
-          </attribute>
-          <element name="jb:Area">
-            <element name="jb:Name">
-              <value>全般海上予報区</value>
-            </element>
-          </element>
-        </element>
-      </element>
-    </element>
-  </define>
-  <!-- === Body rules === -->
-  <define name="body_vxww50_dosha">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <ref name="list_infokind"/>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <data type="string"/>
-        </element>
-        <ref name="info_vxww50_dosha"/>
-      </element>
-    </element>
-    <element name="jm:Body">
-      <element name="jm:TargetArea">
-        <element name="jm:Name">
-          <data type="token"/>
-        </element>
-        <element name="jm:Code">
-          <data type="positiveInteger">
-            <param name="totalDigits">6</param>
-          </data>
-        </element>
-      </element>
-      <element name="jm:Warning">
-        <attribute name="type">
-          <value>土砂災害警戒情報</value>
-        </attribute>
-        <oneOrMore>
-          <ref name="anyElement"/>
-        </oneOrMore>
-      </element>
-      <element name="jm:OfficeInfo">
-        <oneOrMore>
-          <ref name="anyElement"/>
-        </oneOrMore>
-      </element>
-    </element>
-  </define>
-  <define name="body_vxko_emptybody">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <ref name="list_infokind"/>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <data type="string"/>
-        </element>
-        <ref name="info_vxko_kasen"/>
-      </element>
-    </element>
-    <element name="jm:Body">
-      <empty/>
-    </element>
-  </define>
-  <define name="body_vxko_kasen">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <ref name="list_infokind"/>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <data type="string"/>
-        </element>
-        <ref name="info_vxko_kasen"/>
-      </element>
-    </element>
-    <element name="jm:Body">
-      <optional>
-        <element name="jm:Notice">
-          <text/>
-        </element>
-      </optional>
-      <element name="jm:Warning">
-        <attribute name="type">
-          <value>指定河川洪水予報</value>
-        </attribute>
-        <oneOrMore>
-          <ref name="anyElement"/>
-        </oneOrMore>
-      </element>
-      <optional>
-        <element name="jm:MeteorologicalInfos">
-          <attribute name="type">
-            <value>氾濫水の予報</value>
-          </attribute>
-          <oneOrMore>
-            <ref name="anyElement"/>
-          </oneOrMore>
-        </element>
-      </optional>
-      <element name="jm:MeteorologicalInfos">
-        <attribute name="type">
-          <value>雨量情報</value>
-        </attribute>
-        <oneOrMore>
-          <ref name="anyElement"/>
-        </oneOrMore>
-      </element>
-      <element name="jm:MeteorologicalInfos">
-        <attribute name="type">
-          <value>水位・流量情報</value>
-        </attribute>
-        <oneOrMore>
-          <ref name="anyElement"/>
-        </oneOrMore>
-      </element>
-      <element name="jm:OfficeInfo">
-        <oneOrMore>
-          <ref name="anyElement"/>
-        </oneOrMore>
-      </element>
-      <element name="jm:AdditionalInfo">
-        <oneOrMore>
-          <ref name="anyElement"/>
-        </oneOrMore>
-      </element>
-    </element>
-  </define>
-  <define name="body_vpww50_keihou">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <ref name="list_infokind"/>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <data type="string"/>
-        </element>
-        <ref name="infos_vpww50_keihou"/>
-      </element>
-    </element>
-    <element name="jm:Body">
-      <zeroOrMore>
-        <element name="jm:Notice">
-          <text/>
-        </element>
-      </zeroOrMore>
-      <element name="jm:Warning">
-        <attribute name="type">
-          <value>気象警報・注意報（府県予報区等）</value>
-        </attribute>
-        <oneOrMore>
-          <ref name="anyElement"/>
-        </oneOrMore>
-      </element>
-      <element name="jm:Warning">
-        <attribute name="type">
-          <value>気象警報・注意報（一次細分区域等）</value>
-        </attribute>
-        <oneOrMore>
-          <ref name="anyElement"/>
-        </oneOrMore>
-      </element>
-      <element name="jm:Warning">
-        <attribute name="type">
-          <value>気象警報・注意報（市町村等をまとめた地域等）</value>
-        </attribute>
-        <oneOrMore>
-          <ref name="anyElement"/>
-        </oneOrMore>
-      </element>
-      <element name="jm:Warning">
-        <attribute name="type">
-          <value>気象警報・注意報（市町村等）</value>
-        </attribute>
-        <oneOrMore>
-          <ref name="anyElement"/>
-        </oneOrMore>
-      </element>
-      <optional>
-        <element name="jm:MeteorologicalInfos">
-          <attribute name="type">
-            <value>量的予想時系列（市町村等）</value>
-          </attribute>
-          <oneOrMore>
-            <ref name="anyElement"/>
-          </oneOrMore>
-        </element>
-      </optional>
-    </element>
-  </define>
-  <define name="body_vpcy50_umiyoho">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <ref name="list_infokind"/>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <data type="string"/>
-        </element>
-        <ref name="info_vpcu50_kaijou"/>
-      </element>
-    </element>
-    <element name="jm:Body">
-      <element name="jm:Warning">
-        <attribute name="type">
-          <value>地方海上警報発表状況</value>
-        </attribute>
-        <oneOrMore>
-          <element name="jm:Item">
-            <oneOrMore>
-              <element name="jm:Kind">
-                <choice>
-                  <group>
-                    <element name="jm:Name">
-                      <data type="token"/>
-                    </element>
-                    <element name="jm:Code">
-                      <data type="nonNegativeInteger"/>
-                    </element>
-                  </group>
-                  <element name="jm:Status">
-                    <value>海上警報なし</value>
-                  </element>
-                </choice>
-              </element>
-            </oneOrMore>
-            <element name="jm:Area">
-              <element name="jm:Name">
-                <data type="token"/>
-              </element>
-              <element name="jm:Code">
-                <data type="nonNegativeInteger"/>
-              </element>
-            </element>
-          </element>
-        </oneOrMore>
-      </element>
-      <ref name="kaijou_kishouyouin"/>
-      <ref name="umiyoho_jikkyou"/>
-      <ref name="umiyoho_kaiiki"/>
-    </element>
-  </define>
-  <define name="umiyoho_jikkyou">
-    <element name="jm:MeteorologicalInfos">
-      <attribute name="type">
-        <value>観測実況</value>
-      </attribute>
-      <oneOrMore>
-        <ref name="anyElement"/>
-      </oneOrMore>
-    </element>
-  </define>
-  <define name="umiyoho_kaiiki">
-    <element name="jm:MeteorologicalInfos">
-      <attribute name="type">
-        <value>地方海域の予報</value>
-      </attribute>
-      <oneOrMore>
-        <element name="jm:MeteorologicalInfo">
-          <element name="jm:DateTime">
-            <ref name="dateTime_si"/>
-          </element>
-          <element name="jm:Duration">
-            <data type="duration"/>
-          </element>
-          <!-- name of forecast time range duration -->
-          <element name="jm:Name">
-            <data type="token"/>
-          </element>
-          <oneOrMore>
-            <element name="jm:Item">
-              <oneOrMore>
-                <element name="jm:Kind">
-                  <optional>
-                    <choice>
-                      <ref name="kaijou_propwind"/>
-                      <ref name="umiyoho_tenki"/>
-                      <ref name="umiyoho_propfog"/>
-                      <ref name="kaijou_propuneri"/>
-                      <ref name="umiyoho_propice"/>
-                    </choice>
-                  </optional>
-                </element>
-              </oneOrMore>
-              <element name="jm:Area">
-                <element name="jm:Name">
-                  <data type="token"/>
-                </element>
-                <element name="jm:Code">
-                  <data type="nonNegativeInteger"/>
-                </element>
-              </element>
-            </element>
-          </oneOrMore>
-        </element>
-      </oneOrMore>
-    </element>
-  </define>
-  <define name="umiyoho_tenki">
-    <element name="jm:Property">
-      <element name="jm:Type">
-        <value>天気</value>
-      </element>
-      <element name="jm:WeatherPart">
-        <oneOrMore>
-          <ref name="anyElement"/>
-        </oneOrMore>
-      </element>
-    </element>
-  </define>
-  <define name="umiyoho_propfog">
-    <element name="jm:Property">
-      <element name="jm:Type">
-        <value>視程</value>
-      </element>
-      <element name="jm:VisibilityPart">
-        <oneOrMore>
-          <ref name="anyElement"/>
-        </oneOrMore>
-      </element>
-    </element>
-  </define>
-  <define name="umiyoho_propice">
-    <element name="jm:Property">
-      <element name="jm:Type">
-        <value>流氷</value>
-      </element>
-      <element name="jm:SeaIcePart">
-        <oneOrMore>
-          <ref name="anyElement"/>
-        </oneOrMore>
-      </element>
-    </element>
-  </define>
   <define name="body_vpcu50_kaijou">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
-        <ref name="list_infokind"/>
+        <value>地方海上警報</value>
       </element>
       <element name="jb:InfoKindVersion">
         <data type="token"/>
@@ -891,11 +831,66 @@
       </element>
     </element>
   </define>
+  <define name="info_vpzu50_kaijou">
+    <element name="jb:Information">
+      <attribute name="type">
+        <value>全般海上警報</value>
+      </attribute>
+      <oneOrMore>
+        <element name="jb:Item">
+          <element name="jb:Kind">
+            <element name="jb:Name">
+              <ref name="list_kaijou_keihoumei"/>
+            </element>
+            <element name="jb:Code">
+              <ref name="list_kaijou_keihoucode"/>
+            </element>
+          </element>
+          <element name="jb:Areas">
+            <attribute name="codeType">
+              <value>全般海上海域名</value>
+            </attribute>
+            <choice>
+              <ref name="kaijou_area_circles"/>
+              <ref name="kaijou_area_point"/>
+              <ref name="kaijou_area_polygon"/>
+              <ref name="kaijou_area_codes"/>
+            </choice>
+          </element>
+        </element>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="info_vpzu50_kaijou_clear">
+    <element name="jb:Information">
+      <attribute name="type">
+        <value>全般海上警報</value>
+      </attribute>
+      <element name="jb:Item">
+        <element name="jb:Kind">
+          <element name="jb:Name">
+            <value>海上警報なし</value>
+          </element>
+          <!-- this time jb:Code missing -->
+        </element>
+        <element name="jb:Areas">
+          <attribute name="codeType">
+            <value>全般海上海域名</value>
+          </attribute>
+          <element name="jb:Area">
+            <element name="jb:Name">
+              <value>全般海上予報区</value>
+            </element>
+          </element>
+        </element>
+      </element>
+    </element>
+  </define>
   <define name="body_vpzu50_kaijou">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
-        <ref name="list_infokind"/>
+        <value>全般海上警報</value>
       </element>
       <element name="jb:InfoKindVersion">
         <data type="token"/>
@@ -1163,7 +1158,7 @@
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
-        <ref name="list_infokind"/>
+        <value>特殊気象報</value>
       </element>
       <element name="jb:InfoKindVersion">
         <data type="token"/>
@@ -1227,7 +1222,7 @@
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
-        <ref name="list_infokind"/>
+        <value>生物季節観測報告気象報</value>
       </element>
       <element name="jb:InfoKindVersion">
         <data type="token"/>
@@ -1310,7 +1305,7 @@
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
-        <ref name="list_infokind"/>
+        <value>特殊気象報</value>
       </element>
       <element name="jb:InfoKindVersion">
         <data type="token"/>
@@ -1371,7 +1366,7 @@
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
-        <ref name="list_infokind"/>
+        <value>環境気象情報</value>
       </element>
       <element name="jb:InfoKindVersion">
         <data type="token"/>
@@ -1488,7 +1483,7 @@
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
-        <ref name="list_infokind"/>
+        <value>同一現象用平文情報</value>
       </element>
       <element name="jb:InfoKindVersion">
         <data type="token"/>
@@ -1517,7 +1512,10 @@
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
-        <ref name="list_infokind"/>
+        <choice>
+          <value>台風解析・予報情報（５日予報）</value>
+          <value>台風解析・予報情報（３日予報）</value>
+        </choice>
       </element>
       <element name="jb:InfoKindVersion">
         <data type="token"/>
@@ -2345,22 +2343,6 @@
       <value>今後２４時間以内に</value>
       <value>今後１８時間以内は</value>
       <value>今後２４時間以内は</value>
-    </choice>
-  </define>
-  <define name="list_infokind">
-    <choice>
-      <value>台風解析・予報情報（５日予報）</value>
-      <value>台風解析・予報情報（３日予報）</value>
-      <value>特殊気象報</value>
-      <value>生物季節観測報告気象報</value>
-      <value>環境気象情報</value>
-      <value>同一現象用平文情報</value>
-      <value>全般海上警報</value>
-      <value>地方海上警報</value>
-      <value>地方海上予報</value>
-      <value>気象警報・注意報</value>
-      <value>指定河川洪水予報</value>
-      <value>土砂災害警戒情報</value>
     </choice>
   </define>
   <define name="list_title">
