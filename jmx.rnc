@@ -239,8 +239,8 @@ body_vxko_emptybody =
       element jb:Text { xsd:string }
 ,     info_vxko_kasen
     }
-  },
-  element jm:Body { empty }
+  }
+, element jm:Body { empty }
 
 body_vxko_kasen =
   element jb:Head {
@@ -508,8 +508,8 @@ body_vpzu50_kaijou =
                (element jm:Becoming {
                   element jm:TimeModifier {
                     list_kaijou_timemodifier
-                  },
-                  kaijou_windpart
+                  }
+                 ,kaijou_windpart
                 }
                |kaijou_windpart)
              }?
@@ -803,8 +803,8 @@ body_vptw40_typhoon =
       attribute type { "台風情報" }
       ,element jm:MeteorologicalInfo {
         element jm:DateTime {
-          attribute type { list_typh_datetime },
-          dateTime_si
+          attribute type { list_typh_datetime }
+         ,dateTime_si
         },
         element jm:Item {
 
