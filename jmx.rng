@@ -23,30 +23,6 @@
           <ref name="list_pbof"/>
         </element>
       </element>
-      <element name="jb:Head">
-        <ref name="head_common"/>
-        <element name="jb:InfoKind">
-          <ref name="list_infokind"/>
-        </element>
-        <!-- we can simply ignore this -->
-        <element name="jb:InfoKindVersion">
-          <data type="token"/>
-        </element>
-        <element name="jb:Headline">
-          <element name="jb:Text">
-            <data type="string"/>
-          </element>
-          <choice>
-            <empty/>
-            <ref name="info_vpzu50_kaijou"/>
-            <ref name="info_vpzu50_kaijou_clear"/>
-            <ref name="info_vpcu50_kaijou"/>
-            <ref name="infos_vpww50_keihou"/>
-            <ref name="info_vxko_kasen"/>
-            <ref name="info_vxww50_dosha"/>
-          </choice>
-        </element>
-      </element>
       <choice>
         <ref name="body_vgsk50_kisetsu"/>
         <ref name="body_vgsk55_seibutsu"/>
@@ -423,6 +399,21 @@
   </define>
   <!-- === Body rules === -->
   <define name="body_vxww50_dosha">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <ref name="list_infokind"/>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+        <ref name="info_vxww50_dosha"/>
+      </element>
+    </element>
     <element name="jm:Body">
       <element name="jm:TargetArea">
         <element name="jm:Name">
@@ -450,11 +441,41 @@
     </element>
   </define>
   <define name="body_vxko_emptybody">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <ref name="list_infokind"/>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+        <ref name="info_vxko_kasen"/>
+      </element>
+    </element>
     <element name="jm:Body">
       <empty/>
     </element>
   </define>
   <define name="body_vxko_kasen">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <ref name="list_infokind"/>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+        <ref name="info_vxko_kasen"/>
+      </element>
+    </element>
     <element name="jm:Body">
       <optional>
         <element name="jm:Notice">
@@ -508,6 +529,21 @@
     </element>
   </define>
   <define name="body_vpww50_keihou">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <ref name="list_infokind"/>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+        <ref name="infos_vpww50_keihou"/>
+      </element>
+    </element>
     <element name="jm:Body">
       <zeroOrMore>
         <element name="jm:Notice">
@@ -559,6 +595,21 @@
     </element>
   </define>
   <define name="body_vpcy50_umiyoho">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <ref name="list_infokind"/>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+        <ref name="info_vpcu50_kaijou"/>
+      </element>
+    </element>
     <element name="jm:Body">
       <element name="jm:Warning">
         <attribute name="type">
@@ -692,6 +743,21 @@
     </element>
   </define>
   <define name="body_vpcu50_kaijou">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <ref name="list_infokind"/>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+        <ref name="info_vpcu50_kaijou"/>
+      </element>
+    </element>
     <element name="jm:Body">
       <element name="jm:Warning">
         <attribute name="type">
@@ -826,6 +892,24 @@
     </element>
   </define>
   <define name="body_vpzu50_kaijou">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <ref name="list_infokind"/>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+        <choice>
+          <ref name="info_vpzu50_kaijou"/>
+          <ref name="info_vpzu50_kaijou_clear"/>
+        </choice>
+      </element>
+    </element>
     <element name="jm:Body">
       <element name="jm:Notice">
         <choice>
@@ -1076,6 +1160,20 @@
     </element>
   </define>
   <define name="body_vgsk50_kisetsu">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <ref name="list_infokind"/>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+      </element>
+    </element>
     <element name="jm:Body">
       <element name="jm:MeteorologicalInfos">
         <attribute name="type">
@@ -1126,6 +1224,20 @@
     </element>
   </define>
   <define name="body_vgsk55_seibutsu">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <ref name="list_infokind"/>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+      </element>
+    </element>
     <element name="jm:Body">
       <element name="jm:MeteorologicalInfos">
         <attribute name="type">
@@ -1195,6 +1307,20 @@
     </element>
   </define>
   <define name="body_vgsk60_tokushu">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <ref name="list_infokind"/>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+      </element>
+    </element>
     <element name="jm:Body">
       <element name="jm:MeteorologicalInfos">
         <attribute name="type">
@@ -1242,6 +1368,20 @@
     </element>
   </define>
   <define name="body_vguv50_shigaisen">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <ref name="list_infokind"/>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+      </element>
+    </element>
     <element name="jm:Body">
       <element name="jm:MeteorologicalInfos">
         <group>
@@ -1345,6 +1485,20 @@
     </element>
   </define>
   <define name="body_vpti50_joho">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <ref name="list_infokind"/>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+      </element>
+    </element>
     <element name="jm:Body">
       <element name="jm:Notice">
         <empty/>
@@ -1360,6 +1514,20 @@
     </element>
   </define>
   <define name="body_vptw40_typhoon">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <ref name="list_infokind"/>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+      </element>
+    </element>
     <element name="jm:Body">
       <element name="jm:MeteorologicalInfos">
         <attribute name="type">

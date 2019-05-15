@@ -11,23 +11,7 @@ start = element jx:Report {
    ,element jx:EditorialOffice { list_edof }
    ,element jx:PublishingOffice { list_pbof }
   }
-, element jb:Head {
-    head_common
-,   element jb:InfoKind { list_infokind }
-    # we can simply ignore this
-,   element jb:InfoKindVersion { xsd:token }
-,   element jb:Headline {
-      element jb:Text { xsd:string }
-,     (empty
-      |info_vpzu50_kaijou
-      |info_vpzu50_kaijou_clear
-      |info_vpcu50_kaijou
-      |infos_vpww50_keihou
-      |info_vxko_kasen
-      |info_vxww50_dosha)
-    }
-  },
-  (body_vgsk50_kisetsu
+, (body_vgsk50_kisetsu
   |body_vgsk55_seibutsu
   |body_vgsk60_tokushu
   |body_vguv50_shigaisen
@@ -223,7 +207,16 @@ info_vpzu50_kaijou_clear =
 # === Body rules ===
 
 body_vxww50_dosha =
-  element jm:Body {
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { xsd:string }
+,     info_vxww50_dosha
+    }
+  }
+, element jm:Body {
     element jm:TargetArea {
       element jm:Name { xsd:token }
      ,element jm:Code { xsd:positiveInteger { totalDigits = "6" } }
@@ -237,10 +230,29 @@ body_vxww50_dosha =
     }
   }
 
-body_vxko_emptybody = element jm:Body { empty }
+body_vxko_emptybody =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { xsd:string }
+,     info_vxko_kasen
+    }
+  },
+  element jm:Body { empty }
 
 body_vxko_kasen =
-  element jm:Body {
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { xsd:string }
+,     info_vxko_kasen
+    }
+  }
+, element jm:Body {
     element jm:Notice { text }?
    ,element jm:Warning {
       attribute type { "指定河川洪水予報" }
@@ -267,7 +279,16 @@ body_vxko_kasen =
   }
 
 body_vpww50_keihou =
-  element jm:Body {
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { xsd:string }
+,     infos_vpww50_keihou
+    }
+  }
+, element jm:Body {
     element jm:Notice { text }*
    ,element jm:Warning {
       attribute type {
@@ -297,7 +318,16 @@ body_vpww50_keihou =
 
 
 body_vpcy50_umiyoho =
-  element jm:Body {
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { xsd:string }
+,     info_vpcu50_kaijou
+    }
+  }
+, element jm:Body {
     element jm:Warning {
       attribute type { "地方海上警報発表状況" }
      ,element jm:Item {
@@ -366,7 +396,16 @@ umiyoho_propice =
   }
 
 body_vpcu50_kaijou =
-  element jm:Body {
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { xsd:string }
+,     info_vpcu50_kaijou
+    }
+  }
+, element jm:Body {
     element jm:Warning {
       attribute type { "地方海上警報" }
      ,element jm:Item {
@@ -440,7 +479,16 @@ kaijou_kishouyouin =
 
 
 body_vpzu50_kaijou =
-  element jm:Body {
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { xsd:string }
+,     (info_vpzu50_kaijou |info_vpzu50_kaijou_clear)
+    }
+  }
+, element jm:Body {
     element jm:Notice { "" | "警報は６時間毎に更新します。" }
    ,element jm:MeteorologicalInfos {
       attribute type { "全般海上警報" }
@@ -534,7 +582,15 @@ kaijou_windcircle =
     }
 
 body_vgsk50_kisetsu =
-  element jm:Body {
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { xsd:string }
+    }
+  }
+, element jm:Body {
     element jm:MeteorologicalInfos {
       attribute type { "季節観測" }
       ,element jm:MeteorologicalInfo {
@@ -566,7 +622,15 @@ body_vgsk50_kisetsu =
   }
 
 body_vgsk55_seibutsu =
-  element jm:Body {
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { xsd:string }
+    }
+  }
+, element jm:Body {
     element jm:MeteorologicalInfos {
       attribute type { "生物季節観測" }
       ,element jm:MeteorologicalInfo {
@@ -603,7 +667,15 @@ body_vgsk55_seibutsu =
   }
 
 body_vgsk60_tokushu =
-  element jm:Body {
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { xsd:string }
+    }
+  }
+, element jm:Body {
     element jm:MeteorologicalInfos {
       attribute type { "特殊気象報（各種現象）" }
       ,element jm:MeteorologicalInfo {
@@ -634,7 +706,15 @@ body_vgsk60_tokushu =
   }
 
 body_vguv50_shigaisen =
-  element jm:Body {
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { xsd:string }
+    }
+  }
+, element jm:Body {
     element jm:MeteorologicalInfos {
       attribute type { "紫外線観測データ" }
       ,element jm:TimeSeriesInfo {
@@ -691,7 +771,15 @@ body_vguv50_shigaisen =
   }
 
 body_vpti50_joho =
-  element jm:Body {
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { xsd:string }
+    }
+  }
+, element jm:Body {
     element jm:Notice { empty }
     ,element jm:Comment {
       element jm:Text {
@@ -702,7 +790,15 @@ body_vpti50_joho =
   }
 
 body_vptw40_typhoon =
-  element jm:Body {
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { list_infokind }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { xsd:string }
+    }
+  }
+, element jm:Body {
     element jm:MeteorologicalInfos {
       attribute type { "台風情報" }
       ,element jm:MeteorologicalInfo {
