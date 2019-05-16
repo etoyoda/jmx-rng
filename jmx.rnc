@@ -51,6 +51,11 @@ start = element jx:Report {
   |case_vpaw50_sokei
   |case_vzsa50_tenkizu
   |case_vpno50_tokkei
+  |case_vfvo53_ashfall
+  |case_vfvo56_funsoku
+  |case_vpfd60_sochu
+  |case_vpck70_fortnight
+  |case_vpaw51_soten
   )
 }
 
@@ -61,7 +66,7 @@ head_common =
       attribute xsi:nil { "true" }
  |    dateTime_si
     }
-    # only for sokei
+    # only for sokei/soten
 ,   element jb:TargetDTDubious { "頃" }?
 ,   element jb:TargetDuration { xsd:duration }?
 ,   element jb:ValidDateTime { dateTime_si }?
@@ -70,6 +75,81 @@ head_common =
 ,   element jb:Serial { empty | xsd:token }
 
 # === Head and Body rules ===
+
+case_vpck70_fortnight =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "２週間気温予報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { empty }
+    }
+  }
+, element jm:Body {
+    element jm:MeteorologicalInfos {
+      attribute type { "区域予報" }
+     ,anyElement+
+    }?
+,   element jm:MeteorologicalInfos {
+      attribute type { "地点予報" }
+     ,anyElement+
+    }?
+  }
+
+case_vpfd60_sochu =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind {
+      "警報級の可能性（明日まで）"
+      |"警報級の可能性（明後日以降）"
+    }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { empty }
+    }
+  }
+, element jm:Body {
+    element jm:MeteorologicalInfos {
+      attribute type { "区域予報" }
+     ,anyElement+
+    }?
+  }
+
+case_vfvo56_funsoku =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "噴火速報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+,     element jb:Information { anyContent }*
+    }
+  }
+, element jv:Body {
+    element jv:Text { text }
+  |(
+    element jv:VolcanoInfo { anyContent }+
+,   element jv:VolcanoInfoContent { anyContent }
+   )
+  }
+
+case_vfvo53_ashfall =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "降灰予報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+,     element jb:Information { anyContent }+
+    }
+  }
+, element jv:Body {
+    element jv:VolcanoInfo { anyContent }+
+,   element jv:AshInfos { anyContent }+
+,   element jv:VolcanoInfoContent { anyContent }
+    # used in VFVO54 (kouhai sokuhou)
+,   element jv:VolcanoObservation { anyContent }?
+  }
 
 infos_vpno50_tokkei =
   element jb:Information {
@@ -277,6 +357,32 @@ case_vpaw50_sokei =
 ,   element jm:Notice { text }?
 ,   element jm:MeteorologicalInfos {
       attribute type { "異常天候早期警戒情報" }
+,     anyElement+
+    }
+  }
+
+case_vpaw51_soten =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "早期天候情報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+,     element jb:Information {
+        attribute type { "早期天候情報" }
+,       anyElement+
+      }
+    }
+  }
+, element jm:Body {
+    element jm:TargetArea {
+      attribute codeType { "全国・地方予報区等" }
+,     element jm:Name { xsd:token }
+,     element jm:Code { xsd:positiveInteger { totalDigits = "6" } }
+    }
+,   element jm:Notice { text }?
+,   element jm:MeteorologicalInfos {
+      attribute type { "早期天候情報" }
 ,     anyElement+
     }
   }
@@ -2294,6 +2400,15 @@ list_title="季節観測"
 |"アジア太平洋地上実況図"
 |"アジア太平洋海上悪天２４時間予想図"
 |"アジア太平洋海上悪天４８時間予想図"
+|"降灰予報（定時）"
+|"降灰予報（速報）"
+|"降灰予報（詳細）"
+|"噴火速報"
+|"警報級の可能性（明日まで）"
+|"警報級の可能性（明後日以降）"
+|"全般季節予報（２週間気温予報）"
+|"地方季節予報（２週間気温予報）"
+|"早期天候情報"
 
 anyContent = (attribute * { text } | text | anyElement)*
 

@@ -61,6 +61,11 @@
         <ref name="case_vpaw50_sokei"/>
         <ref name="case_vzsa50_tenkizu"/>
         <ref name="case_vpno50_tokkei"/>
+        <ref name="case_vfvo53_ashfall"/>
+        <ref name="case_vfvo56_funsoku"/>
+        <ref name="case_vpfd60_sochu"/>
+        <ref name="case_vpck70_fortnight"/>
+        <ref name="case_vpaw51_soten"/>
       </choice>
     </element>
   </start>
@@ -80,7 +85,7 @@
       </choice>
     </element>
     <optional>
-      <!-- only for sokei -->
+      <!-- only for sokei/soten -->
       <element name="jb:TargetDTDubious">
         <value>頃</value>
       </element>
@@ -113,6 +118,155 @@
     </element>
   </define>
   <!-- === Head and Body rules === -->
+  <define name="case_vpck70_fortnight">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>２週間気温予報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <empty/>
+        </element>
+      </element>
+    </element>
+    <element name="jm:Body">
+      <optional>
+        <element name="jm:MeteorologicalInfos">
+          <attribute name="type">
+            <value>区域予報</value>
+          </attribute>
+          <oneOrMore>
+            <ref name="anyElement"/>
+          </oneOrMore>
+        </element>
+      </optional>
+      <optional>
+        <element name="jm:MeteorologicalInfos">
+          <attribute name="type">
+            <value>地点予報</value>
+          </attribute>
+          <oneOrMore>
+            <ref name="anyElement"/>
+          </oneOrMore>
+        </element>
+      </optional>
+    </element>
+  </define>
+  <define name="case_vpfd60_sochu">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <choice>
+          <value>警報級の可能性（明日まで）</value>
+          <value>警報級の可能性（明後日以降）</value>
+        </choice>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <empty/>
+        </element>
+      </element>
+    </element>
+    <element name="jm:Body">
+      <optional>
+        <element name="jm:MeteorologicalInfos">
+          <attribute name="type">
+            <value>区域予報</value>
+          </attribute>
+          <oneOrMore>
+            <ref name="anyElement"/>
+          </oneOrMore>
+        </element>
+      </optional>
+    </element>
+  </define>
+  <define name="case_vfvo56_funsoku">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>噴火速報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+        <zeroOrMore>
+          <element name="jb:Information">
+            <ref name="anyContent"/>
+          </element>
+        </zeroOrMore>
+      </element>
+    </element>
+    <element name="jv:Body">
+      <choice>
+        <element name="jv:Text">
+          <text/>
+        </element>
+        <group>
+          <oneOrMore>
+            <element name="jv:VolcanoInfo">
+              <ref name="anyContent"/>
+            </element>
+          </oneOrMore>
+          <element name="jv:VolcanoInfoContent">
+            <ref name="anyContent"/>
+          </element>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="case_vfvo53_ashfall">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>降灰予報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+        <oneOrMore>
+          <element name="jb:Information">
+            <ref name="anyContent"/>
+          </element>
+        </oneOrMore>
+      </element>
+    </element>
+    <element name="jv:Body">
+      <oneOrMore>
+        <element name="jv:VolcanoInfo">
+          <ref name="anyContent"/>
+        </element>
+      </oneOrMore>
+      <oneOrMore>
+        <element name="jv:AshInfos">
+          <ref name="anyContent"/>
+        </element>
+      </oneOrMore>
+      <element name="jv:VolcanoInfoContent">
+        <ref name="anyContent"/>
+      </element>
+      <optional>
+        <!-- used in VFVO54 (kouhai sokuhou) -->
+        <element name="jv:VolcanoObservation">
+          <ref name="anyContent"/>
+        </element>
+      </optional>
+    </element>
+  </define>
   <define name="infos_vpno50_tokkei">
     <element name="jb:Information">
       <attribute name="type">
@@ -454,6 +608,58 @@
       <element name="jm:MeteorologicalInfos">
         <attribute name="type">
           <value>異常天候早期警戒情報</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+    </element>
+  </define>
+  <define name="case_vpaw51_soten">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>早期天候情報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+        <element name="jb:Information">
+          <attribute name="type">
+            <value>早期天候情報</value>
+          </attribute>
+          <oneOrMore>
+            <ref name="anyElement"/>
+          </oneOrMore>
+        </element>
+      </element>
+    </element>
+    <element name="jm:Body">
+      <element name="jm:TargetArea">
+        <attribute name="codeType">
+          <value>全国・地方予報区等</value>
+        </attribute>
+        <element name="jm:Name">
+          <data type="token"/>
+        </element>
+        <element name="jm:Code">
+          <data type="positiveInteger">
+            <param name="totalDigits">6</param>
+          </data>
+        </element>
+      </element>
+      <optional>
+        <element name="jm:Notice">
+          <text/>
+        </element>
+      </optional>
+      <element name="jm:MeteorologicalInfos">
+        <attribute name="type">
+          <value>早期天候情報</value>
         </attribute>
         <oneOrMore>
           <ref name="anyElement"/>
@@ -4098,6 +4304,15 @@
       <value>アジア太平洋地上実況図</value>
       <value>アジア太平洋海上悪天２４時間予想図</value>
       <value>アジア太平洋海上悪天４８時間予想図</value>
+      <value>降灰予報（定時）</value>
+      <value>降灰予報（速報）</value>
+      <value>降灰予報（詳細）</value>
+      <value>噴火速報</value>
+      <value>警報級の可能性（明日まで）</value>
+      <value>警報級の可能性（明後日以降）</value>
+      <value>全般季節予報（２週間気温予報）</value>
+      <value>地方季節予報（２週間気温予報）</value>
+      <value>早期天候情報</value>
     </choice>
   </define>
   <define name="anyContent">
