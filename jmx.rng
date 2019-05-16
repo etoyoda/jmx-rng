@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:jm="http://xml.kishou.go.jp/jmaxml1/body/meteorology1/" xmlns:jb="http://xml.kishou.go.jp/jmaxml1/informationBasis1/" xmlns:js="http://xml.kishou.go.jp/jmaxml1/body/seismology1/" xmlns:je="http://xml.kishou.go.jp/jmaxml1/elementBasis1/" xmlns:jx="http://xml.kishou.go.jp/jmaxml1/" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:jm="http://xml.kishou.go.jp/jmaxml1/body/meteorology1/" xmlns:jb="http://xml.kishou.go.jp/jmaxml1/informationBasis1/" xmlns:js="http://xml.kishou.go.jp/jmaxml1/body/seismology1/" xmlns:je="http://xml.kishou.go.jp/jmaxml1/elementBasis1/" xmlns:jv="http://xml.kishou.go.jp/jmaxml1/body/volcanology1/" xmlns:jx="http://xml.kishou.go.jp/jmaxml1/" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <start>
     <element name="jx:Report">
       <element name="jx:Control">
@@ -49,7 +49,15 @@
         <ref name="case_vxse56_katsudou"/>
         <ref name="case_vxse60_kaisuu"/>
         <ref name="case_vxse61_koushin"/>
-        <ref name="case_vtse40_tsunami"/>
+        <ref name="case_vtse40_tsunamikeiho"/>
+        <ref name="case_vtse50_tsunamijoho"/>
+        <ref name="case_vxse41_eew"/>
+        <ref name="case_vyse42_tokai"/>
+        <ref name="case_vzse40_oshirase"/>
+        <ref name="case_vzvo40_oshirase"/>
+        <ref name="case_vfvo50_funka"/>
+        <ref name="case_vfvo52_kazanobs"/>
+        <ref name="case_vpzk50_kisetsu"/>
       </choice>
     </element>
   </start>
@@ -91,7 +99,245 @@
     </element>
   </define>
   <!-- === Head and Body rules === -->
-  <define name="case_vtse40_tsunami">
+  <define name="case_vpzk50_kisetsu">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>季節予報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <empty/>
+        </element>
+      </element>
+    </element>
+    <element name="jm:Body">
+      <element name="jm:Notice">
+        <empty/>
+      </element>
+      <element name="jm:Comment">
+        <element name="jm:Text">
+          <attribute name="type">
+            <value>本文</value>
+          </attribute>
+          <data type="string"/>
+        </element>
+      </element>
+    </element>
+  </define>
+  <define name="case_vfvo52_kazanobs">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>噴火に関する火山観測報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+        <oneOrMore>
+          <element name="jb:Information">
+            <ref name="anyContent"/>
+          </element>
+        </oneOrMore>
+      </element>
+    </element>
+    <element name="jv:Body">
+      <oneOrMore>
+        <element name="jv:VolcanoInfo">
+          <ref name="anyContent"/>
+        </element>
+      </oneOrMore>
+      <element name="jv:VolcanoObservation">
+        <ref name="anyContent"/>
+      </element>
+    </element>
+  </define>
+  <define name="case_vfvo50_funka">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <choice>
+          <value>噴火警報・予報</value>
+          <!-- case VFVO51 -->
+          <value>火山の状況に関する解説情報</value>
+          <!-- case VFSVii -->
+          <value>火山現象に関する海上警報・海上予報</value>
+        </choice>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+        <oneOrMore>
+          <element name="jb:Information">
+            <ref name="anyContent"/>
+          </element>
+        </oneOrMore>
+      </element>
+    </element>
+    <element name="jv:Body">
+      <oneOrMore>
+        <element name="jv:VolcanoInfo">
+          <ref name="anyContent"/>
+        </element>
+      </oneOrMore>
+      <element name="jv:VolcanoInfoContent">
+        <ref name="anyContent"/>
+      </element>
+    </element>
+  </define>
+  <define name="case_vzvo40_oshirase">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>火山に関するお知らせ</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+      </element>
+    </element>
+    <element name="jv:Body">
+      <element name="jv:Text">
+        <text/>
+      </element>
+    </element>
+  </define>
+  <define name="case_vzse40_oshirase">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>地震・津波に関するお知らせ</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+      </element>
+    </element>
+    <element name="js:Body">
+      <element name="js:Text">
+        <text/>
+      </element>
+    </element>
+  </define>
+  <define name="case_vyse42_tokai">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>東海地震関連情報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+      </element>
+    </element>
+    <element name="js:Body">
+      <element name="js:Tokai">
+        <ref name="anyContent"/>
+      </element>
+      <optional>
+        <element name="js:NextAdvisory">
+          <text/>
+        </element>
+      </optional>
+    </element>
+  </define>
+  <define name="case_vxse41_eew">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>緊急地震速報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+        <zeroOrMore>
+          <element name="jb:Information">
+            <attribute name="type"/>
+            <oneOrMore>
+              <!--
+                <Information type="緊急地震速報（地方予報区）">
+                <Information type="緊急地震速報（府県予報区）">
+                <Information type="緊急地震速報（細分区域）">
+              -->
+              <element name="jb:Item">
+                <element name="jb:Kind">
+                  <oneOrMore>
+                    <ref name="anyElement"/>
+                  </oneOrMore>
+                </element>
+                <element name="jb:LastKind">
+                  <oneOrMore>
+                    <ref name="anyElement"/>
+                  </oneOrMore>
+                </element>
+                <element name="jb:Areas">
+                  <attribute name="codeType"/>
+                  <oneOrMore>
+                    <element name="jb:Area">
+                      <element name="jb:Name">
+                        <data type="token"/>
+                      </element>
+                      <element name="jb:Code">
+                        <data type="token"/>
+                      </element>
+                    </element>
+                  </oneOrMore>
+                </element>
+              </element>
+            </oneOrMore>
+          </element>
+        </zeroOrMore>
+      </element>
+    </element>
+    <element name="js:Body">
+      <ref name="anyContent"/>
+    </element>
+  </define>
+  <define name="case_vtse50_tsunamijoho">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>津波情報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+      </element>
+    </element>
+    <ref name="tsunami_body"/>
+  </define>
+  <define name="case_vtse40_tsunamikeiho">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -104,46 +350,67 @@
         <element name="jb:Text">
           <text/>
         </element>
-        <element name="jb:Information">
-          <attribute name="type">
-            <value>津波予報領域表現</value>
-          </attribute>
-          <oneOrMore>
-            <element name="jb:Item">
-              <element name="jb:Kind">
-                <element name="jb:Name">
-                  <data type="token"/>
-                </element>
-                <element name="jb:Code">
-                  <data type="nonNegativeInteger">
-                    <param name="totalDigits">2</param>
-                  </data>
-                </element>
-              </element>
-              <element name="jb:Areas">
-                <attribute name="codeType">
-                  <value>津波予報区</value>
-                </attribute>
-                <oneOrMore>
-                  <element name="jb:Area">
-                    <element name="jb:Name">
-                      <data type="token"/>
-                    </element>
-                    <element name="jb:Code">
-                      <data type="nonNegativeInteger">
-                        <param name="totalDigits">3</param>
-                      </data>
-                    </element>
+        <optional>
+          <!-- omitted when lifting -->
+          <element name="jb:Information">
+            <attribute name="type">
+              <value>津波予報領域表現</value>
+            </attribute>
+            <oneOrMore>
+              <element name="jb:Item">
+                <element name="jb:Kind">
+                  <element name="jb:Name">
+                    <data type="token"/>
                   </element>
-                </oneOrMore>
+                  <element name="jb:Code">
+                    <data type="nonNegativeInteger">
+                      <param name="totalDigits">2</param>
+                    </data>
+                  </element>
+                </element>
+                <element name="jb:Areas">
+                  <attribute name="codeType">
+                    <value>津波予報区</value>
+                  </attribute>
+                  <oneOrMore>
+                    <element name="jb:Area">
+                      <element name="jb:Name">
+                        <data type="token"/>
+                      </element>
+                      <element name="jb:Code">
+                        <data type="nonNegativeInteger">
+                          <param name="totalDigits">3</param>
+                        </data>
+                      </element>
+                    </element>
+                  </oneOrMore>
+                </element>
               </element>
-            </element>
-          </oneOrMore>
-        </element>
+            </oneOrMore>
+          </element>
+        </optional>
       </element>
     </element>
+    <ref name="tsunami_body"/>
+  </define>
+  <define name="tsunami_body">
     <element name="js:Body">
       <element name="js:Tsunami">
+        <optional>
+          <!-- only in some VTSE50 -->
+          <element name="js:Observation">
+            <oneOrMore>
+              <ref name="anyElement"/>
+            </oneOrMore>
+          </element>
+        </optional>
+        <optional>
+          <element name="js:Estimation">
+            <oneOrMore>
+              <ref name="anyElement"/>
+            </oneOrMore>
+          </element>
+        </optional>
         <element name="js:Forecast">
           <oneOrMore>
             <ref name="anyElement"/>
@@ -155,22 +422,31 @@
           <ref name="anyElement"/>
         </oneOrMore>
       </element>
-      <element name="js:Comments">
-        <element name="js:WarningComment">
-          <attribute name="codeType">
-            <value>固定付加文</value>
-          </attribute>
-          <element name="js:Text">
-            <text/>
-          </element>
-          <!-- can be list of 4-digit numbers -->
-          <element name="js:Code">
-            <text/>
-          </element>
-        </element>
-        <element name="js:FreeFormComment">
+      <optional>
+        <element name="js:Text">
           <text/>
         </element>
+      </optional>
+      <element name="js:Comments">
+        <optional>
+          <element name="js:WarningComment">
+            <attribute name="codeType">
+              <value>固定付加文</value>
+            </attribute>
+            <element name="js:Text">
+              <text/>
+            </element>
+            <!-- can be list of 4-digit numbers -->
+            <element name="js:Code">
+              <text/>
+            </element>
+          </element>
+        </optional>
+        <optional>
+          <element name="js:FreeFormComment">
+            <text/>
+          </element>
+        </optional>
       </element>
     </element>
   </define>
@@ -563,6 +839,9 @@
     </element>
     <element name="js:Body">
       <ref name="shindo_intensity"/>
+      <optional>
+        <ref name="kotei_fukabun"/>
+      </optional>
     </element>
   </define>
   <define name="shindo_intensity">
@@ -3210,7 +3489,7 @@
   </define>
   <define name="list_pbof">
     <data type="string">
-      <param name="pattern">気象庁|気象庁予報部|気象庁地球環境・海洋部|気象庁本庁|.*気象台</param>
+      <param name="pattern">気象庁|気象庁予報部|気象庁地球環境・海洋部|気象庁地震火山部|気象庁本庁|.*気象台</param>
     </data>
   </define>
   <define name="list_typh_datetime">
@@ -3359,6 +3638,24 @@
       <value>顕著な地震の震源要素更新のお知らせ</value>
       <value>津波警報・注意報・予報</value>
       <value>津波情報</value>
+      <value>津波警報・注意報・予報a</value>
+      <value>津波情報a</value>
+      <value>緊急地震速報（予報）</value>
+      <value>緊急地震速報（警報）</value>
+      <value>東海地震観測情報</value>
+      <value>東海地震注意情報</value>
+      <value>東海地震予知情報</value>
+      <value>地震・津波に関するお知らせ</value>
+      <value>火山に関するお知らせ</value>
+      <value>噴火警報・予報</value>
+      <value>火山の状況に関する解説情報</value>
+      <value>噴火に関する火山観測報</value>
+      <value>火山現象に関する海上警報・海上予報</value>
+      <value>府県海氷予報</value>
+      <value>全般潮位情報</value>
+      <value>地方潮位情報</value>
+      <value>府県潮位情報</value>
+      <value>全般１か月予報</value>
     </choice>
   </define>
   <define name="anyContent">

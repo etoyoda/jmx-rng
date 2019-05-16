@@ -3,6 +3,7 @@ namespace jb = "http://xml.kishou.go.jp/jmaxml1/informationBasis1/"
 namespace jm = "http://xml.kishou.go.jp/jmaxml1/body/meteorology1/"
 namespace je = "http://xml.kishou.go.jp/jmaxml1/elementBasis1/"
 namespace js = "http://xml.kishou.go.jp/jmaxml1/body/seismology1/"
+namespace jv = "http://xml.kishou.go.jp/jmaxml1/body/volcanology1/"
 
 start = element jx:Report {
   element jx:Control {
@@ -37,7 +38,16 @@ start = element jx:Report {
   |case_vxse56_katsudou
   |case_vxse60_kaisuu
   |case_vxse61_koushin
-  |case_vtse40_tsunami)
+  |case_vtse40_tsunamikeiho
+  |case_vtse50_tsunamijoho
+  |case_vxse41_eew
+  |case_vyse42_tokai
+  |case_vzse40_oshirase
+  |case_vzvo40_oshirase
+  |case_vfvo50_funka
+  |case_vfvo52_kazanobs
+  |case_vpzk50_kisetsu
+  )
 }
 
 head_common =
@@ -52,13 +62,151 @@ head_common =
 
 # === Head and Body rules ===
 
-case_vtse40_tsunami =
+case_vpzk50_kisetsu =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "季節予報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { empty }
+    }
+  }
+, element jm:Body {
+    element jm:Notice { empty }
+    ,element jm:Comment {
+      element jm:Text {
+        attribute type { "本文" }
+        ,xsd:string
+      }
+    }
+  }
+
+case_vfvo52_kazanobs =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind {
+      "噴火に関する火山観測報"
+    }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+,     element jb:Information { anyContent }+
+    }
+  }
+, element jv:Body {
+    element jv:VolcanoInfo { anyContent }+
+,   element jv:VolcanoObservation { anyContent }
+  }
+
+case_vfvo50_funka =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind {
+      "噴火警報・予報"
+      # case VFVO51
+|     "火山の状況に関する解説情報"
+      # case VFSVii
+|     "火山現象に関する海上警報・海上予報"
+    }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+,     element jb:Information { anyContent }+
+    }
+  }
+, element jv:Body {
+    element jv:VolcanoInfo { anyContent }+
+,   element jv:VolcanoInfoContent { anyContent }
+  }
+
+case_vzvo40_oshirase =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "火山に関するお知らせ" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+    }
+  }
+, element jv:Body {
+    element jv:Text { text }
+  }
+
+case_vzse40_oshirase =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind {
+"地震・津波に関するお知らせ" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+    }
+  }
+, element js:Body {
+    element js:Text { text }
+  }
+
+case_vyse42_tokai =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "東海地震関連情報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+    }
+  }
+, element js:Body {
+    element js:Tokai { anyContent }
+,   element js:NextAdvisory { text }?
+  }
+
+case_vxse41_eew =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "緊急地震速報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+,     element jb:Information {
+        attribute type { text }
+#<Information type="緊急地震速報（地方予報区）">
+#<Information type="緊急地震速報（府県予報区）">
+#<Information type="緊急地震速報（細分区域）">
+,       element jb:Item {
+          element jb:Kind { anyElement+ }
+,         element jb:LastKind { anyElement+ }
+,         element jb:Areas {
+            attribute codeType { text }
+,           element jb:Area {
+              element jb:Name { xsd:token }
+,             element jb:Code { xsd:token }
+            }+
+          }
+        }+
+      }*
+    }
+  }
+, element js:Body { anyContent }
+
+case_vtse50_tsunamijoho =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "津波情報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+    }
+  }
+, tsunami_body
+
+case_vtse40_tsunamikeiho =
   element jb:Head {
     head_common
 ,   element jb:InfoKind { "津波警報・注意報・予報" }
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { text }
+      # omitted when lifting
 ,     element jb:Information {
         attribute type { "津波予報領域表現" }
 ,       element jb:Item {
@@ -78,22 +226,29 @@ xsd:nonNegativeInteger { totalDigits = "3" }
             }+
           }
         }+
-      }
+      }?
     }
   }
-, element js:Body {
+, tsunami_body
+
+tsunami_body =
+  element js:Body {
     element js:Tsunami {
-      element js:Forecast { anyElement+ }
+      # only in some VTSE50
+      element js:Observation { anyElement+ }?
+,     element js:Estimation { anyElement+ }?
+,     element js:Forecast { anyElement+ }
     }
 ,   element js:Earthquake { anyElement+ }
+,   element js:Text { text }?
 ,   element js:Comments {
       element js:WarningComment {
         attribute codeType { "固定付加文" }
 ,       element js:Text { text }
         # can be list of 4-digit numbers
 ,       element js:Code { text }
-      }
-,     element js:FreeFormComment { text }
+      }?
+,     element js:FreeFormComment { text }?
     }
   }
 
@@ -300,6 +455,7 @@ case_vxse51_shindo =
   }
 , element js:Body {
     shindo_intensity
+,   kotei_fukabun?
   }
 
 shindo_intensity =
@@ -1740,7 +1896,7 @@ list_edof =
 
 list_pbof =
   xsd:string {
-    pattern = "気象庁|気象庁予報部|気象庁地球環境・海洋部|気象庁本庁|.*気象台"
+    pattern = "気象庁|気象庁予報部|気象庁地球環境・海洋部|気象庁地震火山部|気象庁本庁|.*気象台"
   }
 
 list_typh_datetime =
@@ -1855,6 +2011,24 @@ list_title="季節観測"
 |"顕著な地震の震源要素更新のお知らせ"
 |"津波警報・注意報・予報"
 |"津波情報"
+|"津波警報・注意報・予報a"
+|"津波情報a"
+|"緊急地震速報（予報）"
+|"緊急地震速報（警報）"
+|"東海地震観測情報"
+|"東海地震注意情報"
+|"東海地震予知情報"
+|"地震・津波に関するお知らせ"
+|"火山に関するお知らせ"
+|"噴火警報・予報"
+|"火山の状況に関する解説情報"
+|"噴火に関する火山観測報"
+|"火山現象に関する海上警報・海上予報"
+|"府県海氷予報"
+|"全般潮位情報"
+|"地方潮位情報"
+|"府県潮位情報"
+|"全般１か月予報"
 
 anyContent = (attribute * { text } | text | anyElement)*
 
