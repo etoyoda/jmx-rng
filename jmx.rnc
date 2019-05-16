@@ -36,7 +36,8 @@ start = element jx:Report {
   |case_vxse53_joho
   |case_vxse56_katsudou
   |case_vxse60_kaisuu
-  |case_vxse61_koushin)
+  |case_vxse61_koushin
+  |case_vtse40_tsunami)
 }
 
 head_common =
@@ -50,6 +51,51 @@ head_common =
 ,   element jb:Serial { empty | xsd:token }
 
 # === Head and Body rules ===
+
+case_vtse40_tsunami =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "津波警報・注意報・予報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+,     element jb:Information {
+        attribute type { "津波予報領域表現" }
+,       element jb:Item {
+          element jb:Kind {
+            element jb:Name { xsd:token }
+,           element jb:Code {
+xsd:nonNegativeInteger { totalDigits = "2" }
+            }
+          }
+,         element jb:Areas {
+            attribute codeType { "津波予報区" }
+,           element jb:Area {
+              element jb:Name { xsd:token }
+,             element jb:Code {
+xsd:nonNegativeInteger { totalDigits = "3" }
+              }
+            }+
+          }
+        }+
+      }
+    }
+  }
+, element js:Body {
+    element js:Tsunami {
+      element js:Forecast { anyElement+ }
+    }
+,   element js:Earthquake { anyElement+ }
+,   element js:Comments {
+      element js:WarningComment {
+        attribute codeType { "固定付加文" }
+,       element js:Text { text }
+        # can be list of 4-digit numbers
+,       element js:Code { text }
+      }
+,     element js:FreeFormComment { text }
+    }
+  }
 
 case_vxse61_koushin =
   element jb:Head {
@@ -1807,6 +1853,8 @@ list_title="季節観測"
 |"地震の活動状況等に関する情報"
 |"地震回数に関する情報"
 |"顕著な地震の震源要素更新のお知らせ"
+|"津波警報・注意報・予報"
+|"津波情報"
 
 anyContent = (attribute * { text } | text | anyElement)*
 

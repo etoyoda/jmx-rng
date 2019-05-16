@@ -49,6 +49,7 @@
         <ref name="case_vxse56_katsudou"/>
         <ref name="case_vxse60_kaisuu"/>
         <ref name="case_vxse61_koushin"/>
+        <ref name="case_vtse40_tsunami"/>
       </choice>
     </element>
   </start>
@@ -90,6 +91,89 @@
     </element>
   </define>
   <!-- === Head and Body rules === -->
+  <define name="case_vtse40_tsunami">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>津波警報・注意報・予報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+        <element name="jb:Information">
+          <attribute name="type">
+            <value>津波予報領域表現</value>
+          </attribute>
+          <oneOrMore>
+            <element name="jb:Item">
+              <element name="jb:Kind">
+                <element name="jb:Name">
+                  <data type="token"/>
+                </element>
+                <element name="jb:Code">
+                  <data type="nonNegativeInteger">
+                    <param name="totalDigits">2</param>
+                  </data>
+                </element>
+              </element>
+              <element name="jb:Areas">
+                <attribute name="codeType">
+                  <value>津波予報区</value>
+                </attribute>
+                <oneOrMore>
+                  <element name="jb:Area">
+                    <element name="jb:Name">
+                      <data type="token"/>
+                    </element>
+                    <element name="jb:Code">
+                      <data type="nonNegativeInteger">
+                        <param name="totalDigits">3</param>
+                      </data>
+                    </element>
+                  </element>
+                </oneOrMore>
+              </element>
+            </element>
+          </oneOrMore>
+        </element>
+      </element>
+    </element>
+    <element name="js:Body">
+      <element name="js:Tsunami">
+        <element name="js:Forecast">
+          <oneOrMore>
+            <ref name="anyElement"/>
+          </oneOrMore>
+        </element>
+      </element>
+      <element name="js:Earthquake">
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <element name="js:Comments">
+        <element name="js:WarningComment">
+          <attribute name="codeType">
+            <value>固定付加文</value>
+          </attribute>
+          <element name="js:Text">
+            <text/>
+          </element>
+          <!-- can be list of 4-digit numbers -->
+          <element name="js:Code">
+            <text/>
+          </element>
+        </element>
+        <element name="js:FreeFormComment">
+          <text/>
+        </element>
+      </element>
+    </element>
+  </define>
   <define name="case_vxse61_koushin">
     <element name="jb:Head">
       <ref name="head_common"/>
@@ -3273,6 +3357,8 @@
       <value>地震の活動状況等に関する情報</value>
       <value>地震回数に関する情報</value>
       <value>顕著な地震の震源要素更新のお知らせ</value>
+      <value>津波警報・注意報・予報</value>
+      <value>津波情報</value>
     </choice>
   </define>
   <define name="anyContent">
