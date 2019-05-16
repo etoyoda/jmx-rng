@@ -35,7 +35,8 @@ start = element jx:Report {
   |case_vxse52_shingen
   |case_vxse53_joho
   |case_vxse56_katsudou
-  |case_vxse60_kaisuu)
+  |case_vxse60_kaisuu
+  |case_vxse61_koushin)
 }
 
 head_common =
@@ -50,23 +51,45 @@ head_common =
 
 # === Head and Body rules ===
 
-case_vxse60_kaisuu =
+case_vxse61_koushin =
   element jb:Head {
     head_common
-,   element jb:InfoKind { "地震回数情報" }
+,   element jb:InfoKind { "震源要素更新のお知らせ" }
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { text }
     }
   }
 , element js:Body {
+    # cancellation
     element js:Text { text }
+  |(
+    element js:Earthquake {
+      element js:OriginTime { dateTime_si }
+,     element js:ArrivalTime { dateTime_si }
+,     element js:Hypocenter {
+        element js:Area {
+          element js:Name { xsd:token } 
+,         element js:Code {
+            attribute type { "震央地名" }
+,           xsd:positiveInteger { totalDigits = "3" }
+          }
+,         element je:Coordinate { anyContent }
+,         element je:Coordinate { anyContent }
+        }
+      }
+,     element je:Magnitude { anyContent }
+    }
+,   element js:Comments {
+      element js:FreeFormComment { text }
+    }
+   )
   }
 
-case_vxse56_katsudou =
+case_vxse60_kaisuu =
   element jb:Head {
     head_common
-,   element jb:InfoKind { "地震の活動状況等に関する情報" }
+,   element jb:InfoKind { "地震回数情報" }
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { text }
@@ -88,6 +111,24 @@ case_vxse56_katsudou =
     }
   }
 
+case_vxse56_katsudou =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "地震の活動状況等に関する情報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+    }
+  }
+, element js:Body {
+    # when giving a name to an earthquake
+    element js:Naming {
+      attribute english { text }
+,     text
+    }?
+,   element js:Text { text }
+  }
+
 case_vxse53_joho =
   element jb:Head {
     head_common
@@ -95,7 +136,7 @@ case_vxse53_joho =
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { text }
-      # missing in case of enchi-jishin
+      # missing in case of enchi-jishin or cancellation
 ,     (element jb:Information {
         attribute type { "震源・震度に関する情報（細分区域）" }
 ,       element jb:Item { anyElement+ }+
@@ -107,6 +148,9 @@ case_vxse53_joho =
     }
   }
 , element js:Body {
+    # cancellation
+    element js:Text { text }
+  |(
     element js:Earthquake {
       element js:OriginTime { dateTime_si }
 ,     element js:ArrivalTime { dateTime_si }
@@ -119,11 +163,21 @@ case_vxse53_joho =
           }
 ,         element je:Coordinate { anyContent }
           # present in enchi-jishin
-,        (element js:DetailedName { xsd:token }
+,       ( element js:DetailedName { xsd:token }
 ,         element js:DetailedCode {
             attribute type { "詳細震央地名" }
+,           xsd:positiveInteger { totalDigits = "4" }
+          } )?
+,       ( element js:NameFromMark { xsd:token }
+,         element js:MarkCode {
+            attribute type { "震央補助" }
 ,           xsd:positiveInteger { totalDigits = "3" }
-          })?
+          }
+,         element js:Direction { xsd:token }
+,         element js:Distance {
+            attribute unit { "km" }
+,           xsd:nonNegativeInteger
+          } )?
         }
         # present in enchi-jishin
 ,       element js:Source { "ＰＴＷＣ" }?
@@ -133,6 +187,7 @@ case_vxse53_joho =
     # missing in enchi-jishin
 ,   shindo_intensity?
 ,   kotei_fukabun
+   )
   }
 
 kotei_fukabun =
@@ -140,13 +195,16 @@ kotei_fukabun =
       element js:ForecastComment {
         attribute codeType { "固定付加文" }
 ,       element js:Text { text }
-,       element js:Code { xsd:positiveInteger { totalDigits = "4" } }
+        # can be list of 4-digit numbers
+,       element js:Code { text }
       }
 ,     element js:VarComment {
         attribute codeType { "固定付加文" }
 ,       element js:Text { text }
-,       element js:Code { xsd:positiveInteger { totalDigits = "4" } }
+        # 4-digit number, could be list (TBC)
+,       element js:Code { text }
       }?
+,     element js:FreeFormComment { text }?
     }
 
 case_vxse52_shingen =
@@ -159,6 +217,9 @@ case_vxse52_shingen =
     }
   }
 , element js:Body {
+    # cancellation
+    element js:Text { text }
+  |(
     element js:Earthquake {
       element js:OriginTime { dateTime_si }
 ,     element js:ArrivalTime { dateTime_si }
@@ -175,6 +236,7 @@ case_vxse52_shingen =
 ,     element je:Magnitude { anyContent }
     }
 ,   kotei_fukabun
+   )
   }
 
 case_vxse51_shindo =
@@ -208,18 +270,23 @@ shindo_intensity =
           element js:Name { xsd:token }
 ,         element js:Code { xsd:positiveInteger { totalDigits = "2" } }
 ,         element js:MaxInt { pat_shindo }
+,         element js:Revise { xsd:token }?
 ,         element js:Area {
             element js:Name { xsd:token }
 ,           element js:Code { xsd:positiveInteger { totalDigits = "3" } }
 ,           element js:MaxInt { pat_shindo }
+,           element js:Revise { xsd:token }?
 ,           element js:City {
               element js:Name { xsd:token }
 ,             element js:Code { xsd:positiveInteger { totalDigits = "7" } }
-,             element js:MaxInt { pat_shindo }
+,           ( element js:MaxInt { pat_shindo }
+,             element js:Revise { xsd:token }? )?
+,             element js:Condition { "震度５弱以上未入電" }?
 ,             element js:IntensityStation {
                 element js:Name { xsd:token }
 ,               element js:Code { xsd:positiveInteger { totalDigits = "7" } }
 ,               element js:Int { pat_shindo }
+,               element js:Revise { xsd:token }?
               }+
             }*
           }+
@@ -227,7 +294,16 @@ shindo_intensity =
       }
     }
 
-pat_shindo = xsd:token { pattern = "[12347]|[56][\-+]" }
+pat_shindo = "1"
+|"2"
+|"3"
+|"4"
+|"5-"
+|"5+"
+|"6-"
+|"6+"
+|"7"
+|"震度５弱以上未入電"
 
 case_vpzi50_tenkou =
   element jb:Head {
@@ -246,7 +322,8 @@ case_vpzi50_tenkou =
 ,     element jm:Name { xsd:token }
 ,     element jm:Code { xsd:positiveInteger { totalDigits = "6" } }
     }
-,   element jm:Notice { xsd:string }
+    # present in case of declaring Baiu events
+,   element jm:Notice { xsd:string }?
 ,   element jm:MeteorologicalInfos {
       attribute type { "天候情報" }
 ,     anyElement+
@@ -1728,6 +1805,8 @@ list_title="季節観測"
 |"震源に関する情報"
 |"震源・震度に関する情報"
 |"地震の活動状況等に関する情報"
+|"地震回数に関する情報"
+|"顕著な地震の震源要素更新のお知らせ"
 
 anyContent = (attribute * { text } | text | anyElement)*
 
