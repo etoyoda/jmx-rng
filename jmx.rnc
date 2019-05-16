@@ -31,7 +31,8 @@ start = element jx:Report {
   |case_vpfd50_fuken
   |case_vpfw50_week
   |case_vpzi50_tenkou
-  |case_vxse51_shindo)
+  |case_vxse51_shindo
+  |case_vxse52_shingen)
 }
 
 head_common =
@@ -45,6 +46,36 @@ head_common =
 ,   element jb:Serial { empty | xsd:token }
 
 # === Head and Body rules ===
+
+case_vxse52_shingen =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "震源速報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+    }
+  }
+, element js:Body {
+    element js:Earthquake {
+      element js:OriginTime { dateTime_si }
+,     element js:ArrivalTime { dateTime_si }
+,     element js:Hypocenter {
+        element js:Area {
+          element js:Name { xsd:token } 
+,         element js:Code {
+            attribute type { "震央地名" }
+,           xsd:positiveInteger { totalDigits = "3" }
+          }
+,         element je:Coordinate { anyContent }
+        }
+      }
+,     element je:Magnitude { anyContent }
+    }
+,   element js:Comments {
+      element js:ForecastComment { anyContent }
+    }
+  }
 
 case_vxse51_shindo =
   element jb:Head {
@@ -1576,10 +1607,9 @@ list_title="季節観測"
 |"地方天候情報"
 |"府県天候情報"
 |"震度速報"
+|"震源に関する情報"
 
-anyElement =
-  element * | je:* {
-    (attribute * { text }
-    | text
-    | anyElement) *
-  }
+anyContent = (attribute * { text } | text | anyElement)*
+
+anyElement = element * { (attribute * { text } | text | anyElement)* }
+

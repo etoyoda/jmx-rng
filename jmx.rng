@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar ns="http://xml.kishou.go.jp/jmaxml1/elementBasis1/" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:jm="http://xml.kishou.go.jp/jmaxml1/body/meteorology1/" xmlns:jb="http://xml.kishou.go.jp/jmaxml1/informationBasis1/" xmlns:js="http://xml.kishou.go.jp/jmaxml1/body/seismology1/" xmlns:je="http://xml.kishou.go.jp/jmaxml1/elementBasis1/" xmlns:jx="http://xml.kishou.go.jp/jmaxml1/" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:jm="http://xml.kishou.go.jp/jmaxml1/body/meteorology1/" xmlns:jb="http://xml.kishou.go.jp/jmaxml1/informationBasis1/" xmlns:js="http://xml.kishou.go.jp/jmaxml1/body/seismology1/" xmlns:je="http://xml.kishou.go.jp/jmaxml1/elementBasis1/" xmlns:jx="http://xml.kishou.go.jp/jmaxml1/" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <start>
     <element name="jx:Report">
       <element name="jx:Control">
@@ -44,6 +44,7 @@
         <ref name="case_vpfw50_week"/>
         <ref name="case_vpzi50_tenkou"/>
         <ref name="case_vxse51_shindo"/>
+        <ref name="case_vxse52_shingen"/>
       </choice>
     </element>
   </start>
@@ -88,6 +89,58 @@
     </element>
   </define>
   <!-- === Head and Body rules === -->
+  <define name="case_vxse52_shingen">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>震源速報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+      </element>
+    </element>
+    <element name="js:Body">
+      <element name="js:Earthquake">
+        <element name="js:OriginTime">
+          <ref name="dateTime_si"/>
+        </element>
+        <element name="js:ArrivalTime">
+          <ref name="dateTime_si"/>
+        </element>
+        <element name="js:Hypocenter">
+          <element name="js:Area">
+            <element name="js:Name">
+              <data type="token"/>
+            </element>
+            <element name="js:Code">
+              <attribute name="type">
+                <value>震央地名</value>
+              </attribute>
+              <data type="positiveInteger">
+                <param name="totalDigits">3</param>
+              </data>
+            </element>
+            <element name="je:Coordinate">
+              <ref name="anyContent"/>
+            </element>
+          </element>
+        </element>
+        <element name="je:Magnitude">
+          <ref name="anyContent"/>
+        </element>
+      </element>
+      <element name="js:Comments">
+        <element name="js:ForecastComment">
+          <ref name="anyContent"/>
+        </element>
+      </element>
+    </element>
+  </define>
   <define name="case_vxse51_shindo">
     <element name="jb:Head">
       <ref name="head_common"/>
@@ -2825,14 +2878,23 @@
       <value>地方天候情報</value>
       <value>府県天候情報</value>
       <value>震度速報</value>
+      <value>震源に関する情報</value>
     </choice>
+  </define>
+  <define name="anyContent">
+    <zeroOrMore>
+      <choice>
+        <attribute>
+          <anyName/>
+        </attribute>
+        <text/>
+        <ref name="anyElement"/>
+      </choice>
+    </zeroOrMore>
   </define>
   <define name="anyElement">
     <element>
-      <choice>
-        <anyName/>
-        <nsName/>
-      </choice>
+      <anyName/>
       <zeroOrMore>
         <choice>
           <attribute>

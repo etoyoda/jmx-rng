@@ -1,6 +1,5 @@
 #!/bin/bash
 set -Ceuo pipefail
-set -x
 
 for xml in samples/*.xml
 do
