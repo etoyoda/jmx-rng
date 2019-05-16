@@ -4,6 +4,7 @@ namespace jm = "http://xml.kishou.go.jp/jmaxml1/body/meteorology1/"
 namespace je = "http://xml.kishou.go.jp/jmaxml1/elementBasis1/"
 namespace js = "http://xml.kishou.go.jp/jmaxml1/body/seismology1/"
 namespace jv = "http://xml.kishou.go.jp/jmaxml1/body/volcanology1/"
+namespace xsi = "http://www.w3.org/2001/XMLSchema-instance"
 
 start = element jx:Report {
   element jx:Control {
@@ -47,13 +48,21 @@ start = element jx:Report {
   |case_vfvo50_funka
   |case_vfvo52_kazanobs
   |case_vpzk50_kisetsu
+  |case_vpaw50_sokei
+  |case_vzsa50_tenkizu
+  |case_vpno50_tokkei
   )
 }
 
 head_common =
     element jb:Title { xsd:token }
 ,   element jb:ReportDateTime { dateTime_si }
-,   element jb:TargetDateTime { dateTime_si }
+,   element jb:TargetDateTime {
+      attribute xsi:nil { "true" }
+ |    dateTime_si
+    }
+    # only for sokei
+,   element jb:TargetDTDubious { "頃" }?
 ,   element jb:TargetDuration { xsd:duration }?
 ,   element jb:ValidDateTime { dateTime_si }?
 ,   element jb:EventID { text }
@@ -62,21 +71,245 @@ head_common =
 
 # === Head and Body rules ===
 
-case_vpzk50_kisetsu =
+infos_vpno50_tokkei =
+  element jb:Information {
+    attribute type {
+      "気象特別警報報知（府県予報区等）"}
+   ,anyElement+
+  }
+ ,element jb:Information {
+    attribute type {
+      "気象特別警報報知（一次細分区域等）"}
+   ,anyElement+
+  }?
+ ,element jb:Information {
+    attribute type {
+      "気象特別警報報知（市町村等をまとめた地域等）"}
+   ,anyElement+
+  }?
+ ,element jb:Information {
+    attribute type {
+      "気象特別警報報知（市町村等）"}
+   ,anyElement+
+  }?
+ ,element jb:Information {
+    attribute type {
+      "気象特別警報報知（警報注意報種別毎）"}
+   ,anyElement+
+  }?
+  # may be missing in case of lifting
+
+case_vpno50_tokkei =
   element jb:Head {
     head_common
-,   element jb:InfoKind { "季節予報" }
+,   element jb:InfoKind { "気象特別警報報知" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { xsd:string }
+,     infos_vpno50_tokkei
+    }
+  }
+, element jm:Body { empty }
+
+case_vzsa50_tenkizu =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "天気図情報" }
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { empty }
     }
   }
 , element jm:Body {
-    element jm:Notice { empty }
-    ,element jm:Comment {
-      element jm:Text {
-        attribute type { "本文" }
-        ,xsd:string
+    element jm:MeteorologicalInfos {
+      attribute type { "天気図情報" }
+,     element jm:MeteorologicalInfo {
+        element jm:DateTime {
+          attribute type { text }, dateTime_si
+        }
+,       element jm:Item {
+          element jm:Kind {
+            tenkizu_isobar |tenkizu_hilo |tenkizu_zensen
+          }
+        }+
+      }
+    }
+,   element jm:MeteorologicalInfos {
+      attribute type { "悪天情報" }
+,     element jm:MeteorologicalInfo {
+        element jm:DateTime {
+          attribute type { text }, dateTime_si
+        }
+,       element jm:Item {
+          tenkizu_polygon |tenkizu_areacode
+          |tenkizu_hatch |tenkizu_pointwind
+        }+
+      }
+    }
+  }
+
+
+tenkizu_isobar = element jm:Property {
+    element jm:Type { "等圧線" }
+,   element jm:IsobarPart {
+      element je:Pressure {
+        attribute type { "気圧" }
+,       attribute unit { "hPa" }
+,       xsd:positiveInteger
+      }
+,     element je:Line {
+        attribute type { "位置（度）" }
+,       latlon_decimal2_multi_ascii
+      }
+    }
+  }
+
+tenkizu_hilo  = element jm:Property {
+    element jm:Type {
+      "低気圧" | "高気圧"
+    }
+,   element jm:CenterPart { anyElement+ }
+  }
+
+tenkizu_zensen = element jm:Property {
+    element jm:Type { 
+      "寒冷前線" | "温暖前線" | "閉塞前線"
+    }
+,   element jm:CoordinatePart {
+      element je:Line {
+        attribute type { "前線（度）" }
+,       latlon_decimal2_multi_ascii
+      }
+    }
+  }
+
+tenkizu_polygon =
+  element jm:Kind {
+    element jm:Name { 
+      "悪天情報（霧）"
+    }
+  }
+, element jm:Area {
+    element jm:Name {
+      "霧域"
+    }
+,   element je:Polygon {
+      attribute type { "位置（度）" }
+,     latlon_multi_ascii
+    }
+  }
+
+tenkizu_areacode =
+  element jm:Kind {
+    element jm:Name { 
+      "悪天情報（霧）"
+    }
+  }
+, element jm:Area {
+    attribute codeType { "全般海上海域名" }
+,   element jm:Name { xsd:token }
+,   element jm:Code {
+      xsd:positiveInteger { totalDigits = "4" }
+    }
+  }
+
+tenkizu_hatch =
+  element jm:Kind {
+    element jm:Name { 
+      "悪天情報（海氷）" | "悪天情報（船体着氷）"
+    }
+  }
+, element jm:Area {
+    element jm:Name {
+      "海氷域" | "海氷" | "船体着氷域"
+    }
+,   element je:Coordinate {
+      attribute type { "領域（度）" }
+,     latlon_decimal1_multi_ascii
+    }
+  }
+
+tenkizu_pointwind = element jm:Kind {
+    element jm:Name { "悪天情報（強風）" }
+,   element jm:Property {
+      element jm:Type { "風" }
+,     element jm:WindPart {
+        element je:WindDegree {
+          attribute type { "風向" }
+,         attribute unit { "度（真方位）" }
+,         xsd:positiveInteger
+        }
+,       element je:WindSpeed {
+          attribute type { "最大風速" }
+,         attribute unit { "ノット" }
+,         xsd:positiveInteger
+        }
+      }
+    }
+  }
+, element jm:Area {
+    element jm:Name { "強風域" }
+,   element je:Coordinate {
+      attribute type { "位置（度）" }
+,     latlon_decimal_ascii
+    }
+  }
+
+case_vpaw50_sokei =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "異常天候早期警戒情報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+,     element jb:Information {
+        attribute type { "異常天候早期警戒情報" }
+,       anyElement+
+      }
+    }
+  }
+, element jm:Body {
+    element jm:TargetArea {
+      attribute codeType { "全国・地方予報区等" }
+,     element jm:Name { xsd:token }
+,     element jm:Code { xsd:positiveInteger { totalDigits = "6" } }
+    }
+,   element jm:Notice { text }?
+,   element jm:MeteorologicalInfos {
+      attribute type { "異常天候早期警戒情報" }
+,     anyElement+
+    }
+  }
+
+case_vpzk50_kisetsu =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "季節予報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+    }
+  }
+, element jm:Body {
+    element jm:TargetArea {
+      attribute codeType { "全国・地方予報区等" }
+,     element jm:Name { xsd:token }
+,     element jm:Code { xsd:positiveInteger { totalDigits = "6" } }
+    }
+,   element jm:Notice { text }?
+,   element jm:MeteorologicalInfos {
+      attribute type { "季節予報" }
+,     anyElement+
+    }
+,   element jm:AdditionalInfo {
+      element jm:ClimateForecastAddition {
+        element jm:NextForecastSchedule {
+          attribute target { text }
+,         element jm:Text { text }
+,         element jm:DateTime { dateTime_si }
+        }+
+,       element jm:NoticeOfSchedule { anyContent }?
+,       element jm:AdditionalNotice { anyContent }?
       }
     }
   }
@@ -195,6 +428,10 @@ case_vtse50_tsunamijoho =
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { text }
+,     element jb:Information {
+        attribute type { "沖合の津波観測に関する情報" }
+,       anyElement+
+      }?
     }
   }
 , tsunami_body
@@ -237,7 +474,7 @@ tsunami_body =
       # only in some VTSE50
       element js:Observation { anyElement+ }?
 ,     element js:Estimation { anyElement+ }?
-,     element js:Forecast { anyElement+ }
+,     element js:Forecast { anyElement+ }?
     }
 ,   element js:Earthquake { anyElement+ }
 ,   element js:Text { text }?
@@ -1859,6 +2096,16 @@ latlon_deg_ascii =
     pattern = "\+\d\d?[\-+]\d\d\d/"
   }
 
+latlon_decimal2_multi_ascii =
+  xsd:string {
+    pattern = "/?([\-+]\d\d\.\d\d[\-+]\d\d\d\.\d\d/)+"
+  }
+
+latlon_decimal1_multi_ascii =
+  xsd:string {
+    pattern = "/?([\-+]\d\d\.\d[\-+]\d\d\d\.\d/)+"
+  }
+
 latlon_multi_ascii =
   xsd:string {
     pattern = "/?(\+\d\d[\-+]\d\d\d/)+"
@@ -2029,6 +2276,24 @@ list_title="季節観測"
 |"地方潮位情報"
 |"府県潮位情報"
 |"全般１か月予報"
+|"全般３か月予報"
+|"全般暖・寒候期予報"
+|"地方１か月予報"
+|"地方３か月予報"
+|"地方暖・寒候期予報"
+|"異常天候早期警戒情報"
+|"緊急地震速報配信テスト"
+|"全般スモッグ気象情報"
+|"地方高温注意情報"
+|"府県高温注意情報"
+|"地上実況図"
+|"地上２４時間予想図"
+|"地上４８時間予想図"
+|"沖合の津波観測に関する情報"
+|"気象特別警報報知"
+|"アジア太平洋地上実況図"
+|"アジア太平洋海上悪天２４時間予想図"
+|"アジア太平洋海上悪天４８時間予想図"
 
 anyContent = (attribute * { text } | text | anyElement)*
 

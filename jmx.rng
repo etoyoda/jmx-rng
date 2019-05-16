@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:jm="http://xml.kishou.go.jp/jmaxml1/body/meteorology1/" xmlns:jb="http://xml.kishou.go.jp/jmaxml1/informationBasis1/" xmlns:js="http://xml.kishou.go.jp/jmaxml1/body/seismology1/" xmlns:je="http://xml.kishou.go.jp/jmaxml1/elementBasis1/" xmlns:jv="http://xml.kishou.go.jp/jmaxml1/body/volcanology1/" xmlns:jx="http://xml.kishou.go.jp/jmaxml1/" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:jm="http://xml.kishou.go.jp/jmaxml1/body/meteorology1/" xmlns:jb="http://xml.kishou.go.jp/jmaxml1/informationBasis1/" xmlns:js="http://xml.kishou.go.jp/jmaxml1/body/seismology1/" xmlns:je="http://xml.kishou.go.jp/jmaxml1/elementBasis1/" xmlns:jv="http://xml.kishou.go.jp/jmaxml1/body/volcanology1/" xmlns:jx="http://xml.kishou.go.jp/jmaxml1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <start>
     <element name="jx:Report">
       <element name="jx:Control">
@@ -58,6 +58,9 @@
         <ref name="case_vfvo50_funka"/>
         <ref name="case_vfvo52_kazanobs"/>
         <ref name="case_vpzk50_kisetsu"/>
+        <ref name="case_vpaw50_sokei"/>
+        <ref name="case_vzsa50_tenkizu"/>
+        <ref name="case_vpno50_tokkei"/>
       </choice>
     </element>
   </start>
@@ -69,8 +72,19 @@
       <ref name="dateTime_si"/>
     </element>
     <element name="jb:TargetDateTime">
-      <ref name="dateTime_si"/>
+      <choice>
+        <attribute name="xsi:nil">
+          <value>true</value>
+        </attribute>
+        <ref name="dateTime_si"/>
+      </choice>
     </element>
+    <optional>
+      <!-- only for sokei -->
+      <element name="jb:TargetDTDubious">
+        <value>頃</value>
+      </element>
+    </optional>
     <optional>
       <element name="jb:TargetDuration">
         <data type="duration"/>
@@ -99,11 +113,82 @@
     </element>
   </define>
   <!-- === Head and Body rules === -->
-  <define name="case_vpzk50_kisetsu">
+  <define name="infos_vpno50_tokkei">
+    <element name="jb:Information">
+      <attribute name="type">
+        <value>気象特別警報報知（府県予報区等）</value>
+      </attribute>
+      <oneOrMore>
+        <ref name="anyElement"/>
+      </oneOrMore>
+    </element>
+    <optional>
+      <element name="jb:Information">
+        <attribute name="type">
+          <value>気象特別警報報知（一次細分区域等）</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+    </optional>
+    <optional>
+      <element name="jb:Information">
+        <attribute name="type">
+          <value>気象特別警報報知（市町村等をまとめた地域等）</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+    </optional>
+    <optional>
+      <element name="jb:Information">
+        <attribute name="type">
+          <value>気象特別警報報知（市町村等）</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+    </optional>
+    <optional>
+      <element name="jb:Information">
+        <attribute name="type">
+          <value>気象特別警報報知（警報注意報種別毎）</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+    </optional>
+  </define>
+  <!-- may be missing in case of lifting -->
+  <define name="case_vpno50_tokkei">
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
-        <value>季節予報</value>
+        <value>気象特別警報報知</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <data type="string"/>
+        </element>
+        <ref name="infos_vpno50_tokkei"/>
+      </element>
+    </element>
+    <element name="jm:Body">
+      <empty/>
+    </element>
+  </define>
+  <define name="case_vzsa50_tenkizu">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>天気図情報</value>
       </element>
       <element name="jb:InfoKindVersion">
         <data type="token"/>
@@ -115,15 +200,332 @@
       </element>
     </element>
     <element name="jm:Body">
-      <element name="jm:Notice">
-        <empty/>
+      <element name="jm:MeteorologicalInfos">
+        <attribute name="type">
+          <value>天気図情報</value>
+        </attribute>
+        <element name="jm:MeteorologicalInfo">
+          <element name="jm:DateTime">
+            <attribute name="type"/>
+            <ref name="dateTime_si"/>
+          </element>
+          <oneOrMore>
+            <element name="jm:Item">
+              <element name="jm:Kind">
+                <choice>
+                  <ref name="tenkizu_isobar"/>
+                  <ref name="tenkizu_hilo"/>
+                  <ref name="tenkizu_zensen"/>
+                </choice>
+              </element>
+            </element>
+          </oneOrMore>
+        </element>
       </element>
-      <element name="jm:Comment">
-        <element name="jm:Text">
+      <element name="jm:MeteorologicalInfos">
+        <attribute name="type">
+          <value>悪天情報</value>
+        </attribute>
+        <element name="jm:MeteorologicalInfo">
+          <element name="jm:DateTime">
+            <attribute name="type"/>
+            <ref name="dateTime_si"/>
+          </element>
+          <oneOrMore>
+            <element name="jm:Item">
+              <choice>
+                <ref name="tenkizu_polygon"/>
+                <ref name="tenkizu_areacode"/>
+                <ref name="tenkizu_hatch"/>
+                <ref name="tenkizu_pointwind"/>
+              </choice>
+            </element>
+          </oneOrMore>
+        </element>
+      </element>
+    </element>
+  </define>
+  <define name="tenkizu_isobar">
+    <element name="jm:Property">
+      <element name="jm:Type">
+        <value>等圧線</value>
+      </element>
+      <element name="jm:IsobarPart">
+        <element name="je:Pressure">
           <attribute name="type">
-            <value>本文</value>
+            <value>気圧</value>
           </attribute>
-          <data type="string"/>
+          <attribute name="unit">
+            <value>hPa</value>
+          </attribute>
+          <data type="positiveInteger"/>
+        </element>
+        <element name="je:Line">
+          <attribute name="type">
+            <value>位置（度）</value>
+          </attribute>
+          <ref name="latlon_decimal2_multi_ascii"/>
+        </element>
+      </element>
+    </element>
+  </define>
+  <define name="tenkizu_hilo">
+    <element name="jm:Property">
+      <element name="jm:Type">
+        <choice>
+          <value>低気圧</value>
+          <value>高気圧</value>
+        </choice>
+      </element>
+      <element name="jm:CenterPart">
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+    </element>
+  </define>
+  <define name="tenkizu_zensen">
+    <element name="jm:Property">
+      <element name="jm:Type">
+        <choice>
+          <value>寒冷前線</value>
+          <value>温暖前線</value>
+          <value>閉塞前線</value>
+        </choice>
+      </element>
+      <element name="jm:CoordinatePart">
+        <element name="je:Line">
+          <attribute name="type">
+            <value>前線（度）</value>
+          </attribute>
+          <ref name="latlon_decimal2_multi_ascii"/>
+        </element>
+      </element>
+    </element>
+  </define>
+  <define name="tenkizu_polygon">
+    <element name="jm:Kind">
+      <element name="jm:Name">
+        <value>悪天情報（霧）</value>
+      </element>
+    </element>
+    <element name="jm:Area">
+      <element name="jm:Name">
+        <value>霧域</value>
+      </element>
+      <element name="je:Polygon">
+        <attribute name="type">
+          <value>位置（度）</value>
+        </attribute>
+        <ref name="latlon_multi_ascii"/>
+      </element>
+    </element>
+  </define>
+  <define name="tenkizu_areacode">
+    <element name="jm:Kind">
+      <element name="jm:Name">
+        <value>悪天情報（霧）</value>
+      </element>
+    </element>
+    <element name="jm:Area">
+      <attribute name="codeType">
+        <value>全般海上海域名</value>
+      </attribute>
+      <element name="jm:Name">
+        <data type="token"/>
+      </element>
+      <element name="jm:Code">
+        <data type="positiveInteger">
+          <param name="totalDigits">4</param>
+        </data>
+      </element>
+    </element>
+  </define>
+  <define name="tenkizu_hatch">
+    <element name="jm:Kind">
+      <element name="jm:Name">
+        <choice>
+          <value>悪天情報（海氷）</value>
+          <value>悪天情報（船体着氷）</value>
+        </choice>
+      </element>
+    </element>
+    <element name="jm:Area">
+      <element name="jm:Name">
+        <choice>
+          <value>海氷域</value>
+          <value>海氷</value>
+          <value>船体着氷域</value>
+        </choice>
+      </element>
+      <element name="je:Coordinate">
+        <attribute name="type">
+          <value>領域（度）</value>
+        </attribute>
+        <ref name="latlon_decimal1_multi_ascii"/>
+      </element>
+    </element>
+  </define>
+  <define name="tenkizu_pointwind">
+    <element name="jm:Kind">
+      <element name="jm:Name">
+        <value>悪天情報（強風）</value>
+      </element>
+      <element name="jm:Property">
+        <element name="jm:Type">
+          <value>風</value>
+        </element>
+        <element name="jm:WindPart">
+          <element name="je:WindDegree">
+            <attribute name="type">
+              <value>風向</value>
+            </attribute>
+            <attribute name="unit">
+              <value>度（真方位）</value>
+            </attribute>
+            <data type="positiveInteger"/>
+          </element>
+          <element name="je:WindSpeed">
+            <attribute name="type">
+              <value>最大風速</value>
+            </attribute>
+            <attribute name="unit">
+              <value>ノット</value>
+            </attribute>
+            <data type="positiveInteger"/>
+          </element>
+        </element>
+      </element>
+    </element>
+    <element name="jm:Area">
+      <element name="jm:Name">
+        <value>強風域</value>
+      </element>
+      <element name="je:Coordinate">
+        <attribute name="type">
+          <value>位置（度）</value>
+        </attribute>
+        <ref name="latlon_decimal_ascii"/>
+      </element>
+    </element>
+  </define>
+  <define name="case_vpaw50_sokei">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>異常天候早期警戒情報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+        <element name="jb:Information">
+          <attribute name="type">
+            <value>異常天候早期警戒情報</value>
+          </attribute>
+          <oneOrMore>
+            <ref name="anyElement"/>
+          </oneOrMore>
+        </element>
+      </element>
+    </element>
+    <element name="jm:Body">
+      <element name="jm:TargetArea">
+        <attribute name="codeType">
+          <value>全国・地方予報区等</value>
+        </attribute>
+        <element name="jm:Name">
+          <data type="token"/>
+        </element>
+        <element name="jm:Code">
+          <data type="positiveInteger">
+            <param name="totalDigits">6</param>
+          </data>
+        </element>
+      </element>
+      <optional>
+        <element name="jm:Notice">
+          <text/>
+        </element>
+      </optional>
+      <element name="jm:MeteorologicalInfos">
+        <attribute name="type">
+          <value>異常天候早期警戒情報</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+    </element>
+  </define>
+  <define name="case_vpzk50_kisetsu">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>季節予報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+      </element>
+    </element>
+    <element name="jm:Body">
+      <element name="jm:TargetArea">
+        <attribute name="codeType">
+          <value>全国・地方予報区等</value>
+        </attribute>
+        <element name="jm:Name">
+          <data type="token"/>
+        </element>
+        <element name="jm:Code">
+          <data type="positiveInteger">
+            <param name="totalDigits">6</param>
+          </data>
+        </element>
+      </element>
+      <optional>
+        <element name="jm:Notice">
+          <text/>
+        </element>
+      </optional>
+      <element name="jm:MeteorologicalInfos">
+        <attribute name="type">
+          <value>季節予報</value>
+        </attribute>
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <element name="jm:AdditionalInfo">
+        <element name="jm:ClimateForecastAddition">
+          <oneOrMore>
+            <element name="jm:NextForecastSchedule">
+              <attribute name="target"/>
+              <element name="jm:Text">
+                <text/>
+              </element>
+              <element name="jm:DateTime">
+                <ref name="dateTime_si"/>
+              </element>
+            </element>
+          </oneOrMore>
+          <optional>
+            <element name="jm:NoticeOfSchedule">
+              <ref name="anyContent"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="jm:AdditionalNotice">
+              <ref name="anyContent"/>
+            </element>
+          </optional>
         </element>
       </element>
     </element>
@@ -333,6 +735,16 @@
         <element name="jb:Text">
           <text/>
         </element>
+        <optional>
+          <element name="jb:Information">
+            <attribute name="type">
+              <value>沖合の津波観測に関する情報</value>
+            </attribute>
+            <oneOrMore>
+              <ref name="anyElement"/>
+            </oneOrMore>
+          </element>
+        </optional>
       </element>
     </element>
     <ref name="tsunami_body"/>
@@ -411,11 +823,13 @@
             </oneOrMore>
           </element>
         </optional>
-        <element name="js:Forecast">
-          <oneOrMore>
-            <ref name="anyElement"/>
-          </oneOrMore>
-        </element>
+        <optional>
+          <element name="js:Forecast">
+            <oneOrMore>
+              <ref name="anyElement"/>
+            </oneOrMore>
+          </element>
+        </optional>
       </element>
       <element name="js:Earthquake">
         <oneOrMore>
@@ -3452,6 +3866,16 @@
       <param name="pattern">\+\d\d?[\-+]\d\d\d/</param>
     </data>
   </define>
+  <define name="latlon_decimal2_multi_ascii">
+    <data type="string">
+      <param name="pattern">/?([\-+]\d\d\.\d\d[\-+]\d\d\d\.\d\d/)+</param>
+    </data>
+  </define>
+  <define name="latlon_decimal1_multi_ascii">
+    <data type="string">
+      <param name="pattern">/?([\-+]\d\d\.\d[\-+]\d\d\d\.\d/)+</param>
+    </data>
+  </define>
   <define name="latlon_multi_ascii">
     <data type="string">
       <param name="pattern">/?(\+\d\d[\-+]\d\d\d/)+</param>
@@ -3656,6 +4080,24 @@
       <value>地方潮位情報</value>
       <value>府県潮位情報</value>
       <value>全般１か月予報</value>
+      <value>全般３か月予報</value>
+      <value>全般暖・寒候期予報</value>
+      <value>地方１か月予報</value>
+      <value>地方３か月予報</value>
+      <value>地方暖・寒候期予報</value>
+      <value>異常天候早期警戒情報</value>
+      <value>緊急地震速報配信テスト</value>
+      <value>全般スモッグ気象情報</value>
+      <value>地方高温注意情報</value>
+      <value>府県高温注意情報</value>
+      <value>地上実況図</value>
+      <value>地上２４時間予想図</value>
+      <value>地上４８時間予想図</value>
+      <value>沖合の津波観測に関する情報</value>
+      <value>気象特別警報報知</value>
+      <value>アジア太平洋地上実況図</value>
+      <value>アジア太平洋海上悪天２４時間予想図</value>
+      <value>アジア太平洋海上悪天４８時間予想図</value>
     </choice>
   </define>
   <define name="anyContent">
