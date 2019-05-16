@@ -225,7 +225,7 @@ case_vzsa50_tenkizu =
           |tenkizu_hatch |tenkizu_pointwind
         }+
       }
-    }
+    }?
   }
 
 

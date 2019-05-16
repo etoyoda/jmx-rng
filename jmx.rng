@@ -376,27 +376,29 @@
           </oneOrMore>
         </element>
       </element>
-      <element name="jm:MeteorologicalInfos">
-        <attribute name="type">
-          <value>悪天情報</value>
-        </attribute>
-        <element name="jm:MeteorologicalInfo">
-          <element name="jm:DateTime">
-            <attribute name="type"/>
-            <ref name="dateTime_si"/>
-          </element>
-          <oneOrMore>
-            <element name="jm:Item">
-              <choice>
-                <ref name="tenkizu_polygon"/>
-                <ref name="tenkizu_areacode"/>
-                <ref name="tenkizu_hatch"/>
-                <ref name="tenkizu_pointwind"/>
-              </choice>
+      <optional>
+        <element name="jm:MeteorologicalInfos">
+          <attribute name="type">
+            <value>悪天情報</value>
+          </attribute>
+          <element name="jm:MeteorologicalInfo">
+            <element name="jm:DateTime">
+              <attribute name="type"/>
+              <ref name="dateTime_si"/>
             </element>
-          </oneOrMore>
+            <oneOrMore>
+              <element name="jm:Item">
+                <choice>
+                  <ref name="tenkizu_polygon"/>
+                  <ref name="tenkizu_areacode"/>
+                  <ref name="tenkizu_hatch"/>
+                  <ref name="tenkizu_pointwind"/>
+                </choice>
+              </element>
+            </oneOrMore>
+          </element>
         </element>
-      </element>
+      </optional>
     </element>
   </define>
   <define name="tenkizu_isobar">
