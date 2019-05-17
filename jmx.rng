@@ -447,6 +447,7 @@
           <value>寒冷前線</value>
           <value>温暖前線</value>
           <value>閉塞前線</value>
+          <value>停滞前線</value>
         </choice>
       </element>
       <element name="jm:CoordinatePart">
@@ -4116,12 +4117,12 @@
   </define>
   <define name="list_edof">
     <data type="string">
-      <param name="pattern">気象庁予報部|気象庁本庁|.*気象台|大阪管区気象台（舞鶴）</param>
+      <param name="pattern">気象庁予報部|気象庁本庁|.*気象台|大阪管区気象台（舞鶴）|.*測候所</param>
     </data>
   </define>
   <define name="list_pbof">
     <data type="string">
-      <param name="pattern">気象庁|気象庁予報部|気象庁地球環境・海洋部|気象庁地震火山部|気象庁本庁|.*気象台</param>
+      <param name="pattern">気象庁|気象庁予報部|気象庁地球環境・海洋部|気象庁地震火山部|気象庁本庁|.*気象台|.*測候所</param>
     </data>
   </define>
   <define name="list_typh_datetime">
