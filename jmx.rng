@@ -431,6 +431,8 @@
         <choice>
           <value>低気圧</value>
           <value>高気圧</value>
+          <value>熱帯低気圧</value>
+          <value>低圧部</value>
         </choice>
       </element>
       <element name="jm:CenterPart">
@@ -3157,9 +3159,11 @@
               <data type="integer"/>
             </element>
           </optional>
-          <element name="jm:DeviationFromLastYear">
-            <data type="integer"/>
-          </element>
+          <optional>
+            <element name="jm:DeviationFromLastYear">
+              <data type="integer"/>
+            </element>
+          </optional>
           <optional>
             <element name="jm:Text">
               <data type="token"/>

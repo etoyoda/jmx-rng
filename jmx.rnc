@@ -246,7 +246,7 @@ tenkizu_isobar = element jm:Property {
 
 tenkizu_hilo  = element jm:Property {
     element jm:Type {
-      "低気圧" | "高気圧"
+      "低気圧" | "高気圧" | "熱帯低気圧" | "低圧部"
     }
 ,   element jm:CenterPart { anyElement+ }
   }
@@ -1665,7 +1665,7 @@ case_vgsk55_seibutsu =
     ,element jm:AdditionalInfo {
       element jm:ObservationAddition {
         element jm:DeviationFromNormal { xsd:integer }?
-        ,element jm:DeviationFromLastYear { xsd:integer }
+        ,element jm:DeviationFromLastYear { xsd:integer }?
         ,element jm:Text { xsd:token }?
       }
     }
