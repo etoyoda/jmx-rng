@@ -4221,8 +4221,12 @@
   </define>
   <define name="list_kaijou_timemodifier">
     <choice>
+      <value>今後６時間以内に</value>
       <value>今後１２時間以内に</value>
+      <value>今後１８時間以内に</value>
       <value>今後２４時間以内に</value>
+      <value>今後６時間以内は</value>
+      <value>今後１２時間以内は</value>
       <value>今後１８時間以内は</value>
       <value>今後２４時間以内は</value>
     </choice>
