@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  名前空間接頭辞は公式ドキュメントと異なりとにかく短くした。
+  
+  防災XMLトップ (/jx:Report) 及び (/jx:Report/jx:Control) 以下で用いられる
+-->
+<!-- /jx:Report/jb:Head 以下で用いられる -->
+<!--
+  /jx:Report の第3子要素は jm:Body, js:Body, または jv:Body であり、
+  地震分野で js:, 火山分野で jv:, その他大気海洋関係で jm: が用いられる。
+-->
+<!-- jm:*, js:*, または jv:* の下で共通に用いられる要素。物理量の表現が多い。 -->
 <grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:jm="http://xml.kishou.go.jp/jmaxml1/body/meteorology1/" xmlns:jb="http://xml.kishou.go.jp/jmaxml1/informationBasis1/" xmlns:js="http://xml.kishou.go.jp/jmaxml1/body/seismology1/" xmlns:je="http://xml.kishou.go.jp/jmaxml1/elementBasis1/" xmlns:jv="http://xml.kishou.go.jp/jmaxml1/body/volcanology1/" xmlns:jx="http://xml.kishou.go.jp/jmaxml1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <start>
+    <a:documentation>気象庁防災XMLはすべて js:Report をルート要素とする。
+最初の2つの子要素は必ず jx:Control 及び jb:Head であり、ほとんどの
+情報種別で同じ構造を持つ。</a:documentation>
     <element name="jx:Report">
       <element name="jx:Control">
         <element name="jx:Title">

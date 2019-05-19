@@ -1,10 +1,21 @@
+# 名前空間接頭辞は公式ドキュメントと異なりとにかく短くした。
+#
+# 防災XMLトップ (/jx:Report) 及び (/jx:Report/jx:Control) 以下で用いられる
 namespace jx = "http://xml.kishou.go.jp/jmaxml1/"
+# /jx:Report/jb:Head 以下で用いられる
 namespace jb = "http://xml.kishou.go.jp/jmaxml1/informationBasis1/"
+# /jx:Report の第3子要素は jm:Body, js:Body, または jv:Body であり、
+# 地震分野で js:, 火山分野で jv:, その他大気海洋関係で jm: が用いられる。
 namespace jm = "http://xml.kishou.go.jp/jmaxml1/body/meteorology1/"
-namespace je = "http://xml.kishou.go.jp/jmaxml1/elementBasis1/"
 namespace js = "http://xml.kishou.go.jp/jmaxml1/body/seismology1/"
 namespace jv = "http://xml.kishou.go.jp/jmaxml1/body/volcanology1/"
+# jm:*, js:*, または jv:* の下で共通に用いられる要素。物理量の表現が多い。
+namespace je = "http://xml.kishou.go.jp/jmaxml1/elementBasis1/"
 namespace xsi = "http://www.w3.org/2001/XMLSchema-instance"
+
+## 気象庁防災XMLはすべて js:Report をルート要素とする。
+## 最初の2つの子要素は必ず jx:Control 及び jb:Head であり、ほとんどの
+## 情報種別で同じ構造を持つ。
 
 start = element jx:Report {
   element jx:Control {
