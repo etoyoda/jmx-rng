@@ -20,10 +20,10 @@ namespace xsi = "http://www.w3.org/2001/XMLSchema-instance"
 start = element jx:Report {
   element jx:Control {
     element jx:Title { list_title }
-   ,element jx:DateTime { dateTime_sz }
-   ,element jx:Status { "通常" | "訓練" | "試験" }
-   ,element jx:EditorialOffice { list_edof }
-   ,element jx:PublishingOffice { list_pbof }
+,   element jx:DateTime { dateTime_sz }
+,   element jx:Status { "通常" | "訓練" | "試験" }
+,   element jx:EditorialOffice { list_edof }
+,   element jx:PublishingOffice { list_pbof }
   }
 , (case_vgsk50_kisetsu
   |case_vgsk55_seibutsu
@@ -77,7 +77,6 @@ head_common =
       attribute xsi:nil { "true" }
  |    dateTime_si
     }
-    # only for sokei/soten
 ,   element jb:TargetDTDubious { "頃" }?
 ,   element jb:TargetDuration { xsd:duration }?
 ,   element jb:ValidDateTime { dateTime_si }?
@@ -86,6 +85,9 @@ head_common =
 ,   element jb:Serial { empty | xsd:token }
 
 # === Head and Body rules ===
+# --- rules using jm:Body （大気海洋系情報）
+#
+
 
 case_vpck70_fortnight =
   element jb:Head {
@@ -124,42 +126,6 @@ case_vpfd60_sochu =
       attribute type { "区域予報" }
      ,anyElement+
     }?
-  }
-
-case_vfvo56_funsoku =
-  element jb:Head {
-    head_common
-,   element jb:InfoKind { "噴火速報" }
-,   element jb:InfoKindVersion { xsd:token }
-,   element jb:Headline {
-      element jb:Text { text }
-,     element jb:Information { anyContent }*
-    }
-  }
-, element jv:Body {
-    element jv:Text { text }
-  |(
-    element jv:VolcanoInfo { anyContent }+
-,   element jv:VolcanoInfoContent { anyContent }
-   )
-  }
-
-case_vfvo53_ashfall =
-  element jb:Head {
-    head_common
-,   element jb:InfoKind { "降灰予報" }
-,   element jb:InfoKindVersion { xsd:token }
-,   element jb:Headline {
-      element jb:Text { text }
-,     element jb:Information { anyContent }+
-    }
-  }
-, element jv:Body {
-    element jv:VolcanoInfo { anyContent }+
-,   element jv:AshInfos { anyContent }+
-,   element jv:VolcanoInfoContent { anyContent }
-    # used in VFVO54 (kouhai sokuhou)
-,   element jv:VolcanoObservation { anyContent }?
   }
 
 infos_vpno50_tokkei =
@@ -430,436 +396,6 @@ case_vpzk50_kisetsu =
       }
     }
   }
-
-case_vfvo52_kazanobs =
-  element jb:Head {
-    head_common
-,   element jb:InfoKind {
-      "噴火に関する火山観測報"
-    }
-,   element jb:InfoKindVersion { xsd:token }
-,   element jb:Headline {
-      element jb:Text { text }
-,     element jb:Information { anyContent }+
-    }
-  }
-, element jv:Body {
-    element jv:VolcanoInfo { anyContent }+
-,   element jv:VolcanoObservation { anyContent }
-  }
-
-case_vfvo50_funka =
-  element jb:Head {
-    head_common
-,   element jb:InfoKind {
-      "噴火警報・予報"
-      # case VFVO51
-|     "火山の状況に関する解説情報"
-      # case VFSVii
-|     "火山現象に関する海上警報・海上予報"
-    }
-,   element jb:InfoKindVersion { xsd:token }
-,   element jb:Headline {
-      element jb:Text { text }
-,     element jb:Information { anyContent }+
-    }
-  }
-, element jv:Body {
-    element jv:VolcanoInfo { anyContent }+
-,   element jv:VolcanoInfoContent { anyContent }
-  }
-
-case_vzvo40_oshirase =
-  element jb:Head {
-    head_common
-,   element jb:InfoKind { "火山に関するお知らせ" }
-,   element jb:InfoKindVersion { xsd:token }
-,   element jb:Headline {
-      element jb:Text { text }
-    }
-  }
-, element jv:Body {
-    element jv:Text { text }
-  }
-
-case_vzse40_oshirase =
-  element jb:Head {
-    head_common
-,   element jb:InfoKind {
-"地震・津波に関するお知らせ" }
-,   element jb:InfoKindVersion { xsd:token }
-,   element jb:Headline {
-      element jb:Text { text }
-    }
-  }
-, element js:Body {
-    element js:Text { text }
-  }
-
-case_vyse42_tokai =
-  element jb:Head {
-    head_common
-,   element jb:InfoKind { "東海地震関連情報" }
-,   element jb:InfoKindVersion { xsd:token }
-,   element jb:Headline {
-      element jb:Text { text }
-    }
-  }
-, element js:Body {
-    element js:Tokai { anyContent }
-,   element js:NextAdvisory { text }?
-  }
-
-case_vxse41_eew =
-  element jb:Head {
-    head_common
-,   element jb:InfoKind { "緊急地震速報" }
-,   element jb:InfoKindVersion { xsd:token }
-,   element jb:Headline {
-      element jb:Text { text }
-,     element jb:Information {
-        attribute type { text }
-#<Information type="緊急地震速報（地方予報区）">
-#<Information type="緊急地震速報（府県予報区）">
-#<Information type="緊急地震速報（細分区域）">
-,       element jb:Item {
-          element jb:Kind { anyElement+ }
-,         element jb:LastKind { anyElement+ }
-,         element jb:Areas {
-            attribute codeType { text }
-,           element jb:Area {
-              element jb:Name { xsd:token }
-,             element jb:Code { xsd:token }
-            }+
-          }
-        }+
-      }*
-    }
-  }
-, element js:Body { anyContent }
-
-case_vtse50_tsunamijoho =
-  element jb:Head {
-    head_common
-,   element jb:InfoKind { "津波情報" }
-,   element jb:InfoKindVersion { xsd:token }
-,   element jb:Headline {
-      element jb:Text { text }
-,     element jb:Information {
-        attribute type { "沖合の津波観測に関する情報" }
-,       anyElement+
-      }?
-    }
-  }
-, tsunami_body
-
-case_vtse40_tsunamikeiho =
-  element jb:Head {
-    head_common
-,   element jb:InfoKind { "津波警報・注意報・予報" }
-,   element jb:InfoKindVersion { xsd:token }
-,   element jb:Headline {
-      element jb:Text { text }
-      # omitted when lifting
-,     element jb:Information {
-        attribute type { "津波予報領域表現" }
-,       element jb:Item {
-          element jb:Kind {
-            element jb:Name { xsd:token }
-,           element jb:Code {
-xsd:nonNegativeInteger { totalDigits = "2" }
-            }
-          }
-,         element jb:Areas {
-            attribute codeType { "津波予報区" }
-,           element jb:Area {
-              element jb:Name { xsd:token }
-,             element jb:Code {
-xsd:nonNegativeInteger { totalDigits = "3" }
-              }
-            }+
-          }
-        }+
-      }?
-    }
-  }
-, tsunami_body
-
-tsunami_body =
-  element js:Body {
-    element js:Tsunami {
-      # only in some VTSE50
-      element js:Observation { anyElement+ }?
-,     element js:Estimation { anyElement+ }?
-,     element js:Forecast { anyElement+ }?
-    }
-,   element js:Earthquake { anyElement+ }
-,   element js:Text { text }?
-,   element js:Comments {
-      element js:WarningComment {
-        attribute codeType { "固定付加文" }
-,       element js:Text { text }
-        # can be list of 4-digit numbers
-,       element js:Code { text }
-      }?
-,     element js:FreeFormComment { text }?
-    }
-  }
-
-case_vxse61_koushin =
-  element jb:Head {
-    head_common
-,   element jb:InfoKind { "震源要素更新のお知らせ" }
-,   element jb:InfoKindVersion { xsd:token }
-,   element jb:Headline {
-      element jb:Text { text }
-    }
-  }
-, element js:Body {
-    # cancellation
-    element js:Text { text }
-  |(
-    element js:Earthquake {
-      element js:OriginTime { dateTime_si }
-,     element js:ArrivalTime { dateTime_si }
-,     element js:Hypocenter {
-        element js:Area {
-          element js:Name { xsd:token } 
-,         element js:Code {
-            attribute type { "震央地名" }
-,           xsd:positiveInteger { totalDigits = "3" }
-          }
-,         element je:Coordinate { anyContent }
-,         element je:Coordinate { anyContent }
-        }
-      }
-,     element je:Magnitude { anyContent }
-    }
-,   element js:Comments {
-      element js:FreeFormComment { text }
-    }
-   )
-  }
-
-case_vxse60_kaisuu =
-  element jb:Head {
-    head_common
-,   element jb:InfoKind { "地震回数情報" }
-,   element jb:InfoKindVersion { xsd:token }
-,   element jb:Headline {
-      element jb:Text { text }
-    }
-  }
-, element js:Body {
-    element js:EarthquakeCount {
-      element js:Item {
-        attribute type { text }
-,       element js:StartTime { dateTime_si }
-,       element js:EndTime { dateTime_si }
-,       element js:Number { xsd:nonNegativeInteger }
-,       element js:FeltNumber { xsd:nonNegativeInteger }
-      }+
-    }
-,   element js:NextAdvisory { text }
-,   element js:Comments {
-      element js:FreeFormComment { text }
-    }
-  }
-
-case_vxse56_katsudou =
-  element jb:Head {
-    head_common
-,   element jb:InfoKind { "地震の活動状況等に関する情報" }
-,   element jb:InfoKindVersion { xsd:token }
-,   element jb:Headline {
-      element jb:Text { text }
-    }
-  }
-, element js:Body {
-    # when giving a name to an earthquake
-    element js:Naming {
-      attribute english { text }
-,     text
-    }?
-,   element js:Text { text }
-  }
-
-case_vxse53_joho =
-  element jb:Head {
-    head_common
-,   element jb:InfoKind { "地震情報" }
-,   element jb:InfoKindVersion { xsd:token }
-,   element jb:Headline {
-      element jb:Text { text }
-      # missing in case of enchi-jishin or cancellation
-,     (element jb:Information {
-        attribute type { "震源・震度に関する情報（細分区域）" }
-,       element jb:Item { anyElement+ }+
-      }
-,     element jb:Information {
-        attribute type { "震源・震度に関する情報（市町村等）" }
-,       element jb:Item { anyElement+ }+
-      })?
-    }
-  }
-, element js:Body {
-    # cancellation
-    element js:Text { text }
-  |(
-    element js:Earthquake {
-      element js:OriginTime { dateTime_si }
-,     element js:ArrivalTime { dateTime_si }
-,     element js:Hypocenter {
-        element js:Area {
-          element js:Name { xsd:token } 
-,         element js:Code {
-            attribute type { "震央地名" }
-,           xsd:positiveInteger { totalDigits = "3" }
-          }
-,         element je:Coordinate { anyContent }
-          # present in enchi-jishin
-,       ( element js:DetailedName { xsd:token }
-,         element js:DetailedCode {
-            attribute type { "詳細震央地名" }
-,           xsd:positiveInteger { totalDigits = "4" }
-          } )?
-,       ( element js:NameFromMark { xsd:token }
-,         element js:MarkCode {
-            attribute type { "震央補助" }
-,           xsd:positiveInteger { totalDigits = "3" }
-          }
-,         element js:Direction { xsd:token }
-,         element js:Distance {
-            attribute unit { "km" }
-,           xsd:nonNegativeInteger
-          } )?
-        }
-        # present in enchi-jishin
-,       element js:Source { "ＰＴＷＣ" }?
-      }
-,     element je:Magnitude { anyContent }
-    }
-    # missing in enchi-jishin
-,   shindo_intensity?
-,   kotei_fukabun
-   )
-  }
-
-kotei_fukabun =
-    element js:Comments {
-      element js:ForecastComment {
-        attribute codeType { "固定付加文" }
-,       element js:Text { text }
-        # can be list of 4-digit numbers
-,       element js:Code { text }
-      }
-,     element js:VarComment {
-        attribute codeType { "固定付加文" }
-,       element js:Text { text }
-        # 4-digit number, could be list (TBC)
-,       element js:Code { text }
-      }?
-,     element js:FreeFormComment { text }?
-    }
-
-case_vxse52_shingen =
-  element jb:Head {
-    head_common
-,   element jb:InfoKind { "震源速報" }
-,   element jb:InfoKindVersion { xsd:token }
-,   element jb:Headline {
-      element jb:Text { text }
-    }
-  }
-, element js:Body {
-    # cancellation
-    element js:Text { text }
-  |(
-    element js:Earthquake {
-      element js:OriginTime { dateTime_si }
-,     element js:ArrivalTime { dateTime_si }
-,     element js:Hypocenter {
-        element js:Area {
-          element js:Name { xsd:token } 
-,         element js:Code {
-            attribute type { "震央地名" }
-,           xsd:positiveInteger { totalDigits = "3" }
-          }
-,         element je:Coordinate { anyContent }
-        }
-      }
-,     element je:Magnitude { anyContent }
-    }
-,   kotei_fukabun
-   )
-  }
-
-case_vxse51_shindo =
-  element jb:Head {
-    head_common
-,   element jb:InfoKind { "震度速報" }
-,   element jb:InfoKindVersion { xsd:token }
-,   element jb:Headline {
-      element jb:Text { text }
-,     element jb:Information {
-        attribute type { "震度速報" }
-,       element jb:Item { anyElement+ }+
-      }
-    }
-  }
-, element js:Body {
-    shindo_intensity
-,   kotei_fukabun?
-  }
-
-shindo_intensity =
-    element js:Intensity {
-      element js:Observation {
-        element js:CodeDefine {
-          element js:Type {
-            attribute xpath { xsd:token }
-,           xsd:token
-          }+
-        }
-,       element js:MaxInt { pat_shindo }
-,       element js:Pref {
-          element js:Name { xsd:token }
-,         element js:Code { xsd:positiveInteger { totalDigits = "2" } }
-,         element js:MaxInt { pat_shindo }
-,         element js:Revise { xsd:token }?
-,         element js:Area {
-            element js:Name { xsd:token }
-,           element js:Code { xsd:positiveInteger { totalDigits = "3" } }
-,           element js:MaxInt { pat_shindo }
-,           element js:Revise { xsd:token }?
-,           element js:City {
-              element js:Name { xsd:token }
-,             element js:Code { xsd:positiveInteger { totalDigits = "7" } }
-,           ( element js:MaxInt { pat_shindo }
-,             element js:Revise { xsd:token }? )?
-,             element js:Condition { "震度５弱以上未入電" }?
-,             element js:IntensityStation {
-                element js:Name { xsd:token }
-,               element js:Code { xsd:positiveInteger { totalDigits = "7" } }
-,               element js:Int { pat_shindo }
-,               element js:Revise { xsd:token }?
-              }+
-            }*
-          }+
-        }+
-      }
-    }
-
-pat_shindo = "1"
-|"2"
-|"3"
-|"4"
-|"5-"
-|"5+"
-|"6-"
-|"6+"
-|"7"
-|"震度５弱以上未入電"
 
 case_vpzi50_tenkou =
   element jb:Head {
@@ -2144,7 +1680,483 @@ radii_yohouen =
     }
   }
 
-### === simple data types ===
+#
+# --- rules using js:Body --- 地震系情報
+#
+
+case_vzse40_oshirase =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind {
+"地震・津波に関するお知らせ" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+    }
+  }
+, element js:Body {
+    element js:Text { text }
+  }
+
+case_vyse42_tokai =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "東海地震関連情報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+    }
+  }
+, element js:Body {
+    element js:Tokai { anyContent }
+,   element js:NextAdvisory { text }?
+  }
+
+case_vxse41_eew =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "緊急地震速報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+,     element jb:Information {
+        attribute type { text }
+#<Information type="緊急地震速報（地方予報区）">
+#<Information type="緊急地震速報（府県予報区）">
+#<Information type="緊急地震速報（細分区域）">
+,       element jb:Item {
+          element jb:Kind { anyElement+ }
+,         element jb:LastKind { anyElement+ }
+,         element jb:Areas {
+            attribute codeType { text }
+,           element jb:Area {
+              element jb:Name { xsd:token }
+,             element jb:Code { xsd:token }
+            }+
+          }
+        }+
+      }*
+    }
+  }
+, element js:Body { anyContent }
+
+case_vtse50_tsunamijoho =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "津波情報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+,     element jb:Information {
+        attribute type { "沖合の津波観測に関する情報" }
+,       anyElement+
+      }?
+    }
+  }
+, tsunami_body
+
+case_vtse40_tsunamikeiho =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "津波警報・注意報・予報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+      # omitted when lifting
+,     element jb:Information {
+        attribute type { "津波予報領域表現" }
+,       element jb:Item {
+          element jb:Kind {
+            element jb:Name { xsd:token }
+,           element jb:Code {
+xsd:nonNegativeInteger { totalDigits = "2" }
+            }
+          }
+,         element jb:Areas {
+            attribute codeType { "津波予報区" }
+,           element jb:Area {
+              element jb:Name { xsd:token }
+,             element jb:Code {
+xsd:nonNegativeInteger { totalDigits = "3" }
+              }
+            }+
+          }
+        }+
+      }?
+    }
+  }
+, tsunami_body
+
+tsunami_body =
+  element js:Body {
+    element js:Tsunami {
+      # only in some VTSE50
+      element js:Observation { anyElement+ }?
+,     element js:Estimation { anyElement+ }?
+,     element js:Forecast { anyElement+ }?
+    }
+,   element js:Earthquake { anyElement+ }
+,   element js:Text { text }?
+,   element js:Comments {
+      element js:WarningComment {
+        attribute codeType { "固定付加文" }
+,       element js:Text { text }
+        # can be list of 4-digit numbers
+,       element js:Code { text }
+      }?
+,     element js:FreeFormComment { text }?
+    }
+  }
+
+case_vxse61_koushin =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "震源要素更新のお知らせ" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+    }
+  }
+, element js:Body {
+    # cancellation
+    element js:Text { text }
+  |(
+    element js:Earthquake {
+      element js:OriginTime { dateTime_si }
+,     element js:ArrivalTime { dateTime_si }
+,     element js:Hypocenter {
+        element js:Area {
+          element js:Name { xsd:token } 
+,         element js:Code {
+            attribute type { "震央地名" }
+,           xsd:positiveInteger { totalDigits = "3" }
+          }
+,         element je:Coordinate { anyContent }
+,         element je:Coordinate { anyContent }
+        }
+      }
+,     element je:Magnitude { anyContent }
+    }
+,   element js:Comments {
+      element js:FreeFormComment { text }
+    }
+   )
+  }
+
+case_vxse60_kaisuu =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "地震回数情報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+    }
+  }
+, element js:Body {
+    element js:EarthquakeCount {
+      element js:Item {
+        attribute type { text }
+,       element js:StartTime { dateTime_si }
+,       element js:EndTime { dateTime_si }
+,       element js:Number { xsd:nonNegativeInteger }
+,       element js:FeltNumber { xsd:nonNegativeInteger }
+      }+
+    }
+,   element js:NextAdvisory { text }
+,   element js:Comments {
+      element js:FreeFormComment { text }
+    }
+  }
+
+case_vxse56_katsudou =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "地震の活動状況等に関する情報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+    }
+  }
+, element js:Body {
+    # when giving a name to an earthquake
+    element js:Naming {
+      attribute english { text }
+,     text
+    }?
+,   element js:Text { text }
+  }
+
+case_vxse53_joho =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "地震情報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+      # missing in case of enchi-jishin or cancellation
+,     (element jb:Information {
+        attribute type { "震源・震度に関する情報（細分区域）" }
+,       element jb:Item { anyElement+ }+
+      }
+,     element jb:Information {
+        attribute type { "震源・震度に関する情報（市町村等）" }
+,       element jb:Item { anyElement+ }+
+      })?
+    }
+  }
+, element js:Body {
+    # cancellation
+    element js:Text { text }
+  |(
+    element js:Earthquake {
+      element js:OriginTime { dateTime_si }
+,     element js:ArrivalTime { dateTime_si }
+,     element js:Hypocenter {
+        element js:Area {
+          element js:Name { xsd:token } 
+,         element js:Code {
+            attribute type { "震央地名" }
+,           xsd:positiveInteger { totalDigits = "3" }
+          }
+,         element je:Coordinate { anyContent }
+          # present in enchi-jishin
+,       ( element js:DetailedName { xsd:token }
+,         element js:DetailedCode {
+            attribute type { "詳細震央地名" }
+,           xsd:positiveInteger { totalDigits = "4" }
+          } )?
+,       ( element js:NameFromMark { xsd:token }
+,         element js:MarkCode {
+            attribute type { "震央補助" }
+,           xsd:positiveInteger { totalDigits = "3" }
+          }
+,         element js:Direction { xsd:token }
+,         element js:Distance {
+            attribute unit { "km" }
+,           xsd:nonNegativeInteger
+          } )?
+        }
+        # present in enchi-jishin
+,       element js:Source { "ＰＴＷＣ" }?
+      }
+,     element je:Magnitude { anyContent }
+    }
+    # missing in enchi-jishin
+,   shindo_intensity?
+,   kotei_fukabun
+   )
+  }
+
+kotei_fukabun =
+    element js:Comments {
+      element js:ForecastComment {
+        attribute codeType { "固定付加文" }
+,       element js:Text { text }
+        # can be list of 4-digit numbers
+,       element js:Code { text }
+      }
+,     element js:VarComment {
+        attribute codeType { "固定付加文" }
+,       element js:Text { text }
+        # 4-digit number, could be list (TBC)
+,       element js:Code { text }
+      }?
+,     element js:FreeFormComment { text }?
+    }
+
+case_vxse52_shingen =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "震源速報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+    }
+  }
+, element js:Body {
+    # cancellation
+    element js:Text { text }
+  |(
+    element js:Earthquake {
+      element js:OriginTime { dateTime_si }
+,     element js:ArrivalTime { dateTime_si }
+,     element js:Hypocenter {
+        element js:Area {
+          element js:Name { xsd:token } 
+,         element js:Code {
+            attribute type { "震央地名" }
+,           xsd:positiveInteger { totalDigits = "3" }
+          }
+,         element je:Coordinate { anyContent }
+        }
+      }
+,     element je:Magnitude { anyContent }
+    }
+,   kotei_fukabun
+   )
+  }
+
+case_vxse51_shindo =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "震度速報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+,     element jb:Information {
+        attribute type { "震度速報" }
+,       element jb:Item { anyElement+ }+
+      }
+    }
+  }
+, element js:Body {
+    shindo_intensity
+,   kotei_fukabun?
+  }
+
+shindo_intensity =
+    element js:Intensity {
+      element js:Observation {
+        element js:CodeDefine {
+          element js:Type {
+            attribute xpath { xsd:token }
+,           xsd:token
+          }+
+        }
+,       element js:MaxInt { pat_shindo }
+,       element js:Pref {
+          element js:Name { xsd:token }
+,         element js:Code { xsd:positiveInteger { totalDigits = "2" } }
+,         element js:MaxInt { pat_shindo }
+,         element js:Revise { xsd:token }?
+,         element js:Area {
+            element js:Name { xsd:token }
+,           element js:Code { xsd:positiveInteger { totalDigits = "3" } }
+,           element js:MaxInt { pat_shindo }
+,           element js:Revise { xsd:token }?
+,           element js:City {
+              element js:Name { xsd:token }
+,             element js:Code { xsd:positiveInteger { totalDigits = "7" } }
+,           ( element js:MaxInt { pat_shindo }
+,             element js:Revise { xsd:token }? )?
+,             element js:Condition { "震度５弱以上未入電" }?
+,             element js:IntensityStation {
+                element js:Name { xsd:token }
+,               element js:Code { xsd:positiveInteger { totalDigits = "7" } }
+,               element js:Int { pat_shindo }
+,               element js:Revise { xsd:token }?
+              }+
+            }*
+          }+
+        }+
+      }
+    }
+
+pat_shindo = "1"
+|"2"
+|"3"
+|"4"
+|"5-"
+|"5+"
+|"6-"
+|"6+"
+|"7"
+|"震度５弱以上未入電"
+
+#
+# --- rules using jv:Body --- 火山系情報
+#
+
+case_vfvo52_kazanobs =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind {
+      "噴火に関する火山観測報"
+    }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+,     element jb:Information { anyContent }+
+    }
+  }
+, element jv:Body {
+    element jv:VolcanoInfo { anyContent }+
+,   element jv:VolcanoObservation { anyContent }
+  }
+
+case_vfvo50_funka =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind {
+      "噴火警報・予報"
+      # case VFVO51
+|     "火山の状況に関する解説情報"
+      # case VFSVii
+|     "火山現象に関する海上警報・海上予報"
+    }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+,     element jb:Information { anyContent }+
+    }
+  }
+, element jv:Body {
+    element jv:VolcanoInfo { anyContent }+
+,   element jv:VolcanoInfoContent { anyContent }
+  }
+
+case_vzvo40_oshirase =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "火山に関するお知らせ" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+    }
+  }
+, element jv:Body {
+    element jv:Text { text }
+  }
+
+case_vfvo56_funsoku =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "噴火速報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+,     element jb:Information { anyContent }*
+    }
+  }
+, element jv:Body {
+    element jv:Text { text }
+  |(
+    element jv:VolcanoInfo { anyContent }+
+,   element jv:VolcanoInfoContent { anyContent }
+   )
+  }
+
+case_vfvo53_ashfall =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "降灰予報" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { text }
+,     element jb:Information { anyContent }+
+    }
+  }
+, element jv:Body {
+    element jv:VolcanoInfo { anyContent }+
+,   element jv:AshInfos { anyContent }+
+,   element jv:VolcanoInfoContent { anyContent }
+    # used in VFVO54 (kouhai sokuhou)
+,   element jv:VolcanoObservation { anyContent }?
+  }
+
+#
+# --- list of possible tokens ---
+#
 
 list_typhoon_class =
   "台風(TY)"
@@ -2184,74 +2196,6 @@ list_direction16 =
   | "西南西"
   | "西北西"
   | "北北西"
-
-pat_katakana =
-  xsd:string { pattern = "[ァ-ー]*" }
-
-dateTime_sz =
-  xsd:dateTime {
-    pattern = "\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ"
-  }
-
-dateTime_si =
-  xsd:dateTime {
-    pattern = "\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\+09:00"
-  }
-
-latlon_decimal3_ascii =
-  xsd:string {
-    pattern = "\+\d\d\.\d\d\d[\-+]\d\d\d\.\d\d\d/"
-  }
-
-latlon_decimal_ascii =
-  xsd:string {
-    pattern = "\+\d\d?\.\d[\-+]\d\d\d\.\d/"
-  }
-
-latlon_deg_ascii =
-  xsd:string {
-    pattern = "\+\d\d?[\-+]\d\d\d/"
-  }
-
-latlon_decimal2_multi_ascii =
-  xsd:string {
-    pattern = "/?([\-+]\d\d\.\d\d[\-+]\d\d\d\.\d\d/)+"
-  }
-
-latlon_decimal1_multi_ascii =
-  xsd:string {
-    pattern = "/?([\-+]\d\d\.\d[\-+]\d\d\d\.\d/)+"
-  }
-
-latlon_multi_ascii =
-  xsd:string {
-    pattern = "/?(\+\d\d[\-+]\d\d\d/)+"
-  }
-
-latlon_decimal_ja =
-  xsd:string {
-    pattern = "北緯[０-９]+．[０-９]度[東西]経[０-９]+．[０-９]度"
-  }
-
-latlon_deg_ja =
-  xsd:string {
-    pattern = "北緯[０-９]+度[東西]経[０-９]+度"
-  }
-
-latlon_multi_ja =
-  xsd:string {
-    pattern = "(北緯[０-９]+度[東西]経[０-９]+度(、)?)+"
-  }
-
-latlon_sexagesimal_ascii =
-  xsd:string {
-    pattern = "\+\d\d\d\d[\-+]\d\d\d\d\d/"
-  }
-
-latlon_sexagesimal_ja =
-  xsd:string {
-    pattern = "北緯[０-９]{2}度[０-９]{2}分[東西]経[０-９]{3}度[０-９]{2}分"
-  }
 
 list_edof =
   xsd:string {
@@ -2424,6 +2368,78 @@ list_title="季節観測"
 |"全般季節予報（２週間気温予報）"
 |"地方季節予報（２週間気温予報）"
 |"早期天候情報"
+
+### === simple data types ===
+
+pat_katakana =
+  xsd:string { pattern = "[ァ-ー]*" }
+
+dateTime_sz =
+  xsd:dateTime {
+    pattern = "\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ"
+  }
+
+dateTime_si =
+  xsd:dateTime {
+    pattern = "\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\+09:00"
+  }
+
+latlon_decimal3_ascii =
+  xsd:string {
+    pattern = "\+\d\d\.\d\d\d[\-+]\d\d\d\.\d\d\d/"
+  }
+
+latlon_decimal_ascii =
+  xsd:string {
+    pattern = "\+\d\d?\.\d[\-+]\d\d\d\.\d/"
+  }
+
+latlon_deg_ascii =
+  xsd:string {
+    pattern = "\+\d\d?[\-+]\d\d\d/"
+  }
+
+latlon_decimal2_multi_ascii =
+  xsd:string {
+    pattern = "/?([\-+]\d\d\.\d\d[\-+]\d\d\d\.\d\d/)+"
+  }
+
+latlon_decimal1_multi_ascii =
+  xsd:string {
+    pattern = "/?([\-+]\d\d\.\d[\-+]\d\d\d\.\d/)+"
+  }
+
+latlon_multi_ascii =
+  xsd:string {
+    pattern = "/?(\+\d\d[\-+]\d\d\d/)+"
+  }
+
+latlon_decimal_ja =
+  xsd:string {
+    pattern = "北緯[０-９]+．[０-９]度[東西]経[０-９]+．[０-９]度"
+  }
+
+latlon_deg_ja =
+  xsd:string {
+    pattern = "北緯[０-９]+度[東西]経[０-９]+度"
+  }
+
+latlon_multi_ja =
+  xsd:string {
+    pattern = "(北緯[０-９]+度[東西]経[０-９]+度(、)?)+"
+  }
+
+latlon_sexagesimal_ascii =
+  xsd:string {
+    pattern = "\+\d\d\d\d[\-+]\d\d\d\d\d/"
+  }
+
+latlon_sexagesimal_ja =
+  xsd:string {
+    pattern = "北緯[０-９]{2}度[０-９]{2}分[東西]経[０-９]{3}度[０-９]{2}分"
+  }
+
+# --- shorthands for unknown structure, to be eliminated someday ---
 
 anyContent = (attribute * { text } | text | anyElement)*
 

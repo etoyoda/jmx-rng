@@ -99,7 +99,6 @@
       </choice>
     </element>
     <optional>
-      <!-- only for sokei/soten -->
       <element name="jb:TargetDTDubious">
         <value>頃</value>
       </element>
@@ -131,7 +130,11 @@
       </choice>
     </element>
   </define>
-  <!-- === Head and Body rules === -->
+  <!--
+    === Head and Body rules ===
+    - - - rules using jm:Body （大気海洋系情報）
+    
+  -->
   <define name="case_vpck70_fortnight">
     <element name="jb:Head">
       <ref name="head_common"/>
@@ -197,86 +200,6 @@
           <oneOrMore>
             <ref name="anyElement"/>
           </oneOrMore>
-        </element>
-      </optional>
-    </element>
-  </define>
-  <define name="case_vfvo56_funsoku">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <value>噴火速報</value>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <text/>
-        </element>
-        <zeroOrMore>
-          <element name="jb:Information">
-            <ref name="anyContent"/>
-          </element>
-        </zeroOrMore>
-      </element>
-    </element>
-    <element name="jv:Body">
-      <choice>
-        <element name="jv:Text">
-          <text/>
-        </element>
-        <group>
-          <oneOrMore>
-            <element name="jv:VolcanoInfo">
-              <ref name="anyContent"/>
-            </element>
-          </oneOrMore>
-          <element name="jv:VolcanoInfoContent">
-            <ref name="anyContent"/>
-          </element>
-        </group>
-      </choice>
-    </element>
-  </define>
-  <define name="case_vfvo53_ashfall">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <value>降灰予報</value>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <text/>
-        </element>
-        <oneOrMore>
-          <element name="jb:Information">
-            <ref name="anyContent"/>
-          </element>
-        </oneOrMore>
-      </element>
-    </element>
-    <element name="jv:Body">
-      <oneOrMore>
-        <element name="jv:VolcanoInfo">
-          <ref name="anyContent"/>
-        </element>
-      </oneOrMore>
-      <oneOrMore>
-        <element name="jv:AshInfos">
-          <ref name="anyContent"/>
-        </element>
-      </oneOrMore>
-      <element name="jv:VolcanoInfoContent">
-        <ref name="anyContent"/>
-      </element>
-      <optional>
-        <!-- used in VFVO54 (kouhai sokuhou) -->
-        <element name="jv:VolcanoObservation">
-          <ref name="anyContent"/>
         </element>
       </optional>
     </element>
@@ -754,854 +677,6 @@
         </element>
       </element>
     </element>
-  </define>
-  <define name="case_vfvo52_kazanobs">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <value>噴火に関する火山観測報</value>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <text/>
-        </element>
-        <oneOrMore>
-          <element name="jb:Information">
-            <ref name="anyContent"/>
-          </element>
-        </oneOrMore>
-      </element>
-    </element>
-    <element name="jv:Body">
-      <oneOrMore>
-        <element name="jv:VolcanoInfo">
-          <ref name="anyContent"/>
-        </element>
-      </oneOrMore>
-      <element name="jv:VolcanoObservation">
-        <ref name="anyContent"/>
-      </element>
-    </element>
-  </define>
-  <define name="case_vfvo50_funka">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <choice>
-          <value>噴火警報・予報</value>
-          <!-- case VFVO51 -->
-          <value>火山の状況に関する解説情報</value>
-          <!-- case VFSVii -->
-          <value>火山現象に関する海上警報・海上予報</value>
-        </choice>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <text/>
-        </element>
-        <oneOrMore>
-          <element name="jb:Information">
-            <ref name="anyContent"/>
-          </element>
-        </oneOrMore>
-      </element>
-    </element>
-    <element name="jv:Body">
-      <oneOrMore>
-        <element name="jv:VolcanoInfo">
-          <ref name="anyContent"/>
-        </element>
-      </oneOrMore>
-      <element name="jv:VolcanoInfoContent">
-        <ref name="anyContent"/>
-      </element>
-    </element>
-  </define>
-  <define name="case_vzvo40_oshirase">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <value>火山に関するお知らせ</value>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <text/>
-        </element>
-      </element>
-    </element>
-    <element name="jv:Body">
-      <element name="jv:Text">
-        <text/>
-      </element>
-    </element>
-  </define>
-  <define name="case_vzse40_oshirase">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <value>地震・津波に関するお知らせ</value>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <text/>
-        </element>
-      </element>
-    </element>
-    <element name="js:Body">
-      <element name="js:Text">
-        <text/>
-      </element>
-    </element>
-  </define>
-  <define name="case_vyse42_tokai">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <value>東海地震関連情報</value>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <text/>
-        </element>
-      </element>
-    </element>
-    <element name="js:Body">
-      <element name="js:Tokai">
-        <ref name="anyContent"/>
-      </element>
-      <optional>
-        <element name="js:NextAdvisory">
-          <text/>
-        </element>
-      </optional>
-    </element>
-  </define>
-  <define name="case_vxse41_eew">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <value>緊急地震速報</value>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <text/>
-        </element>
-        <zeroOrMore>
-          <element name="jb:Information">
-            <attribute name="type"/>
-            <oneOrMore>
-              <!--
-                <Information type="緊急地震速報（地方予報区）">
-                <Information type="緊急地震速報（府県予報区）">
-                <Information type="緊急地震速報（細分区域）">
-              -->
-              <element name="jb:Item">
-                <element name="jb:Kind">
-                  <oneOrMore>
-                    <ref name="anyElement"/>
-                  </oneOrMore>
-                </element>
-                <element name="jb:LastKind">
-                  <oneOrMore>
-                    <ref name="anyElement"/>
-                  </oneOrMore>
-                </element>
-                <element name="jb:Areas">
-                  <attribute name="codeType"/>
-                  <oneOrMore>
-                    <element name="jb:Area">
-                      <element name="jb:Name">
-                        <data type="token"/>
-                      </element>
-                      <element name="jb:Code">
-                        <data type="token"/>
-                      </element>
-                    </element>
-                  </oneOrMore>
-                </element>
-              </element>
-            </oneOrMore>
-          </element>
-        </zeroOrMore>
-      </element>
-    </element>
-    <element name="js:Body">
-      <ref name="anyContent"/>
-    </element>
-  </define>
-  <define name="case_vtse50_tsunamijoho">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <value>津波情報</value>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <text/>
-        </element>
-        <optional>
-          <element name="jb:Information">
-            <attribute name="type">
-              <value>沖合の津波観測に関する情報</value>
-            </attribute>
-            <oneOrMore>
-              <ref name="anyElement"/>
-            </oneOrMore>
-          </element>
-        </optional>
-      </element>
-    </element>
-    <ref name="tsunami_body"/>
-  </define>
-  <define name="case_vtse40_tsunamikeiho">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <value>津波警報・注意報・予報</value>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <text/>
-        </element>
-        <optional>
-          <!-- omitted when lifting -->
-          <element name="jb:Information">
-            <attribute name="type">
-              <value>津波予報領域表現</value>
-            </attribute>
-            <oneOrMore>
-              <element name="jb:Item">
-                <element name="jb:Kind">
-                  <element name="jb:Name">
-                    <data type="token"/>
-                  </element>
-                  <element name="jb:Code">
-                    <data type="nonNegativeInteger">
-                      <param name="totalDigits">2</param>
-                    </data>
-                  </element>
-                </element>
-                <element name="jb:Areas">
-                  <attribute name="codeType">
-                    <value>津波予報区</value>
-                  </attribute>
-                  <oneOrMore>
-                    <element name="jb:Area">
-                      <element name="jb:Name">
-                        <data type="token"/>
-                      </element>
-                      <element name="jb:Code">
-                        <data type="nonNegativeInteger">
-                          <param name="totalDigits">3</param>
-                        </data>
-                      </element>
-                    </element>
-                  </oneOrMore>
-                </element>
-              </element>
-            </oneOrMore>
-          </element>
-        </optional>
-      </element>
-    </element>
-    <ref name="tsunami_body"/>
-  </define>
-  <define name="tsunami_body">
-    <element name="js:Body">
-      <element name="js:Tsunami">
-        <optional>
-          <!-- only in some VTSE50 -->
-          <element name="js:Observation">
-            <oneOrMore>
-              <ref name="anyElement"/>
-            </oneOrMore>
-          </element>
-        </optional>
-        <optional>
-          <element name="js:Estimation">
-            <oneOrMore>
-              <ref name="anyElement"/>
-            </oneOrMore>
-          </element>
-        </optional>
-        <optional>
-          <element name="js:Forecast">
-            <oneOrMore>
-              <ref name="anyElement"/>
-            </oneOrMore>
-          </element>
-        </optional>
-      </element>
-      <element name="js:Earthquake">
-        <oneOrMore>
-          <ref name="anyElement"/>
-        </oneOrMore>
-      </element>
-      <optional>
-        <element name="js:Text">
-          <text/>
-        </element>
-      </optional>
-      <element name="js:Comments">
-        <optional>
-          <element name="js:WarningComment">
-            <attribute name="codeType">
-              <value>固定付加文</value>
-            </attribute>
-            <element name="js:Text">
-              <text/>
-            </element>
-            <!-- can be list of 4-digit numbers -->
-            <element name="js:Code">
-              <text/>
-            </element>
-          </element>
-        </optional>
-        <optional>
-          <element name="js:FreeFormComment">
-            <text/>
-          </element>
-        </optional>
-      </element>
-    </element>
-  </define>
-  <define name="case_vxse61_koushin">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <value>震源要素更新のお知らせ</value>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <text/>
-        </element>
-      </element>
-    </element>
-    <element name="js:Body">
-      <choice>
-        <!-- cancellation -->
-        <element name="js:Text">
-          <text/>
-        </element>
-        <group>
-          <element name="js:Earthquake">
-            <element name="js:OriginTime">
-              <ref name="dateTime_si"/>
-            </element>
-            <element name="js:ArrivalTime">
-              <ref name="dateTime_si"/>
-            </element>
-            <element name="js:Hypocenter">
-              <element name="js:Area">
-                <element name="js:Name">
-                  <data type="token"/>
-                </element>
-                <element name="js:Code">
-                  <attribute name="type">
-                    <value>震央地名</value>
-                  </attribute>
-                  <data type="positiveInteger">
-                    <param name="totalDigits">3</param>
-                  </data>
-                </element>
-                <element name="je:Coordinate">
-                  <ref name="anyContent"/>
-                </element>
-                <element name="je:Coordinate">
-                  <ref name="anyContent"/>
-                </element>
-              </element>
-            </element>
-            <element name="je:Magnitude">
-              <ref name="anyContent"/>
-            </element>
-          </element>
-          <element name="js:Comments">
-            <element name="js:FreeFormComment">
-              <text/>
-            </element>
-          </element>
-        </group>
-      </choice>
-    </element>
-  </define>
-  <define name="case_vxse60_kaisuu">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <value>地震回数情報</value>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <text/>
-        </element>
-      </element>
-    </element>
-    <element name="js:Body">
-      <element name="js:EarthquakeCount">
-        <oneOrMore>
-          <element name="js:Item">
-            <attribute name="type"/>
-            <element name="js:StartTime">
-              <ref name="dateTime_si"/>
-            </element>
-            <element name="js:EndTime">
-              <ref name="dateTime_si"/>
-            </element>
-            <element name="js:Number">
-              <data type="nonNegativeInteger"/>
-            </element>
-            <element name="js:FeltNumber">
-              <data type="nonNegativeInteger"/>
-            </element>
-          </element>
-        </oneOrMore>
-      </element>
-      <element name="js:NextAdvisory">
-        <text/>
-      </element>
-      <element name="js:Comments">
-        <element name="js:FreeFormComment">
-          <text/>
-        </element>
-      </element>
-    </element>
-  </define>
-  <define name="case_vxse56_katsudou">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <value>地震の活動状況等に関する情報</value>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <text/>
-        </element>
-      </element>
-    </element>
-    <element name="js:Body">
-      <optional>
-        <!-- when giving a name to an earthquake -->
-        <element name="js:Naming">
-          <attribute name="english"/>
-          <text/>
-        </element>
-      </optional>
-      <element name="js:Text">
-        <text/>
-      </element>
-    </element>
-  </define>
-  <define name="case_vxse53_joho">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <value>地震情報</value>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <text/>
-        </element>
-        <optional>
-          <!-- missing in case of enchi-jishin or cancellation -->
-          <group>
-            <element name="jb:Information">
-              <attribute name="type">
-                <value>震源・震度に関する情報（細分区域）</value>
-              </attribute>
-              <oneOrMore>
-                <element name="jb:Item">
-                  <oneOrMore>
-                    <ref name="anyElement"/>
-                  </oneOrMore>
-                </element>
-              </oneOrMore>
-            </element>
-            <element name="jb:Information">
-              <attribute name="type">
-                <value>震源・震度に関する情報（市町村等）</value>
-              </attribute>
-              <oneOrMore>
-                <element name="jb:Item">
-                  <oneOrMore>
-                    <ref name="anyElement"/>
-                  </oneOrMore>
-                </element>
-              </oneOrMore>
-            </element>
-          </group>
-        </optional>
-      </element>
-    </element>
-    <element name="js:Body">
-      <choice>
-        <!-- cancellation -->
-        <element name="js:Text">
-          <text/>
-        </element>
-        <group>
-          <element name="js:Earthquake">
-            <element name="js:OriginTime">
-              <ref name="dateTime_si"/>
-            </element>
-            <element name="js:ArrivalTime">
-              <ref name="dateTime_si"/>
-            </element>
-            <element name="js:Hypocenter">
-              <element name="js:Area">
-                <element name="js:Name">
-                  <data type="token"/>
-                </element>
-                <element name="js:Code">
-                  <attribute name="type">
-                    <value>震央地名</value>
-                  </attribute>
-                  <data type="positiveInteger">
-                    <param name="totalDigits">3</param>
-                  </data>
-                </element>
-                <element name="je:Coordinate">
-                  <ref name="anyContent"/>
-                </element>
-                <optional>
-                  <!-- present in enchi-jishin -->
-                  <group>
-                    <element name="js:DetailedName">
-                      <data type="token"/>
-                    </element>
-                    <element name="js:DetailedCode">
-                      <attribute name="type">
-                        <value>詳細震央地名</value>
-                      </attribute>
-                      <data type="positiveInteger">
-                        <param name="totalDigits">4</param>
-                      </data>
-                    </element>
-                  </group>
-                </optional>
-                <optional>
-                  <element name="js:NameFromMark">
-                    <data type="token"/>
-                  </element>
-                  <element name="js:MarkCode">
-                    <attribute name="type">
-                      <value>震央補助</value>
-                    </attribute>
-                    <data type="positiveInteger">
-                      <param name="totalDigits">3</param>
-                    </data>
-                  </element>
-                  <element name="js:Direction">
-                    <data type="token"/>
-                  </element>
-                  <element name="js:Distance">
-                    <attribute name="unit">
-                      <value>km</value>
-                    </attribute>
-                    <data type="nonNegativeInteger"/>
-                  </element>
-                </optional>
-              </element>
-              <optional>
-                <!-- present in enchi-jishin -->
-                <element name="js:Source">
-                  <value>ＰＴＷＣ</value>
-                </element>
-              </optional>
-            </element>
-            <element name="je:Magnitude">
-              <ref name="anyContent"/>
-            </element>
-          </element>
-          <optional>
-            <!-- missing in enchi-jishin -->
-            <ref name="shindo_intensity"/>
-          </optional>
-          <ref name="kotei_fukabun"/>
-        </group>
-      </choice>
-    </element>
-  </define>
-  <define name="kotei_fukabun">
-    <element name="js:Comments">
-      <element name="js:ForecastComment">
-        <attribute name="codeType">
-          <value>固定付加文</value>
-        </attribute>
-        <element name="js:Text">
-          <text/>
-        </element>
-        <!-- can be list of 4-digit numbers -->
-        <element name="js:Code">
-          <text/>
-        </element>
-      </element>
-      <optional>
-        <element name="js:VarComment">
-          <attribute name="codeType">
-            <value>固定付加文</value>
-          </attribute>
-          <element name="js:Text">
-            <text/>
-          </element>
-          <!-- 4-digit number, could be list (TBC) -->
-          <element name="js:Code">
-            <text/>
-          </element>
-        </element>
-      </optional>
-      <optional>
-        <element name="js:FreeFormComment">
-          <text/>
-        </element>
-      </optional>
-    </element>
-  </define>
-  <define name="case_vxse52_shingen">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <value>震源速報</value>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <text/>
-        </element>
-      </element>
-    </element>
-    <element name="js:Body">
-      <choice>
-        <!-- cancellation -->
-        <element name="js:Text">
-          <text/>
-        </element>
-        <group>
-          <element name="js:Earthquake">
-            <element name="js:OriginTime">
-              <ref name="dateTime_si"/>
-            </element>
-            <element name="js:ArrivalTime">
-              <ref name="dateTime_si"/>
-            </element>
-            <element name="js:Hypocenter">
-              <element name="js:Area">
-                <element name="js:Name">
-                  <data type="token"/>
-                </element>
-                <element name="js:Code">
-                  <attribute name="type">
-                    <value>震央地名</value>
-                  </attribute>
-                  <data type="positiveInteger">
-                    <param name="totalDigits">3</param>
-                  </data>
-                </element>
-                <element name="je:Coordinate">
-                  <ref name="anyContent"/>
-                </element>
-              </element>
-            </element>
-            <element name="je:Magnitude">
-              <ref name="anyContent"/>
-            </element>
-          </element>
-          <ref name="kotei_fukabun"/>
-        </group>
-      </choice>
-    </element>
-  </define>
-  <define name="case_vxse51_shindo">
-    <element name="jb:Head">
-      <ref name="head_common"/>
-      <element name="jb:InfoKind">
-        <value>震度速報</value>
-      </element>
-      <element name="jb:InfoKindVersion">
-        <data type="token"/>
-      </element>
-      <element name="jb:Headline">
-        <element name="jb:Text">
-          <text/>
-        </element>
-        <element name="jb:Information">
-          <attribute name="type">
-            <value>震度速報</value>
-          </attribute>
-          <oneOrMore>
-            <element name="jb:Item">
-              <oneOrMore>
-                <ref name="anyElement"/>
-              </oneOrMore>
-            </element>
-          </oneOrMore>
-        </element>
-      </element>
-    </element>
-    <element name="js:Body">
-      <ref name="shindo_intensity"/>
-      <optional>
-        <ref name="kotei_fukabun"/>
-      </optional>
-    </element>
-  </define>
-  <define name="shindo_intensity">
-    <element name="js:Intensity">
-      <element name="js:Observation">
-        <element name="js:CodeDefine">
-          <oneOrMore>
-            <element name="js:Type">
-              <attribute name="xpath">
-                <data type="token"/>
-              </attribute>
-              <data type="token"/>
-            </element>
-          </oneOrMore>
-        </element>
-        <element name="js:MaxInt">
-          <ref name="pat_shindo"/>
-        </element>
-        <oneOrMore>
-          <element name="js:Pref">
-            <element name="js:Name">
-              <data type="token"/>
-            </element>
-            <element name="js:Code">
-              <data type="positiveInteger">
-                <param name="totalDigits">2</param>
-              </data>
-            </element>
-            <element name="js:MaxInt">
-              <ref name="pat_shindo"/>
-            </element>
-            <optional>
-              <element name="js:Revise">
-                <data type="token"/>
-              </element>
-            </optional>
-            <oneOrMore>
-              <element name="js:Area">
-                <element name="js:Name">
-                  <data type="token"/>
-                </element>
-                <element name="js:Code">
-                  <data type="positiveInteger">
-                    <param name="totalDigits">3</param>
-                  </data>
-                </element>
-                <element name="js:MaxInt">
-                  <ref name="pat_shindo"/>
-                </element>
-                <optional>
-                  <element name="js:Revise">
-                    <data type="token"/>
-                  </element>
-                </optional>
-                <zeroOrMore>
-                  <element name="js:City">
-                    <element name="js:Name">
-                      <data type="token"/>
-                    </element>
-                    <element name="js:Code">
-                      <data type="positiveInteger">
-                        <param name="totalDigits">7</param>
-                      </data>
-                    </element>
-                    <optional>
-                      <element name="js:MaxInt">
-                        <ref name="pat_shindo"/>
-                      </element>
-                      <optional>
-                        <element name="js:Revise">
-                          <data type="token"/>
-                        </element>
-                      </optional>
-                    </optional>
-                    <optional>
-                      <element name="js:Condition">
-                        <value>震度５弱以上未入電</value>
-                      </element>
-                    </optional>
-                    <oneOrMore>
-                      <element name="js:IntensityStation">
-                        <element name="js:Name">
-                          <data type="token"/>
-                        </element>
-                        <element name="js:Code">
-                          <data type="positiveInteger">
-                            <param name="totalDigits">7</param>
-                          </data>
-                        </element>
-                        <element name="js:Int">
-                          <ref name="pat_shindo"/>
-                        </element>
-                        <optional>
-                          <element name="js:Revise">
-                            <data type="token"/>
-                          </element>
-                        </optional>
-                      </element>
-                    </oneOrMore>
-                  </element>
-                </zeroOrMore>
-              </element>
-            </oneOrMore>
-          </element>
-        </oneOrMore>
-      </element>
-    </element>
-  </define>
-  <define name="pat_shindo">
-    <choice>
-      <value>1</value>
-      <value>2</value>
-      <value>3</value>
-      <value>4</value>
-      <value>5-</value>
-      <value>5+</value>
-      <value>6-</value>
-      <value>6+</value>
-      <value>7</value>
-      <value>震度５弱以上未入電</value>
-    </choice>
   </define>
   <define name="case_vpzi50_tenkou">
     <element name="jb:Head">
@@ -4013,8 +3088,950 @@
       </element>
     </element>
   </define>
+  <!--
+    
+    - - - rules using js:Body - - - 地震系情報
+    
+  -->
+  <define name="case_vzse40_oshirase">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>地震・津波に関するお知らせ</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+      </element>
+    </element>
+    <element name="js:Body">
+      <element name="js:Text">
+        <text/>
+      </element>
+    </element>
+  </define>
+  <define name="case_vyse42_tokai">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>東海地震関連情報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+      </element>
+    </element>
+    <element name="js:Body">
+      <element name="js:Tokai">
+        <ref name="anyContent"/>
+      </element>
+      <optional>
+        <element name="js:NextAdvisory">
+          <text/>
+        </element>
+      </optional>
+    </element>
+  </define>
+  <define name="case_vxse41_eew">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>緊急地震速報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+        <zeroOrMore>
+          <element name="jb:Information">
+            <attribute name="type"/>
+            <oneOrMore>
+              <!--
+                <Information type="緊急地震速報（地方予報区）">
+                <Information type="緊急地震速報（府県予報区）">
+                <Information type="緊急地震速報（細分区域）">
+              -->
+              <element name="jb:Item">
+                <element name="jb:Kind">
+                  <oneOrMore>
+                    <ref name="anyElement"/>
+                  </oneOrMore>
+                </element>
+                <element name="jb:LastKind">
+                  <oneOrMore>
+                    <ref name="anyElement"/>
+                  </oneOrMore>
+                </element>
+                <element name="jb:Areas">
+                  <attribute name="codeType"/>
+                  <oneOrMore>
+                    <element name="jb:Area">
+                      <element name="jb:Name">
+                        <data type="token"/>
+                      </element>
+                      <element name="jb:Code">
+                        <data type="token"/>
+                      </element>
+                    </element>
+                  </oneOrMore>
+                </element>
+              </element>
+            </oneOrMore>
+          </element>
+        </zeroOrMore>
+      </element>
+    </element>
+    <element name="js:Body">
+      <ref name="anyContent"/>
+    </element>
+  </define>
+  <define name="case_vtse50_tsunamijoho">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>津波情報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+        <optional>
+          <element name="jb:Information">
+            <attribute name="type">
+              <value>沖合の津波観測に関する情報</value>
+            </attribute>
+            <oneOrMore>
+              <ref name="anyElement"/>
+            </oneOrMore>
+          </element>
+        </optional>
+      </element>
+    </element>
+    <ref name="tsunami_body"/>
+  </define>
+  <define name="case_vtse40_tsunamikeiho">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>津波警報・注意報・予報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+        <optional>
+          <!-- omitted when lifting -->
+          <element name="jb:Information">
+            <attribute name="type">
+              <value>津波予報領域表現</value>
+            </attribute>
+            <oneOrMore>
+              <element name="jb:Item">
+                <element name="jb:Kind">
+                  <element name="jb:Name">
+                    <data type="token"/>
+                  </element>
+                  <element name="jb:Code">
+                    <data type="nonNegativeInteger">
+                      <param name="totalDigits">2</param>
+                    </data>
+                  </element>
+                </element>
+                <element name="jb:Areas">
+                  <attribute name="codeType">
+                    <value>津波予報区</value>
+                  </attribute>
+                  <oneOrMore>
+                    <element name="jb:Area">
+                      <element name="jb:Name">
+                        <data type="token"/>
+                      </element>
+                      <element name="jb:Code">
+                        <data type="nonNegativeInteger">
+                          <param name="totalDigits">3</param>
+                        </data>
+                      </element>
+                    </element>
+                  </oneOrMore>
+                </element>
+              </element>
+            </oneOrMore>
+          </element>
+        </optional>
+      </element>
+    </element>
+    <ref name="tsunami_body"/>
+  </define>
+  <define name="tsunami_body">
+    <element name="js:Body">
+      <element name="js:Tsunami">
+        <optional>
+          <!-- only in some VTSE50 -->
+          <element name="js:Observation">
+            <oneOrMore>
+              <ref name="anyElement"/>
+            </oneOrMore>
+          </element>
+        </optional>
+        <optional>
+          <element name="js:Estimation">
+            <oneOrMore>
+              <ref name="anyElement"/>
+            </oneOrMore>
+          </element>
+        </optional>
+        <optional>
+          <element name="js:Forecast">
+            <oneOrMore>
+              <ref name="anyElement"/>
+            </oneOrMore>
+          </element>
+        </optional>
+      </element>
+      <element name="js:Earthquake">
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+      <optional>
+        <element name="js:Text">
+          <text/>
+        </element>
+      </optional>
+      <element name="js:Comments">
+        <optional>
+          <element name="js:WarningComment">
+            <attribute name="codeType">
+              <value>固定付加文</value>
+            </attribute>
+            <element name="js:Text">
+              <text/>
+            </element>
+            <!-- can be list of 4-digit numbers -->
+            <element name="js:Code">
+              <text/>
+            </element>
+          </element>
+        </optional>
+        <optional>
+          <element name="js:FreeFormComment">
+            <text/>
+          </element>
+        </optional>
+      </element>
+    </element>
+  </define>
+  <define name="case_vxse61_koushin">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>震源要素更新のお知らせ</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+      </element>
+    </element>
+    <element name="js:Body">
+      <choice>
+        <!-- cancellation -->
+        <element name="js:Text">
+          <text/>
+        </element>
+        <group>
+          <element name="js:Earthquake">
+            <element name="js:OriginTime">
+              <ref name="dateTime_si"/>
+            </element>
+            <element name="js:ArrivalTime">
+              <ref name="dateTime_si"/>
+            </element>
+            <element name="js:Hypocenter">
+              <element name="js:Area">
+                <element name="js:Name">
+                  <data type="token"/>
+                </element>
+                <element name="js:Code">
+                  <attribute name="type">
+                    <value>震央地名</value>
+                  </attribute>
+                  <data type="positiveInteger">
+                    <param name="totalDigits">3</param>
+                  </data>
+                </element>
+                <element name="je:Coordinate">
+                  <ref name="anyContent"/>
+                </element>
+                <element name="je:Coordinate">
+                  <ref name="anyContent"/>
+                </element>
+              </element>
+            </element>
+            <element name="je:Magnitude">
+              <ref name="anyContent"/>
+            </element>
+          </element>
+          <element name="js:Comments">
+            <element name="js:FreeFormComment">
+              <text/>
+            </element>
+          </element>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="case_vxse60_kaisuu">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>地震回数情報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+      </element>
+    </element>
+    <element name="js:Body">
+      <element name="js:EarthquakeCount">
+        <oneOrMore>
+          <element name="js:Item">
+            <attribute name="type"/>
+            <element name="js:StartTime">
+              <ref name="dateTime_si"/>
+            </element>
+            <element name="js:EndTime">
+              <ref name="dateTime_si"/>
+            </element>
+            <element name="js:Number">
+              <data type="nonNegativeInteger"/>
+            </element>
+            <element name="js:FeltNumber">
+              <data type="nonNegativeInteger"/>
+            </element>
+          </element>
+        </oneOrMore>
+      </element>
+      <element name="js:NextAdvisory">
+        <text/>
+      </element>
+      <element name="js:Comments">
+        <element name="js:FreeFormComment">
+          <text/>
+        </element>
+      </element>
+    </element>
+  </define>
+  <define name="case_vxse56_katsudou">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>地震の活動状況等に関する情報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+      </element>
+    </element>
+    <element name="js:Body">
+      <optional>
+        <!-- when giving a name to an earthquake -->
+        <element name="js:Naming">
+          <attribute name="english"/>
+          <text/>
+        </element>
+      </optional>
+      <element name="js:Text">
+        <text/>
+      </element>
+    </element>
+  </define>
+  <define name="case_vxse53_joho">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>地震情報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+        <optional>
+          <!-- missing in case of enchi-jishin or cancellation -->
+          <group>
+            <element name="jb:Information">
+              <attribute name="type">
+                <value>震源・震度に関する情報（細分区域）</value>
+              </attribute>
+              <oneOrMore>
+                <element name="jb:Item">
+                  <oneOrMore>
+                    <ref name="anyElement"/>
+                  </oneOrMore>
+                </element>
+              </oneOrMore>
+            </element>
+            <element name="jb:Information">
+              <attribute name="type">
+                <value>震源・震度に関する情報（市町村等）</value>
+              </attribute>
+              <oneOrMore>
+                <element name="jb:Item">
+                  <oneOrMore>
+                    <ref name="anyElement"/>
+                  </oneOrMore>
+                </element>
+              </oneOrMore>
+            </element>
+          </group>
+        </optional>
+      </element>
+    </element>
+    <element name="js:Body">
+      <choice>
+        <!-- cancellation -->
+        <element name="js:Text">
+          <text/>
+        </element>
+        <group>
+          <element name="js:Earthquake">
+            <element name="js:OriginTime">
+              <ref name="dateTime_si"/>
+            </element>
+            <element name="js:ArrivalTime">
+              <ref name="dateTime_si"/>
+            </element>
+            <element name="js:Hypocenter">
+              <element name="js:Area">
+                <element name="js:Name">
+                  <data type="token"/>
+                </element>
+                <element name="js:Code">
+                  <attribute name="type">
+                    <value>震央地名</value>
+                  </attribute>
+                  <data type="positiveInteger">
+                    <param name="totalDigits">3</param>
+                  </data>
+                </element>
+                <element name="je:Coordinate">
+                  <ref name="anyContent"/>
+                </element>
+                <optional>
+                  <!-- present in enchi-jishin -->
+                  <group>
+                    <element name="js:DetailedName">
+                      <data type="token"/>
+                    </element>
+                    <element name="js:DetailedCode">
+                      <attribute name="type">
+                        <value>詳細震央地名</value>
+                      </attribute>
+                      <data type="positiveInteger">
+                        <param name="totalDigits">4</param>
+                      </data>
+                    </element>
+                  </group>
+                </optional>
+                <optional>
+                  <element name="js:NameFromMark">
+                    <data type="token"/>
+                  </element>
+                  <element name="js:MarkCode">
+                    <attribute name="type">
+                      <value>震央補助</value>
+                    </attribute>
+                    <data type="positiveInteger">
+                      <param name="totalDigits">3</param>
+                    </data>
+                  </element>
+                  <element name="js:Direction">
+                    <data type="token"/>
+                  </element>
+                  <element name="js:Distance">
+                    <attribute name="unit">
+                      <value>km</value>
+                    </attribute>
+                    <data type="nonNegativeInteger"/>
+                  </element>
+                </optional>
+              </element>
+              <optional>
+                <!-- present in enchi-jishin -->
+                <element name="js:Source">
+                  <value>ＰＴＷＣ</value>
+                </element>
+              </optional>
+            </element>
+            <element name="je:Magnitude">
+              <ref name="anyContent"/>
+            </element>
+          </element>
+          <optional>
+            <!-- missing in enchi-jishin -->
+            <ref name="shindo_intensity"/>
+          </optional>
+          <ref name="kotei_fukabun"/>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="kotei_fukabun">
+    <element name="js:Comments">
+      <element name="js:ForecastComment">
+        <attribute name="codeType">
+          <value>固定付加文</value>
+        </attribute>
+        <element name="js:Text">
+          <text/>
+        </element>
+        <!-- can be list of 4-digit numbers -->
+        <element name="js:Code">
+          <text/>
+        </element>
+      </element>
+      <optional>
+        <element name="js:VarComment">
+          <attribute name="codeType">
+            <value>固定付加文</value>
+          </attribute>
+          <element name="js:Text">
+            <text/>
+          </element>
+          <!-- 4-digit number, could be list (TBC) -->
+          <element name="js:Code">
+            <text/>
+          </element>
+        </element>
+      </optional>
+      <optional>
+        <element name="js:FreeFormComment">
+          <text/>
+        </element>
+      </optional>
+    </element>
+  </define>
+  <define name="case_vxse52_shingen">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>震源速報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+      </element>
+    </element>
+    <element name="js:Body">
+      <choice>
+        <!-- cancellation -->
+        <element name="js:Text">
+          <text/>
+        </element>
+        <group>
+          <element name="js:Earthquake">
+            <element name="js:OriginTime">
+              <ref name="dateTime_si"/>
+            </element>
+            <element name="js:ArrivalTime">
+              <ref name="dateTime_si"/>
+            </element>
+            <element name="js:Hypocenter">
+              <element name="js:Area">
+                <element name="js:Name">
+                  <data type="token"/>
+                </element>
+                <element name="js:Code">
+                  <attribute name="type">
+                    <value>震央地名</value>
+                  </attribute>
+                  <data type="positiveInteger">
+                    <param name="totalDigits">3</param>
+                  </data>
+                </element>
+                <element name="je:Coordinate">
+                  <ref name="anyContent"/>
+                </element>
+              </element>
+            </element>
+            <element name="je:Magnitude">
+              <ref name="anyContent"/>
+            </element>
+          </element>
+          <ref name="kotei_fukabun"/>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="case_vxse51_shindo">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>震度速報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+        <element name="jb:Information">
+          <attribute name="type">
+            <value>震度速報</value>
+          </attribute>
+          <oneOrMore>
+            <element name="jb:Item">
+              <oneOrMore>
+                <ref name="anyElement"/>
+              </oneOrMore>
+            </element>
+          </oneOrMore>
+        </element>
+      </element>
+    </element>
+    <element name="js:Body">
+      <ref name="shindo_intensity"/>
+      <optional>
+        <ref name="kotei_fukabun"/>
+      </optional>
+    </element>
+  </define>
+  <define name="shindo_intensity">
+    <element name="js:Intensity">
+      <element name="js:Observation">
+        <element name="js:CodeDefine">
+          <oneOrMore>
+            <element name="js:Type">
+              <attribute name="xpath">
+                <data type="token"/>
+              </attribute>
+              <data type="token"/>
+            </element>
+          </oneOrMore>
+        </element>
+        <element name="js:MaxInt">
+          <ref name="pat_shindo"/>
+        </element>
+        <oneOrMore>
+          <element name="js:Pref">
+            <element name="js:Name">
+              <data type="token"/>
+            </element>
+            <element name="js:Code">
+              <data type="positiveInteger">
+                <param name="totalDigits">2</param>
+              </data>
+            </element>
+            <element name="js:MaxInt">
+              <ref name="pat_shindo"/>
+            </element>
+            <optional>
+              <element name="js:Revise">
+                <data type="token"/>
+              </element>
+            </optional>
+            <oneOrMore>
+              <element name="js:Area">
+                <element name="js:Name">
+                  <data type="token"/>
+                </element>
+                <element name="js:Code">
+                  <data type="positiveInteger">
+                    <param name="totalDigits">3</param>
+                  </data>
+                </element>
+                <element name="js:MaxInt">
+                  <ref name="pat_shindo"/>
+                </element>
+                <optional>
+                  <element name="js:Revise">
+                    <data type="token"/>
+                  </element>
+                </optional>
+                <zeroOrMore>
+                  <element name="js:City">
+                    <element name="js:Name">
+                      <data type="token"/>
+                    </element>
+                    <element name="js:Code">
+                      <data type="positiveInteger">
+                        <param name="totalDigits">7</param>
+                      </data>
+                    </element>
+                    <optional>
+                      <element name="js:MaxInt">
+                        <ref name="pat_shindo"/>
+                      </element>
+                      <optional>
+                        <element name="js:Revise">
+                          <data type="token"/>
+                        </element>
+                      </optional>
+                    </optional>
+                    <optional>
+                      <element name="js:Condition">
+                        <value>震度５弱以上未入電</value>
+                      </element>
+                    </optional>
+                    <oneOrMore>
+                      <element name="js:IntensityStation">
+                        <element name="js:Name">
+                          <data type="token"/>
+                        </element>
+                        <element name="js:Code">
+                          <data type="positiveInteger">
+                            <param name="totalDigits">7</param>
+                          </data>
+                        </element>
+                        <element name="js:Int">
+                          <ref name="pat_shindo"/>
+                        </element>
+                        <optional>
+                          <element name="js:Revise">
+                            <data type="token"/>
+                          </element>
+                        </optional>
+                      </element>
+                    </oneOrMore>
+                  </element>
+                </zeroOrMore>
+              </element>
+            </oneOrMore>
+          </element>
+        </oneOrMore>
+      </element>
+    </element>
+  </define>
+  <define name="pat_shindo">
+    <choice>
+      <value>1</value>
+      <value>2</value>
+      <value>3</value>
+      <value>4</value>
+      <value>5-</value>
+      <value>5+</value>
+      <value>6-</value>
+      <value>6+</value>
+      <value>7</value>
+      <value>震度５弱以上未入電</value>
+    </choice>
+  </define>
+  <!--
+    
+    - - - rules using jv:Body - - - 火山系情報
+    
+  -->
+  <define name="case_vfvo52_kazanobs">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>噴火に関する火山観測報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+        <oneOrMore>
+          <element name="jb:Information">
+            <ref name="anyContent"/>
+          </element>
+        </oneOrMore>
+      </element>
+    </element>
+    <element name="jv:Body">
+      <oneOrMore>
+        <element name="jv:VolcanoInfo">
+          <ref name="anyContent"/>
+        </element>
+      </oneOrMore>
+      <element name="jv:VolcanoObservation">
+        <ref name="anyContent"/>
+      </element>
+    </element>
+  </define>
+  <define name="case_vfvo50_funka">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <choice>
+          <value>噴火警報・予報</value>
+          <!-- case VFVO51 -->
+          <value>火山の状況に関する解説情報</value>
+          <!-- case VFSVii -->
+          <value>火山現象に関する海上警報・海上予報</value>
+        </choice>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+        <oneOrMore>
+          <element name="jb:Information">
+            <ref name="anyContent"/>
+          </element>
+        </oneOrMore>
+      </element>
+    </element>
+    <element name="jv:Body">
+      <oneOrMore>
+        <element name="jv:VolcanoInfo">
+          <ref name="anyContent"/>
+        </element>
+      </oneOrMore>
+      <element name="jv:VolcanoInfoContent">
+        <ref name="anyContent"/>
+      </element>
+    </element>
+  </define>
+  <define name="case_vzvo40_oshirase">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>火山に関するお知らせ</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+      </element>
+    </element>
+    <element name="jv:Body">
+      <element name="jv:Text">
+        <text/>
+      </element>
+    </element>
+  </define>
+  <define name="case_vfvo56_funsoku">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>噴火速報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+        <zeroOrMore>
+          <element name="jb:Information">
+            <ref name="anyContent"/>
+          </element>
+        </zeroOrMore>
+      </element>
+    </element>
+    <element name="jv:Body">
+      <choice>
+        <element name="jv:Text">
+          <text/>
+        </element>
+        <group>
+          <oneOrMore>
+            <element name="jv:VolcanoInfo">
+              <ref name="anyContent"/>
+            </element>
+          </oneOrMore>
+          <element name="jv:VolcanoInfoContent">
+            <ref name="anyContent"/>
+          </element>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="case_vfvo53_ashfall">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>降灰予報</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <text/>
+        </element>
+        <oneOrMore>
+          <element name="jb:Information">
+            <ref name="anyContent"/>
+          </element>
+        </oneOrMore>
+      </element>
+    </element>
+    <element name="jv:Body">
+      <oneOrMore>
+        <element name="jv:VolcanoInfo">
+          <ref name="anyContent"/>
+        </element>
+      </oneOrMore>
+      <oneOrMore>
+        <element name="jv:AshInfos">
+          <ref name="anyContent"/>
+        </element>
+      </oneOrMore>
+      <element name="jv:VolcanoInfoContent">
+        <ref name="anyContent"/>
+      </element>
+      <optional>
+        <!-- used in VFVO54 (kouhai sokuhou) -->
+        <element name="jv:VolcanoObservation">
+          <ref name="anyContent"/>
+        </element>
+      </optional>
+    </element>
+  </define>
+  <!--
+    
+    - - - list of possible tokens - - -
+    
+  -->
   <define name="list_typhoon_class">
-    <a:documentation>=== simple data types ===</a:documentation>
     <choice>
       <value>台風(TY)</value>
       <value>台風(STS)</value>
@@ -4062,76 +4079,6 @@
       <value>西北西</value>
       <value>北北西</value>
     </choice>
-  </define>
-  <define name="pat_katakana">
-    <data type="string">
-      <param name="pattern">[ァ-ー]*</param>
-    </data>
-  </define>
-  <define name="dateTime_sz">
-    <data type="dateTime">
-      <param name="pattern">\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ</param>
-    </data>
-  </define>
-  <define name="dateTime_si">
-    <data type="dateTime">
-      <param name="pattern">\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\+09:00</param>
-    </data>
-  </define>
-  <define name="latlon_decimal3_ascii">
-    <data type="string">
-      <param name="pattern">\+\d\d\.\d\d\d[\-+]\d\d\d\.\d\d\d/</param>
-    </data>
-  </define>
-  <define name="latlon_decimal_ascii">
-    <data type="string">
-      <param name="pattern">\+\d\d?\.\d[\-+]\d\d\d\.\d/</param>
-    </data>
-  </define>
-  <define name="latlon_deg_ascii">
-    <data type="string">
-      <param name="pattern">\+\d\d?[\-+]\d\d\d/</param>
-    </data>
-  </define>
-  <define name="latlon_decimal2_multi_ascii">
-    <data type="string">
-      <param name="pattern">/?([\-+]\d\d\.\d\d[\-+]\d\d\d\.\d\d/)+</param>
-    </data>
-  </define>
-  <define name="latlon_decimal1_multi_ascii">
-    <data type="string">
-      <param name="pattern">/?([\-+]\d\d\.\d[\-+]\d\d\d\.\d/)+</param>
-    </data>
-  </define>
-  <define name="latlon_multi_ascii">
-    <data type="string">
-      <param name="pattern">/?(\+\d\d[\-+]\d\d\d/)+</param>
-    </data>
-  </define>
-  <define name="latlon_decimal_ja">
-    <data type="string">
-      <param name="pattern">北緯[０-９]+．[０-９]度[東西]経[０-９]+．[０-９]度</param>
-    </data>
-  </define>
-  <define name="latlon_deg_ja">
-    <data type="string">
-      <param name="pattern">北緯[０-９]+度[東西]経[０-９]+度</param>
-    </data>
-  </define>
-  <define name="latlon_multi_ja">
-    <data type="string">
-      <param name="pattern">(北緯[０-９]+度[東西]経[０-９]+度(、)?)+</param>
-    </data>
-  </define>
-  <define name="latlon_sexagesimal_ascii">
-    <data type="string">
-      <param name="pattern">\+\d\d\d\d[\-+]\d\d\d\d\d/</param>
-    </data>
-  </define>
-  <define name="latlon_sexagesimal_ja">
-    <data type="string">
-      <param name="pattern">北緯[０-９]{2}度[０-９]{2}分[東西]経[０-９]{3}度[０-９]{2}分</param>
-    </data>
   </define>
   <define name="list_edof">
     <data type="string">
@@ -4340,6 +4287,78 @@
       <value>早期天候情報</value>
     </choice>
   </define>
+  <define name="pat_katakana">
+    <a:documentation>=== simple data types ===</a:documentation>
+    <data type="string">
+      <param name="pattern">[ァ-ー]*</param>
+    </data>
+  </define>
+  <define name="dateTime_sz">
+    <data type="dateTime">
+      <param name="pattern">\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ</param>
+    </data>
+  </define>
+  <define name="dateTime_si">
+    <data type="dateTime">
+      <param name="pattern">\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\+09:00</param>
+    </data>
+  </define>
+  <define name="latlon_decimal3_ascii">
+    <data type="string">
+      <param name="pattern">\+\d\d\.\d\d\d[\-+]\d\d\d\.\d\d\d/</param>
+    </data>
+  </define>
+  <define name="latlon_decimal_ascii">
+    <data type="string">
+      <param name="pattern">\+\d\d?\.\d[\-+]\d\d\d\.\d/</param>
+    </data>
+  </define>
+  <define name="latlon_deg_ascii">
+    <data type="string">
+      <param name="pattern">\+\d\d?[\-+]\d\d\d/</param>
+    </data>
+  </define>
+  <define name="latlon_decimal2_multi_ascii">
+    <data type="string">
+      <param name="pattern">/?([\-+]\d\d\.\d\d[\-+]\d\d\d\.\d\d/)+</param>
+    </data>
+  </define>
+  <define name="latlon_decimal1_multi_ascii">
+    <data type="string">
+      <param name="pattern">/?([\-+]\d\d\.\d[\-+]\d\d\d\.\d/)+</param>
+    </data>
+  </define>
+  <define name="latlon_multi_ascii">
+    <data type="string">
+      <param name="pattern">/?(\+\d\d[\-+]\d\d\d/)+</param>
+    </data>
+  </define>
+  <define name="latlon_decimal_ja">
+    <data type="string">
+      <param name="pattern">北緯[０-９]+．[０-９]度[東西]経[０-９]+．[０-９]度</param>
+    </data>
+  </define>
+  <define name="latlon_deg_ja">
+    <data type="string">
+      <param name="pattern">北緯[０-９]+度[東西]経[０-９]+度</param>
+    </data>
+  </define>
+  <define name="latlon_multi_ja">
+    <data type="string">
+      <param name="pattern">(北緯[０-９]+度[東西]経[０-９]+度(、)?)+</param>
+    </data>
+  </define>
+  <define name="latlon_sexagesimal_ascii">
+    <data type="string">
+      <param name="pattern">\+\d\d\d\d[\-+]\d\d\d\d\d/</param>
+    </data>
+  </define>
+  <define name="latlon_sexagesimal_ja">
+    <data type="string">
+      <param name="pattern">北緯[０-９]{2}度[０-９]{2}分[東西]経[０-９]{3}度[０-９]{2}分</param>
+    </data>
+  </define>
+  <!-- - - - shorthands for unknown structure, to be eliminated someday - - - -->
   <define name="anyContent">
     <zeroOrMore>
       <choice>
