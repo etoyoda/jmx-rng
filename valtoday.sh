@@ -5,6 +5,7 @@ PATH=/usr/local/bin:/usr/bin:/bin
 work=$(cat ${HOME}/.workdir)
 : ${work:=/nwp/p3}
 addr=$(cat ${HOME}/.mailto)
+public=$(cat ${HOME}/.mailto-pub)
 arch=/nwp/a0
 scriptdir=$(dirname $0)
 
@@ -29,6 +30,7 @@ cd $wd
 exec 2> validate.log
 
 echo "#--- JMX nightly validation $today ---" >&2
+echo "# NOTE: failure does not always mean JMA message, rather problem of RNG more likely."
 
 tar xf $tgz
 
@@ -37,13 +39,15 @@ n=0
 for xml in ./urn*
 do
   let "n++" || :
-  if jing $rng $xml >&2
+  ln $xml input.xml
+  if jing $rng input.xml >&2
   then
     rm -f $xml
   else
     let "nfail++" || :
     echo "=== ${nfail}: $xml fails ===" >&2
   fi
+  rm -f input.xml
 done
 
 echo "# total messages: $n" >&2
@@ -51,7 +55,10 @@ echo "# failed messages: $nfail" >&2
 
 exec 2>&1
 
-mail --subject="JMX nightly validation $today" $addr < validate.log
+mail --subject="JMX nightly validation $today $n" $addr < validate.log
+if [ $n -gt 0 ]; then
+  mail --subject="JMX nightly validation $today $n" $public < validate.log
+fi
 
 cd $work
 test -d $work/$ym || mkdir $work/$ym
