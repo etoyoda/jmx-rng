@@ -1160,7 +1160,7 @@ case_vgsk50_kisetsu =
               attribute type { "国際地点番号" }
               ,xsd:positiveInteger
             }?
-            ,element jm:Location { xsd:NMTOKEN }
+            ,element jm:Location { xsd:token }
           }
         }
       }
@@ -1203,8 +1203,8 @@ case_vgsk55_seibutsu =
               attribute type { "国際地点番号" }
               ,xsd:positiveInteger
             }?
-            ,element jm:Location { xsd:NMTOKEN }
-            ,element jm:Status { xsd:NMTOKEN }
+            ,element jm:Location { xsd:token }
+            ,element jm:Status { xsd:token }
           }
         }
       }

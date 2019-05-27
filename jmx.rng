@@ -2159,7 +2159,7 @@
                 </element>
               </optional>
               <element name="jm:Location">
-                <data type="NMTOKEN"/>
+                <data type="token"/>
               </element>
             </element>
           </element>
@@ -2232,10 +2232,10 @@
                 </element>
               </optional>
               <element name="jm:Location">
-                <data type="NMTOKEN"/>
+                <data type="token"/>
               </element>
               <element name="jm:Status">
-                <data type="NMTOKEN"/>
+                <data type="token"/>
               </element>
             </element>
           </element>
