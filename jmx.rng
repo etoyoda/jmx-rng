@@ -3590,7 +3590,10 @@
               <optional>
                 <!-- present in enchi-jishin -->
                 <element name="js:Source">
-                  <value>ＰＴＷＣ</value>
+                  <choice>
+                    <value>ＰＴＷＣ</value>
+                    <value>ＵＳＧＳ</value>
+                  </choice>
                 </element>
               </optional>
             </element>

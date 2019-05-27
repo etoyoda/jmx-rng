@@ -1937,7 +1937,7 @@ case_vxse53_joho =
           } )?
         }
         # present in enchi-jishin
-,       element js:Source { "ＰＴＷＣ" }?
+,       element js:Source { "ＰＴＷＣ" | "ＵＳＧＳ" }?
       }
 ,     element je:Magnitude { anyContent }
     }
