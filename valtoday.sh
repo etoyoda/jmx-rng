@@ -30,7 +30,8 @@ cd $wd
 exec 2> validate.log
 
 echo "#--- JMX nightly validation $today ---" >&2
-echo "# NOTE: failure does not always mean JMA message, rather problem of RNG more likely."
+echo "# against RNG schema at https://github.com/etoyoda/jmx-rng " >&2
+echo "# NOTE: failure does not always mean JMA message, rather problem of RNG more likely." >&2
 
 tar xf $tgz
 
@@ -55,9 +56,9 @@ echo "# failed messages: $nfail" >&2
 
 exec 2>&1
 
-mail --subject="JMX nightly validation $today $n" $addr < validate.log
-if [ $n -gt 0 ]; then
-  mail --subject="JMX nightly validation $today $n" $public < validate.log
+mail --subject="JMX nightly validation $today $nfail/$n" $addr < validate.log
+if [ $nfail -gt 0 ]; then
+  mail --subject="JMX nightly validation $today $nfail/$n" $public < validate.log
 fi
 
 cd $work
