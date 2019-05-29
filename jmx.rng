@@ -39,12 +39,19 @@
       </element>
       <choice>
         <ref name="case_vgsk50_kisetsu"/>
+        <!-- 特殊気象報 [季節観測] -->
         <ref name="case_vgsk55_seibutsu"/>
+        <!-- 生物季節観測報告気象報 -->
         <ref name="case_vgsk60_tokushu"/>
+        <!-- 特殊気象報 -->
         <ref name="case_vguv50_shigaisen"/>
+        <!-- 紫外線観測データ -->
         <ref name="case_vpti50_joho"/>
+        <!-- 同一現象用平文情報 -->
         <ref name="case_vptw40_typhoon"/>
+        <!-- 台風解析・予報情報 -->
         <ref name="case_vpzu50_kaijou"/>
+        <!-- 全般海上警報 -->
         <ref name="case_vpcu50_kaijou"/>
         <ref name="case_vpcy50_umiyoho"/>
         <ref name="case_vpww50_keihou"/>
@@ -79,6 +86,7 @@
         <ref name="case_vfvo56_funsoku"/>
         <ref name="case_vpfd60_sochu"/>
         <ref name="case_vpck70_fortnight"/>
+        <!-- ２週間気温予報 -->
         <ref name="case_vpaw51_soten"/>
       </choice>
     </element>
@@ -136,6 +144,7 @@
     
   -->
   <define name="case_vpck70_fortnight">
+    <a:documentation>２週間気温予報</a:documentation>
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -1845,6 +1854,7 @@
       </element>
     </element>
   </define>
+  <!-- 全般海上警報 -->
   <define name="case_vpzu50_kaijou">
     <element name="jb:Head">
       <ref name="head_common"/>
@@ -1942,9 +1952,12 @@
                         </zeroOrMore>
                         <optional>
                           <element name="jm:ClassPart">
-                            <oneOrMore>
-                              <ref name="anyElement"/>
-                            </oneOrMore>
+                            <element name="je:TyphoonClass">
+                              <attribute name="type">
+                                <value>熱帯低気圧階級</value>
+                              </attribute>
+                              <ref name="list_typhoon_class_bare"/>
+                            </element>
                           </element>
                         </optional>
                         <optional>
@@ -2012,9 +2025,12 @@
                       </element>
                       <optional>
                         <element name="jm:ClassPart">
-                          <oneOrMore>
-                            <ref name="anyElement"/>
-                          </oneOrMore>
+                          <element name="je:TyphoonClass">
+                            <attribute name="type">
+                              <value>熱帯低気圧階級</value>
+                            </attribute>
+                            <ref name="list_typhoon_class_bare"/>
+                          </element>
                         </element>
                       </optional>
                       <optional>
@@ -2114,6 +2130,7 @@
     </element>
   </define>
   <define name="case_vgsk50_kisetsu">
+    <a:documentation>特殊気象報 [季節観測]</a:documentation>
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -2178,6 +2195,7 @@
     </element>
   </define>
   <define name="case_vgsk55_seibutsu">
+    <a:documentation>生物季節観測報告気象報</a:documentation>
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -2263,6 +2281,7 @@
     </element>
   </define>
   <define name="case_vgsk60_tokushu">
+    <a:documentation>特殊気象報</a:documentation>
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -2324,6 +2343,7 @@
     </element>
   </define>
   <define name="case_vguv50_shigaisen">
+    <a:documentation>紫外線観測データ</a:documentation>
     <element name="jb:Head">
       <ref name="head_common"/>
       <element name="jb:InfoKind">
@@ -2440,6 +2460,7 @@
       <!-- jm:MeteorologicalInfos -->
     </element>
   </define>
+  <!-- 同一現象用平文情報 -->
   <define name="case_vpti50_joho">
     <element name="jb:Head">
       <ref name="head_common"/>
@@ -2469,6 +2490,7 @@
       </element>
     </element>
   </define>
+  <!-- 台風解析・予報情報 -->
   <define name="case_vptw40_typhoon">
     <element name="jb:Head">
       <ref name="head_common"/>
@@ -4034,6 +4056,15 @@
     - - - list of possible tokens - - -
     
   -->
+  <define name="list_typhoon_class_bare">
+    <choice>
+      <value>台風</value>
+      <value>熱帯低気圧</value>
+      <value>ハリケーン</value>
+      <value>発達した熱帯低気圧</value>
+      <value>温帯低気圧</value>
+    </choice>
+  </define>
   <define name="list_typhoon_class">
     <choice>
       <value>台風(TY)</value>
