@@ -37,18 +37,19 @@ tar xf $tgz
 
 nfail=0
 n=0
-for xml in ./urn*
+for xml in urn*
 do
   let "n++" || :
-  ln $xml input.xml
-  if jing $rng input.xml >&2
+  tmpxml=/tmp/jmx-$(echo $xml | sed 's/urn:uuid://').xml
+  cp $xml $tmpxml
+  if jing $rng $tmpxml >&2
   then
     rm -f $xml
   else
     let "nfail++" || :
     echo "=== ${nfail}: $xml fails ===" >&2
   fi
-  rm -f input.xml
+  rm -f $tmpxml
 done
 
 echo "# total messages: $n" >&2
