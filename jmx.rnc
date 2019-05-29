@@ -2284,6 +2284,7 @@ list_kaijou_proptype =
 
 list_kaijou_proptype2 =
   "低気圧" | "高気圧" | "温暖前線" | "寒冷前線"
+  | "閉塞前線"
   | "停滞前線"
   | "熱帯低気圧"
   | "低圧部"
