@@ -25,13 +25,13 @@ start = element jx:Report {
 ,   element jx:EditorialOffice { list_edof }
 ,   element jx:PublishingOffice { list_pbof }
   }
-, (case_vgsk50_kisetsu
-  |case_vgsk55_seibutsu
-  |case_vgsk60_tokushu
-  |case_vguv50_shigaisen
-  |case_vpti50_joho
-  |case_vptw40_typhoon
-  |case_vpzu50_kaijou
+, (case_vgsk50_kisetsu # 特殊気象報 [季節観測]
+  |case_vgsk55_seibutsu # 生物季節観測報告気象報
+  |case_vgsk60_tokushu # 特殊気象報
+  |case_vguv50_shigaisen # 紫外線観測データ
+  |case_vpti50_joho # 同一現象用平文情報
+  |case_vptw40_typhoon # 台風解析・予報情報
+  |case_vpzu50_kaijou # 全般海上警報
   |case_vpcu50_kaijou
   |case_vpcy50_umiyoho
   |case_vpww50_keihou
@@ -65,7 +65,7 @@ start = element jx:Report {
   |case_vfvo53_ashfall
   |case_vfvo56_funsoku
   |case_vpfd60_sochu
-  |case_vpck70_fortnight
+  |case_vpck70_fortnight # ２週間気温予報
   |case_vpaw51_soten
   )
 }
@@ -89,6 +89,7 @@ head_common =
 #
 
 
+## ２週間気温予報
 case_vpck70_fortnight =
   element jb:Head {
     head_common
@@ -1030,6 +1031,7 @@ info_vpzu50_kaijou_clear =
     }
   }
 
+# 全般海上警報
 case_vpzu50_kaijou =
   element jb:Head {
     head_common
@@ -1068,7 +1070,12 @@ case_vpzu50_kaijou =
              ,element jm:WarningAreaPart {
                 kaijou_windcircle
               }*
-             ,element jm:ClassPart { anyElement+ }?
+             ,element jm:ClassPart {
+                element je:TyphoonClass {
+                  attribute type { "熱帯低気圧階級" },
+                  list_typhoon_class_bare
+                }
+              }?
              ,element jm:TyphoonNamePart { anyElement+ }?
              ,element jm:CenterPart { anyElement+ }?
              ,element jm:CoordinatePart { anyElement+ }?
@@ -1090,7 +1097,12 @@ case_vpzu50_kaijou =
             element jm:ClassName { "気圧系" | "前線" }
            ,element jm:Property {
               element jm:Type { list_kaijou_proptype2 }
-             ,element jm:ClassPart { anyElement+ }?
+             ,element jm:ClassPart {
+                element je:TyphoonClass {
+                  attribute type { "熱帯低気圧階級" },
+                  list_typhoon_class_bare
+                }
+              }?
              ,element jm:CenterPart { anyElement+ }?
              ,element jm:Text { text }?
             }*
@@ -1133,6 +1145,7 @@ kaijou_windcircle =
       radii_of_wind
     }
 
+## 特殊気象報 [季節観測]
 case_vgsk50_kisetsu =
   element jb:Head {
     head_common
@@ -1173,6 +1186,7 @@ case_vgsk50_kisetsu =
     }
   }
 
+## 生物季節観測報告気象報
 case_vgsk55_seibutsu =
   element jb:Head {
     head_common
@@ -1218,6 +1232,7 @@ case_vgsk55_seibutsu =
     }
   }
 
+## 特殊気象報
 case_vgsk60_tokushu =
   element jb:Head {
     head_common
@@ -1257,6 +1272,7 @@ case_vgsk60_tokushu =
     }
   }
 
+## 紫外線観測データ
 case_vguv50_shigaisen =
   element jb:Head {
     head_common
@@ -1322,6 +1338,7 @@ case_vguv50_shigaisen =
     } # jm:MeteorologicalInfos
   }
 
+# 同一現象用平文情報
 case_vpti50_joho =
   element jb:Head {
     head_common
@@ -1341,6 +1358,7 @@ case_vpti50_joho =
     }
   }
 
+# 台風解析・予報情報
 case_vptw40_typhoon =
   element jb:Head {
     head_common
@@ -2157,6 +2175,13 @@ case_vfvo53_ashfall =
 #
 # --- list of possible tokens ---
 #
+
+list_typhoon_class_bare =
+  "台風"
+  | "熱帯低気圧"
+  | "ハリケーン"
+  | "発達した熱帯低気圧"
+  | "温帯低気圧"
 
 list_typhoon_class =
   "台風(TY)"
