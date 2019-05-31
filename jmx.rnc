@@ -34,7 +34,7 @@ start = element jx:Report {
   |case_vpzu50_kaijou # 全般海上警報
   |case_vpcu50_kaijou
   |case_vpcy50_umiyoho
-  |case_vpww50_keihou
+  |case_vpww50_keihou # 気象警報・注意報
   |case_vxko_kasen
   |case_vxko_emptybody
   |case_vxww50_dosha
@@ -708,31 +708,47 @@ case_vxko_kasen =
     }
   }
 
-infos_vpww50_keihou =
+item_keihou =
+  element jb:Item {
+    element jb:Kind {
+      element jb:Name { token }
+     ,element jb:Code { token }
+     ,element jb:Condition { token }?
+    }+
+   ,element jb:Areas {
+      attribute codeType { token }
+     ,element jb:Area {
+        element jb:Name { token }
+       ,element jb:Code { token }
+      }+
+    }
+  }
+
+infos_keihou =
   element jb:Information {
     attribute type {
       "気象警報・注意報（府県予報区等）"}
-   ,anyElement+
+   ,item_keihou+
   }
  ,element jb:Information {
     attribute type {
       "気象警報・注意報（一次細分区域等）"}
-   ,anyElement+
+   ,item_keihou+
   }
  ,element jb:Information {
     attribute type {
       "気象警報・注意報（市町村等をまとめた地域等）"}
-   ,anyElement+
+   ,item_keihou+
   }
  ,element jb:Information {
     attribute type {
       "気象警報・注意報（市町村等）"}
-   ,anyElement+
+   ,item_keihou+
   }
  ,element jb:Information {
     attribute type {
       "気象警報・注意報（警報注意報種別毎）"}
-   ,anyElement+
+   ,item_keihou+
   }?
   # may be missing in case of lifting
 
@@ -743,7 +759,7 @@ case_vpww50_keihou =
 ,   element jb:InfoKindVersion { xsd:token }
 ,   element jb:Headline {
       element jb:Text { xsd:string }
-,     infos_vpww50_keihou
+,     infos_keihou
     }
   }
 , element jm:Body {

@@ -55,6 +55,7 @@
         <ref name="case_vpcu50_kaijou"/>
         <ref name="case_vpcy50_umiyoho"/>
         <ref name="case_vpww50_keihou"/>
+        <!-- 気象警報・注意報 -->
         <ref name="case_vxko_kasen"/>
         <ref name="case_vxko_emptybody"/>
         <ref name="case_vxww50_dosha"/>
@@ -1254,13 +1255,47 @@
       </element>
     </element>
   </define>
-  <define name="infos_vpww50_keihou">
+  <define name="item_keihou">
+    <element name="jb:Item">
+      <oneOrMore>
+        <element name="jb:Kind">
+          <element name="jb:Name">
+            <data type="token" datatypeLibrary=""/>
+          </element>
+          <element name="jb:Code">
+            <data type="token" datatypeLibrary=""/>
+          </element>
+          <optional>
+            <element name="jb:Condition">
+              <data type="token" datatypeLibrary=""/>
+            </element>
+          </optional>
+        </element>
+      </oneOrMore>
+      <element name="jb:Areas">
+        <attribute name="codeType">
+          <data type="token" datatypeLibrary=""/>
+        </attribute>
+        <oneOrMore>
+          <element name="jb:Area">
+            <element name="jb:Name">
+              <data type="token" datatypeLibrary=""/>
+            </element>
+            <element name="jb:Code">
+              <data type="token" datatypeLibrary=""/>
+            </element>
+          </element>
+        </oneOrMore>
+      </element>
+    </element>
+  </define>
+  <define name="infos_keihou">
     <element name="jb:Information">
       <attribute name="type">
         <value>気象警報・注意報（府県予報区等）</value>
       </attribute>
       <oneOrMore>
-        <ref name="anyElement"/>
+        <ref name="item_keihou"/>
       </oneOrMore>
     </element>
     <element name="jb:Information">
@@ -1268,7 +1303,7 @@
         <value>気象警報・注意報（一次細分区域等）</value>
       </attribute>
       <oneOrMore>
-        <ref name="anyElement"/>
+        <ref name="item_keihou"/>
       </oneOrMore>
     </element>
     <element name="jb:Information">
@@ -1276,7 +1311,7 @@
         <value>気象警報・注意報（市町村等をまとめた地域等）</value>
       </attribute>
       <oneOrMore>
-        <ref name="anyElement"/>
+        <ref name="item_keihou"/>
       </oneOrMore>
     </element>
     <element name="jb:Information">
@@ -1284,7 +1319,7 @@
         <value>気象警報・注意報（市町村等）</value>
       </attribute>
       <oneOrMore>
-        <ref name="anyElement"/>
+        <ref name="item_keihou"/>
       </oneOrMore>
     </element>
     <optional>
@@ -1293,7 +1328,7 @@
           <value>気象警報・注意報（警報注意報種別毎）</value>
         </attribute>
         <oneOrMore>
-          <ref name="anyElement"/>
+          <ref name="item_keihou"/>
         </oneOrMore>
       </element>
     </optional>
@@ -1312,7 +1347,7 @@
         <element name="jb:Text">
           <data type="string"/>
         </element>
-        <ref name="infos_vpww50_keihou"/>
+        <ref name="infos_keihou"/>
       </element>
     </element>
     <element name="jm:Body">
