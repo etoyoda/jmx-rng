@@ -1,18 +1,16 @@
 #!/usr/bin/make -f
 test: jmx.rng samples
-	bash validate.sh
+	cd samples && $(MAKE) validate
 
 jmx.rng: jmx.rnc
 	trang jmx.rnc jmx.rng
 
 samples:
 	bash getsamp.sh
+	bash mkmf.sh
 
 clean: reset
 	rm -rf samples
 
 reset:
-	rm -f .hush.*
-
-reset-kaijou:
-	rm -f .hush.11* .hush.12* .hush.13*
+	rm -f samples/*.ok
