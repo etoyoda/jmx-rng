@@ -724,6 +724,172 @@ item_keihou =
     }
   }
 
+je_winddir_keihou = element je:WindDirection {
+              attribute type { token }
+             ,attribute unit { token }
+             ,attribute description { token }
+             ,token
+            }
+
+je_waveheight_keihou = element je:WaveHeight {
+                attribute type { token }
+               ,attribute unit { token }
+               ,attribute description { token }
+               ,xsd:float
+              }
+
+je_tidallevel_keihou = element je:TidalLevel {
+                attribute type { token }
+               ,attribute unit { token }
+               ,attribute description { token }
+               ,xsd:float
+              }
+
+je_visibility_keihou = element je:Visibility {
+                attribute type { token }
+               ,attribute unit { token }
+               ,attribute description { token }
+               ,attribute condition { token }?
+               ,xsd:nonNegativeInteger
+              }
+
+je_windspeed_keihou = element je:WindSpeed {
+                attribute type { token }
+               ,attribute unit { token }
+               ,attribute description { token }
+               ,xsd:nonNegativeInteger
+              }
+
+je_snowfalldepth_keihou= element je:SnowfallDepth {
+                attribute type { token }
+               ,attribute unit { token }
+               ,attribute description { token }
+               ,xsd:nonNegativeInteger
+              }
+
+je_humidity_keihou= element je:Humidity {
+                attribute type { token }
+               ,attribute unit { token }
+               ,attribute description { token }
+               ,xsd:nonNegativeInteger
+              }
+
+kikan_keihou = (
+  element jm:ZoneTime { element jm:Date { token } ,element jm:Term { token } }?
+ ,element jm:StartTime { element jm:Date { token } ,element jm:Term { token } }?
+ ,element jm:EndTime { element jm:Date { token } ,element jm:Term { token }? }?
+ ,element jm:OverTime { token }?
+)
+
+mitem_keihou =
+  element jm:Item {
+   (
+    element jm:Kind {
+      element jm:Status { "発表警報・注意報はなし" }
+    }
+   ,element jm:Area {
+      element jm:Name { token }
+     ,element jm:Code { token }
+    }
+   )|(
+    element jm:Kind {
+      element jm:Name { token }
+     ,element jm:Code { token }
+     ,element jm:Status { token }
+     ,element jm:WarningNotice {
+        kikan_keihou
+       ,element jm:Note { token }
+      }?
+     ,element jm:Condition { token }?
+     ,element jm:LastKind { anyElement+ }?
+     ,element jm:NextKinds { anyElement+ }?
+     ,element jm:Attention { element jm:Note { token }+ }?
+     ,element jm:Addition { element jm:Note { token }+ }?
+     ,element jm:Property {
+        element jm:Type { token }
+       ,element jm:WarningPeriod { kikan_keihou }?
+       ,element jm:AdvisoryPeriod { kikan_keihou }
+       ,element jm:PeakTime { 
+          element jm:Date { token }
+         ,element jm:Term { token }
+        }?
+       ,element jm:PrecipitationPart {
+          element jm:Base {
+            element je:Precipitation {
+              attribute type { token }
+             ,attribute unit { token }
+             ,attribute description { token }
+             ,xsd:nonNegativeInteger
+            }
+          }
+        }?
+       ,element jm:WindDirectionPart {
+          element jm:Base { je_winddir_keihou }
+         ,element jm:Becoming { je_winddir_keihou }?
+        }?
+       ,element jm:WindSpeedPart {
+          element jm:Base {
+            element jm:Local {
+              element jm:AreaName { token }
+             ,je_windspeed_keihou
+            }+
+          | je_windspeed_keihou
+          }
+        }?
+       ,element jm:WaveHeightPart {
+          element jm:Base {
+            element jm:Local {
+              element jm:AreaName { token }
+             ,je_waveheight_keihou
+            }+
+          | je_waveheight_keihou
+          }
+        }?
+       ,element jm:TidalLevelPart {
+          element jm:Base {
+            element jm:Local {
+              element jm:AreaName { token }
+             ,je_tidallevel_keihou
+            }+
+          | je_tidallevel_keihou
+          }
+        }?
+       ,element jm:VisibilityPart {
+          element jm:Base {
+            element jm:Local {
+              element jm:AreaName { token }
+             ,je_visibility_keihou
+            }+
+          | je_visibility_keihou
+          }
+        }?
+       ,element jm:SnowfallDepthPart {
+          element jm:Base {
+            element jm:Local {
+              element jm:AreaName { token }
+             ,je_snowfalldepth_keihou
+            }+
+          | je_snowfalldepth_keihou
+          }
+        }?
+       ,element jm:HumidityPart {
+          element jm:Base {
+            je_humidity_keihou
+           ,je_humidity_keihou
+          }
+        }?
+      }*
+    }+
+   ,element jm:Area {
+      element jm:Name { token }
+     ,element jm:Code { token }
+    }
+   ,element jm:ChangeStatus { token }
+   ,element jm:FullStatus { token }?
+   ,element jm:EditingMark { xsd:nonNegativeInteger }?
+   )
+  }
+
 infos_keihou =
   element jb:Information {
     attribute type {
@@ -767,22 +933,22 @@ case_vpww50_keihou =
    ,element jm:Warning {
       attribute type {
         "気象警報・注意報（府県予報区等）"}
-     ,anyElement+
+     ,mitem_keihou+
     }
    ,element jm:Warning {
       attribute type {
         "気象警報・注意報（一次細分区域等）"}
-     ,anyElement+
+     ,mitem_keihou+
     }
    ,element jm:Warning {
       attribute type {
         "気象警報・注意報（市町村等をまとめた地域等）"}
-     ,anyElement+
+     ,mitem_keihou+
     }
    ,element jm:Warning {
       attribute type {
         "気象警報・注意報（市町村等）"}
-     ,anyElement+
+     ,mitem_keihou+
     }
    ,element jm:MeteorologicalInfos {
       attribute type { "量的予想時系列（市町村等）" }

@@ -1289,6 +1289,398 @@
       </element>
     </element>
   </define>
+  <define name="je_winddir_keihou">
+    <element name="je:WindDirection">
+      <attribute name="type">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <attribute name="unit">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <attribute name="description">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <data type="token" datatypeLibrary=""/>
+    </element>
+  </define>
+  <define name="je_waveheight_keihou">
+    <element name="je:WaveHeight">
+      <attribute name="type">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <attribute name="unit">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <attribute name="description">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <data type="float"/>
+    </element>
+  </define>
+  <define name="je_tidallevel_keihou">
+    <element name="je:TidalLevel">
+      <attribute name="type">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <attribute name="unit">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <attribute name="description">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <data type="float"/>
+    </element>
+  </define>
+  <define name="je_visibility_keihou">
+    <element name="je:Visibility">
+      <attribute name="type">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <attribute name="unit">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <attribute name="description">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <optional>
+        <attribute name="condition">
+          <data type="token" datatypeLibrary=""/>
+        </attribute>
+      </optional>
+      <data type="nonNegativeInteger"/>
+    </element>
+  </define>
+  <define name="je_windspeed_keihou">
+    <element name="je:WindSpeed">
+      <attribute name="type">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <attribute name="unit">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <attribute name="description">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <data type="nonNegativeInteger"/>
+    </element>
+  </define>
+  <define name="je_snowfalldepth_keihou">
+    <element name="je:SnowfallDepth">
+      <attribute name="type">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <attribute name="unit">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <attribute name="description">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <data type="nonNegativeInteger"/>
+    </element>
+  </define>
+  <define name="je_humidity_keihou">
+    <element name="je:Humidity">
+      <attribute name="type">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <attribute name="unit">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <attribute name="description">
+        <data type="token" datatypeLibrary=""/>
+      </attribute>
+      <data type="nonNegativeInteger"/>
+    </element>
+  </define>
+  <define name="kikan_keihou">
+    <optional>
+      <element name="jm:ZoneTime">
+        <element name="jm:Date">
+          <data type="token" datatypeLibrary=""/>
+        </element>
+        <element name="jm:Term">
+          <data type="token" datatypeLibrary=""/>
+        </element>
+      </element>
+    </optional>
+    <optional>
+      <element name="jm:StartTime">
+        <element name="jm:Date">
+          <data type="token" datatypeLibrary=""/>
+        </element>
+        <element name="jm:Term">
+          <data type="token" datatypeLibrary=""/>
+        </element>
+      </element>
+    </optional>
+    <optional>
+      <element name="jm:EndTime">
+        <element name="jm:Date">
+          <data type="token" datatypeLibrary=""/>
+        </element>
+        <optional>
+          <element name="jm:Term">
+            <data type="token" datatypeLibrary=""/>
+          </element>
+        </optional>
+      </element>
+    </optional>
+    <optional>
+      <element name="jm:OverTime">
+        <data type="token" datatypeLibrary=""/>
+      </element>
+    </optional>
+  </define>
+  <define name="mitem_keihou">
+    <element name="jm:Item">
+      <choice>
+        <group>
+          <element name="jm:Kind">
+            <element name="jm:Status">
+              <value>発表警報・注意報はなし</value>
+            </element>
+          </element>
+          <element name="jm:Area">
+            <element name="jm:Name">
+              <data type="token" datatypeLibrary=""/>
+            </element>
+            <element name="jm:Code">
+              <data type="token" datatypeLibrary=""/>
+            </element>
+          </element>
+        </group>
+        <group>
+          <oneOrMore>
+            <element name="jm:Kind">
+              <element name="jm:Name">
+                <data type="token" datatypeLibrary=""/>
+              </element>
+              <element name="jm:Code">
+                <data type="token" datatypeLibrary=""/>
+              </element>
+              <element name="jm:Status">
+                <data type="token" datatypeLibrary=""/>
+              </element>
+              <optional>
+                <element name="jm:WarningNotice">
+                  <ref name="kikan_keihou"/>
+                  <element name="jm:Note">
+                    <data type="token" datatypeLibrary=""/>
+                  </element>
+                </element>
+              </optional>
+              <optional>
+                <element name="jm:Condition">
+                  <data type="token" datatypeLibrary=""/>
+                </element>
+              </optional>
+              <optional>
+                <element name="jm:LastKind">
+                  <oneOrMore>
+                    <ref name="anyElement"/>
+                  </oneOrMore>
+                </element>
+              </optional>
+              <optional>
+                <element name="jm:NextKinds">
+                  <oneOrMore>
+                    <ref name="anyElement"/>
+                  </oneOrMore>
+                </element>
+              </optional>
+              <optional>
+                <element name="jm:Attention">
+                  <oneOrMore>
+                    <element name="jm:Note">
+                      <data type="token" datatypeLibrary=""/>
+                    </element>
+                  </oneOrMore>
+                </element>
+              </optional>
+              <optional>
+                <element name="jm:Addition">
+                  <oneOrMore>
+                    <element name="jm:Note">
+                      <data type="token" datatypeLibrary=""/>
+                    </element>
+                  </oneOrMore>
+                </element>
+              </optional>
+              <zeroOrMore>
+                <element name="jm:Property">
+                  <element name="jm:Type">
+                    <data type="token" datatypeLibrary=""/>
+                  </element>
+                  <optional>
+                    <element name="jm:WarningPeriod">
+                      <ref name="kikan_keihou"/>
+                    </element>
+                  </optional>
+                  <element name="jm:AdvisoryPeriod">
+                    <ref name="kikan_keihou"/>
+                  </element>
+                  <optional>
+                    <element name="jm:PeakTime">
+                      <element name="jm:Date">
+                        <data type="token" datatypeLibrary=""/>
+                      </element>
+                      <element name="jm:Term">
+                        <data type="token" datatypeLibrary=""/>
+                      </element>
+                    </element>
+                  </optional>
+                  <optional>
+                    <element name="jm:PrecipitationPart">
+                      <element name="jm:Base">
+                        <element name="je:Precipitation">
+                          <attribute name="type">
+                            <data type="token" datatypeLibrary=""/>
+                          </attribute>
+                          <attribute name="unit">
+                            <data type="token" datatypeLibrary=""/>
+                          </attribute>
+                          <attribute name="description">
+                            <data type="token" datatypeLibrary=""/>
+                          </attribute>
+                          <data type="nonNegativeInteger"/>
+                        </element>
+                      </element>
+                    </element>
+                  </optional>
+                  <optional>
+                    <element name="jm:WindDirectionPart">
+                      <element name="jm:Base">
+                        <ref name="je_winddir_keihou"/>
+                      </element>
+                      <optional>
+                        <element name="jm:Becoming">
+                          <ref name="je_winddir_keihou"/>
+                        </element>
+                      </optional>
+                    </element>
+                  </optional>
+                  <optional>
+                    <element name="jm:WindSpeedPart">
+                      <element name="jm:Base">
+                        <choice>
+                          <oneOrMore>
+                            <element name="jm:Local">
+                              <element name="jm:AreaName">
+                                <data type="token" datatypeLibrary=""/>
+                              </element>
+                              <ref name="je_windspeed_keihou"/>
+                            </element>
+                          </oneOrMore>
+                          <ref name="je_windspeed_keihou"/>
+                        </choice>
+                      </element>
+                    </element>
+                  </optional>
+                  <optional>
+                    <element name="jm:WaveHeightPart">
+                      <element name="jm:Base">
+                        <choice>
+                          <oneOrMore>
+                            <element name="jm:Local">
+                              <element name="jm:AreaName">
+                                <data type="token" datatypeLibrary=""/>
+                              </element>
+                              <ref name="je_waveheight_keihou"/>
+                            </element>
+                          </oneOrMore>
+                          <ref name="je_waveheight_keihou"/>
+                        </choice>
+                      </element>
+                    </element>
+                  </optional>
+                  <optional>
+                    <element name="jm:TidalLevelPart">
+                      <element name="jm:Base">
+                        <choice>
+                          <oneOrMore>
+                            <element name="jm:Local">
+                              <element name="jm:AreaName">
+                                <data type="token" datatypeLibrary=""/>
+                              </element>
+                              <ref name="je_tidallevel_keihou"/>
+                            </element>
+                          </oneOrMore>
+                          <ref name="je_tidallevel_keihou"/>
+                        </choice>
+                      </element>
+                    </element>
+                  </optional>
+                  <optional>
+                    <element name="jm:VisibilityPart">
+                      <element name="jm:Base">
+                        <choice>
+                          <oneOrMore>
+                            <element name="jm:Local">
+                              <element name="jm:AreaName">
+                                <data type="token" datatypeLibrary=""/>
+                              </element>
+                              <ref name="je_visibility_keihou"/>
+                            </element>
+                          </oneOrMore>
+                          <ref name="je_visibility_keihou"/>
+                        </choice>
+                      </element>
+                    </element>
+                  </optional>
+                  <optional>
+                    <element name="jm:SnowfallDepthPart">
+                      <element name="jm:Base">
+                        <choice>
+                          <oneOrMore>
+                            <element name="jm:Local">
+                              <element name="jm:AreaName">
+                                <data type="token" datatypeLibrary=""/>
+                              </element>
+                              <ref name="je_snowfalldepth_keihou"/>
+                            </element>
+                          </oneOrMore>
+                          <ref name="je_snowfalldepth_keihou"/>
+                        </choice>
+                      </element>
+                    </element>
+                  </optional>
+                  <optional>
+                    <element name="jm:HumidityPart">
+                      <element name="jm:Base">
+                        <ref name="je_humidity_keihou"/>
+                        <ref name="je_humidity_keihou"/>
+                      </element>
+                    </element>
+                  </optional>
+                </element>
+              </zeroOrMore>
+            </element>
+          </oneOrMore>
+          <element name="jm:Area">
+            <element name="jm:Name">
+              <data type="token" datatypeLibrary=""/>
+            </element>
+            <element name="jm:Code">
+              <data type="token" datatypeLibrary=""/>
+            </element>
+          </element>
+          <element name="jm:ChangeStatus">
+            <data type="token" datatypeLibrary=""/>
+          </element>
+          <optional>
+            <element name="jm:FullStatus">
+              <data type="token" datatypeLibrary=""/>
+            </element>
+          </optional>
+          <optional>
+            <element name="jm:EditingMark">
+              <data type="nonNegativeInteger"/>
+            </element>
+          </optional>
+        </group>
+      </choice>
+    </element>
+  </define>
   <define name="infos_keihou">
     <element name="jb:Information">
       <attribute name="type">
@@ -1361,7 +1753,7 @@
           <value>気象警報・注意報（府県予報区等）</value>
         </attribute>
         <oneOrMore>
-          <ref name="anyElement"/>
+          <ref name="mitem_keihou"/>
         </oneOrMore>
       </element>
       <element name="jm:Warning">
@@ -1369,7 +1761,7 @@
           <value>気象警報・注意報（一次細分区域等）</value>
         </attribute>
         <oneOrMore>
-          <ref name="anyElement"/>
+          <ref name="mitem_keihou"/>
         </oneOrMore>
       </element>
       <element name="jm:Warning">
@@ -1377,7 +1769,7 @@
           <value>気象警報・注意報（市町村等をまとめた地域等）</value>
         </attribute>
         <oneOrMore>
-          <ref name="anyElement"/>
+          <ref name="mitem_keihou"/>
         </oneOrMore>
       </element>
       <element name="jm:Warning">
@@ -1385,7 +1777,7 @@
           <value>気象警報・注意報（市町村等）</value>
         </attribute>
         <oneOrMore>
-          <ref name="anyElement"/>
+          <ref name="mitem_keihou"/>
         </oneOrMore>
       </element>
       <optional>
