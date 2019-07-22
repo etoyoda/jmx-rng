@@ -208,6 +208,7 @@ case_vzsa50_tenkizu =
           element jm:Kind {
             tenkizu_isobar |tenkizu_hilo |tenkizu_zensen
           }
+        | tenkizu_taifuu
         }+
       }
     }
@@ -247,6 +248,16 @@ tenkizu_hilo  = element jm:Property {
     }
 ,   element jm:CenterPart { anyElement+ }
   }
+
+tenkizu_taifuu  = element jm:Kind {
+    element jm:Property {
+      element jm:Type {
+        "台風"
+      }
+     ,element jm:CenterPart { anyElement+ }
+    }
+  }
+ ,element jm:Kind { anyElement+ }+
 
 tenkizu_zensen = element jm:Property {
     element jm:Type { 

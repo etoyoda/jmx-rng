@@ -348,13 +348,16 @@
           </element>
           <oneOrMore>
             <element name="jm:Item">
-              <element name="jm:Kind">
-                <choice>
-                  <ref name="tenkizu_isobar"/>
-                  <ref name="tenkizu_hilo"/>
-                  <ref name="tenkizu_zensen"/>
-                </choice>
-              </element>
+              <choice>
+                <element name="jm:Kind">
+                  <choice>
+                    <ref name="tenkizu_isobar"/>
+                    <ref name="tenkizu_hilo"/>
+                    <ref name="tenkizu_zensen"/>
+                  </choice>
+                </element>
+                <ref name="tenkizu_taifuu"/>
+              </choice>
             </element>
           </oneOrMore>
         </element>
@@ -424,6 +427,27 @@
         </oneOrMore>
       </element>
     </element>
+  </define>
+  <define name="tenkizu_taifuu">
+    <element name="jm:Kind">
+      <element name="jm:Property">
+        <element name="jm:Type">
+          <value>台風</value>
+        </element>
+        <element name="jm:CenterPart">
+          <oneOrMore>
+            <ref name="anyElement"/>
+          </oneOrMore>
+        </element>
+      </element>
+    </element>
+    <oneOrMore>
+      <element name="jm:Kind">
+        <oneOrMore>
+          <ref name="anyElement"/>
+        </oneOrMore>
+      </element>
+    </oneOrMore>
   </define>
   <define name="tenkizu_zensen">
     <element name="jm:Property">
