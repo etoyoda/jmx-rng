@@ -67,6 +67,7 @@ start = element jx:Report {
   |case_vpfd60_sochu
   |case_vpck70_fortnight # ２週間気温予報
   |case_vpaw51_soten
+  |case_kikendo
   )
 }
 
@@ -88,6 +89,24 @@ head_common =
 # --- rules using jm:Body （大気海洋系情報）
 #
 
+case_kikendo =
+  element jb:Head {
+    head_common
+,   element jb:InfoKind { "気象危険度通知" }
+,   element jb:InfoKindVersion { xsd:token }
+,   element jb:Headline {
+      element jb:Text { empty }
+    }
+  }
+, element jm:Body {
+    element jm:MeteorologicalInfos {
+      attribute type { "区域予報" }
+     ,element jm:MeteorologicalInfo {
+        element jm:DateTime { dateTime_si }
+       ,anyElement+
+      }+
+    }+
+  }
 
 ## ２週間気温予報
 case_vpck70_fortnight =
@@ -796,14 +815,14 @@ mitem_keihou =
       element jm:Name { token }
      ,element jm:Code { token }
      ,element jm:Status { token }
-     ,element jm:WarningNotice {
-        kikan_keihou
-       ,element jm:Note { token }
-      }?
      ,element jm:Condition { token }?
      ,element jm:LastKind { anyElement+ }?
      ,element jm:NextKinds { anyElement+ }?
      ,element jm:Attention { element jm:Note { token }+ }?
+     ,element jm:WarningNotice {
+        kikan_keihou
+       ,element jm:Note { token }
+      }?
      ,element jm:Addition { element jm:Note { token }+ }?
      ,element jm:Property {
         element jm:Type { token }
@@ -2576,6 +2595,7 @@ list_title="季節観測"
 |"全般季節予報（２週間気温予報）"
 |"地方季節予報（２週間気温予報）"
 |"早期天候情報"
+|"大雨危険度通知"
 
 ### === simple data types ===
 

@@ -89,6 +89,7 @@
         <ref name="case_vpck70_fortnight"/>
         <!-- ２週間気温予報 -->
         <ref name="case_vpaw51_soten"/>
+        <ref name="case_kikendo"/>
       </choice>
     </element>
   </start>
@@ -144,6 +145,41 @@
     - - - rules using jm:Body （大気海洋系情報）
     
   -->
+  <define name="case_kikendo">
+    <element name="jb:Head">
+      <ref name="head_common"/>
+      <element name="jb:InfoKind">
+        <value>気象危険度通知</value>
+      </element>
+      <element name="jb:InfoKindVersion">
+        <data type="token"/>
+      </element>
+      <element name="jb:Headline">
+        <element name="jb:Text">
+          <empty/>
+        </element>
+      </element>
+    </element>
+    <element name="jm:Body">
+      <oneOrMore>
+        <element name="jm:MeteorologicalInfos">
+          <attribute name="type">
+            <value>区域予報</value>
+          </attribute>
+          <oneOrMore>
+            <element name="jm:MeteorologicalInfo">
+              <element name="jm:DateTime">
+                <ref name="dateTime_si"/>
+              </element>
+              <oneOrMore>
+                <ref name="anyElement"/>
+              </oneOrMore>
+            </element>
+          </oneOrMore>
+        </element>
+      </oneOrMore>
+    </element>
+  </define>
   <define name="case_vpck70_fortnight">
     <a:documentation>２週間気温予報</a:documentation>
     <element name="jb:Head">
@@ -1462,14 +1498,6 @@
                 <data type="token" datatypeLibrary=""/>
               </element>
               <optional>
-                <element name="jm:WarningNotice">
-                  <ref name="kikan_keihou"/>
-                  <element name="jm:Note">
-                    <data type="token" datatypeLibrary=""/>
-                  </element>
-                </element>
-              </optional>
-              <optional>
                 <element name="jm:Condition">
                   <data type="token" datatypeLibrary=""/>
                 </element>
@@ -1495,6 +1523,14 @@
                       <data type="token" datatypeLibrary=""/>
                     </element>
                   </oneOrMore>
+                </element>
+              </optional>
+              <optional>
+                <element name="jm:WarningNotice">
+                  <ref name="kikan_keihou"/>
+                  <element name="jm:Note">
+                    <data type="token" datatypeLibrary=""/>
+                  </element>
                 </element>
               </optional>
               <optional>
@@ -4747,6 +4783,7 @@
       <value>全般季節予報（２週間気温予報）</value>
       <value>地方季節予報（２週間気温予報）</value>
       <value>早期天候情報</value>
+      <value>大雨危険度通知</value>
     </choice>
   </define>
   <define name="pat_katakana">
