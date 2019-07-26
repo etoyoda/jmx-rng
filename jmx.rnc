@@ -221,7 +221,7 @@ case_vzsa50_tenkizu =
 ,       element jm:Item {
           tenkizu_polygon |tenkizu_areacode
           |tenkizu_hatch |tenkizu_pointwind
-        }+
+        }*
       }
     }?
   }
