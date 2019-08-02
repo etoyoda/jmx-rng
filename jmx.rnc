@@ -840,7 +840,7 @@ mitem_keihou =
        ,element jm:WarningPeriod { kikan_keihou }?
        ,element jm:AdvisoryPeriod { kikan_keihou }
        ,element jm:PeakTime { 
-          element jm:Date { token }
+          element jm:Date { token }?
          ,element jm:Term { token }
         }?
        ,element jm:PrecipitationPart {

@@ -1581,9 +1581,11 @@
                   </element>
                   <optional>
                     <element name="jm:PeakTime">
-                      <element name="jm:Date">
-                        <data type="token" datatypeLibrary=""/>
-                      </element>
+                      <optional>
+                        <element name="jm:Date">
+                          <data type="token" datatypeLibrary=""/>
+                        </element>
+                      </optional>
                       <element name="jm:Term">
                         <data type="token" datatypeLibrary=""/>
                       </element>
