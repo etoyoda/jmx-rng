@@ -804,11 +804,11 @@ je_humidity_keihou= element je:Humidity {
                ,xsd:nonNegativeInteger
               }
 
-kikan_keihou = (
-  element jm:ZoneTime { element jm:Date { token } ,element jm:Term { token } }?
- ,element jm:StartTime { element jm:Date { token } ,element jm:Term { token } }?
+jmx_m_type_Period = (
+  element jm:StartTime { element jm:Date { token } ,element jm:Term { token } }?
  ,element jm:EndTime { element jm:Date { token } ,element jm:Term { token }? }?
  ,element jm:OverTime { token }?
+ ,element jm:ZoneTime { element jm:Date { token } ,element jm:Term { token } }?
 )
 
 mitem_keihou =
@@ -831,14 +831,14 @@ mitem_keihou =
      ,element jm:NextKinds { anyElement+ }?
      ,element jm:Attention { element jm:Note { token }+ }?
      ,element jm:WarningNotice {
-        kikan_keihou
+        jmx_m_type_Period
        ,element jm:Note { token }
       }?
      ,element jm:Addition { element jm:Note { token }+ }?
      ,element jm:Property {
         element jm:Type { token }
-       ,element jm:WarningPeriod { kikan_keihou }?
-       ,element jm:AdvisoryPeriod { kikan_keihou }
+       ,element jm:WarningPeriod { jmx_m_type_Period }?
+       ,element jm:AdvisoryPeriod { jmx_m_type_Period }
        ,element jm:PeakTime { 
           element jm:Date { token }?
          ,element jm:Term { token }
@@ -905,7 +905,7 @@ mitem_keihou =
        ,element jm:HumidityPart {
           element jm:Base {
             je_humidity_keihou
-           ,je_humidity_keihou
+           ,je_humidity_keihou?
           }
         }?
       }*

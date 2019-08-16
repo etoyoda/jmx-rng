@@ -1452,17 +1452,7 @@
       <data type="nonNegativeInteger"/>
     </element>
   </define>
-  <define name="kikan_keihou">
-    <optional>
-      <element name="jm:ZoneTime">
-        <element name="jm:Date">
-          <data type="token" datatypeLibrary=""/>
-        </element>
-        <element name="jm:Term">
-          <data type="token" datatypeLibrary=""/>
-        </element>
-      </element>
-    </optional>
+  <define name="jmx_m_type_Period">
     <optional>
       <element name="jm:StartTime">
         <element name="jm:Date">
@@ -1488,6 +1478,16 @@
     <optional>
       <element name="jm:OverTime">
         <data type="token" datatypeLibrary=""/>
+      </element>
+    </optional>
+    <optional>
+      <element name="jm:ZoneTime">
+        <element name="jm:Date">
+          <data type="token" datatypeLibrary=""/>
+        </element>
+        <element name="jm:Term">
+          <data type="token" datatypeLibrary=""/>
+        </element>
       </element>
     </optional>
   </define>
@@ -1551,7 +1551,7 @@
               </optional>
               <optional>
                 <element name="jm:WarningNotice">
-                  <ref name="kikan_keihou"/>
+                  <ref name="jmx_m_type_Period"/>
                   <element name="jm:Note">
                     <data type="token" datatypeLibrary=""/>
                   </element>
@@ -1573,11 +1573,11 @@
                   </element>
                   <optional>
                     <element name="jm:WarningPeriod">
-                      <ref name="kikan_keihou"/>
+                      <ref name="jmx_m_type_Period"/>
                     </element>
                   </optional>
                   <element name="jm:AdvisoryPeriod">
-                    <ref name="kikan_keihou"/>
+                    <ref name="jmx_m_type_Period"/>
                   </element>
                   <optional>
                     <element name="jm:PeakTime">
@@ -1710,7 +1710,9 @@
                     <element name="jm:HumidityPart">
                       <element name="jm:Base">
                         <ref name="je_humidity_keihou"/>
-                        <ref name="je_humidity_keihou"/>
+                        <optional>
+                          <ref name="je_humidity_keihou"/>
+                        </optional>
                       </element>
                     </element>
                   </optional>
