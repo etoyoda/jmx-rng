@@ -1394,6 +1394,7 @@ case_vgsk50_kisetsu =
       element jm:ObservationAddition {
         element jm:DeviationFromNormal { xsd:integer }
         ,element jm:DeviationFromLastYear { xsd:integer }
+        ,element jm:Text { xsd:token }?
       }
     }
   }
