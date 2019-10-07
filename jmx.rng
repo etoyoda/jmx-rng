@@ -2681,6 +2681,11 @@
           <element name="jm:DeviationFromLastYear">
             <data type="integer"/>
           </element>
+          <optional>
+            <element name="jm:Text">
+              <data type="token"/>
+            </element>
+          </optional>
         </element>
       </element>
     </element>
