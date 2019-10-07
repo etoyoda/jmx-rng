@@ -4,6 +4,7 @@ PATH=/usr/local/bin:/usr/bin:/bin
 
 work=$(cat ${HOME}/.workdir)
 : ${work:=/nwp/p3}
+: ${svr:='tako.toyoda-eizi.net'}}
 addr=$(cat ${HOME}/.mailto)
 public=$(cat ${HOME}/.mailto-pub)
 arch=/nwp/a0
@@ -66,5 +67,6 @@ cd $work
 test -d $work/$ym || mkdir $work/$ym
 tar -c -C $wd -z -f $work/$ym/jmxval-$today.tgz .
 rm -rf $wd
+rsync -auz $work/$ym/ ${svr}:$work/$ym/
 
 exit 0
