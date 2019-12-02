@@ -1372,7 +1372,7 @@ case_vgsk50_kisetsu =
       attribute type { "季節観測" }
       ,element jm:MeteorologicalInfo {
         element jm:DateTime {
-          attribute significant { "yyyy-mm-dd" }
+          attribute significant { "yyyy-mm-dd" | "yyyy-mm-ddThh:mm" }
           ,dateTime_si
         }
         ,element jm:Item {

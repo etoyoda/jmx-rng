@@ -2644,7 +2644,10 @@
         <element name="jm:MeteorologicalInfo">
           <element name="jm:DateTime">
             <attribute name="significant">
-              <value>yyyy-mm-dd</value>
+              <choice>
+                <value>yyyy-mm-dd</value>
+                <value>yyyy-mm-ddThh:mm</value>
+              </choice>
             </attribute>
             <ref name="dateTime_si"/>
           </element>
