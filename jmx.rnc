@@ -2671,7 +2671,7 @@ latlon_multi_ja =
 
 latlon_sexagesimal_ascii =
   xsd:string {
-    pattern = "\+\d\d\d\d[\-+]\d\d\d\d\d/"
+    pattern = "\+\d\d\d\d?[\-+]\d\d\d\d\d/"
   }
 
 latlon_sexagesimal_ja =

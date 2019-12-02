@@ -4885,7 +4885,7 @@
   </define>
   <define name="latlon_sexagesimal_ascii">
     <data type="string">
-      <param name="pattern">\+\d\d\d\d[\-+]\d\d\d\d\d/</param>
+      <param name="pattern">\+\d\d\d\d?[\-+]\d\d\d\d\d/</param>
     </data>
   </define>
   <define name="latlon_sexagesimal_ja">
