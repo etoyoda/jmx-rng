@@ -2646,7 +2646,7 @@ latlon_decimal2_multi_ascii =
 
 latlon_decimal1_multi_ascii =
   xsd:string {
-    pattern = "/?([\-+]\d\d\.\d[\-+]\d\d\d\.\d/)+"
+    pattern = "/?([\-+]\d+\.\d[\-+]\d\d\d\.\d/)+"
   }
 
 latlon_multi_ascii =
@@ -2676,7 +2676,7 @@ latlon_sexagesimal_ascii =
 
 latlon_sexagesimal_ja =
   xsd:string {
-    pattern = "北緯[０-９]{2}度[０-９]{2}分[東西]経[０-９]{3}度[０-９]{2}分"
+    pattern = "北緯[０-９]+度[０-９]{2}分[東西]経[０-９]{3}度[０-９]{2}分"
   }
 
 # --- shorthands for unknown structure, to be eliminated someday ---

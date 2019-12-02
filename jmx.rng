@@ -4860,7 +4860,7 @@
   </define>
   <define name="latlon_decimal1_multi_ascii">
     <data type="string">
-      <param name="pattern">/?([\-+]\d\d\.\d[\-+]\d\d\d\.\d/)+</param>
+      <param name="pattern">/?([\-+]\d+\.\d[\-+]\d\d\d\.\d/)+</param>
     </data>
   </define>
   <define name="latlon_multi_ascii">
@@ -4890,7 +4890,7 @@
   </define>
   <define name="latlon_sexagesimal_ja">
     <data type="string">
-      <param name="pattern">北緯[０-９]{2}度[０-９]{2}分[東西]経[０-９]{3}度[０-９]{2}分</param>
+      <param name="pattern">北緯[０-９]+度[０-９]{2}分[東西]経[０-９]{3}度[０-９]{2}分</param>
     </data>
   </define>
   <!-- - - - shorthands for unknown structure, to be eliminated someday - - - -->
