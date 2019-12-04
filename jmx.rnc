@@ -2646,7 +2646,8 @@ latlon_decimal2_multi_ascii =
 
 latlon_decimal1_multi_ascii =
   xsd:string {
-    pattern = "/?([\-+]\d+\.\d[\-+]\d\d\d\.\d/)+"
+    #pattern = "/?([\-+]\d+\.\d[\-+]\d\d\d\.\d/)+"
+    pattern = "[\-+0-9./]+"
   }
 
 latlon_multi_ascii =

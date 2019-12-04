@@ -4860,7 +4860,8 @@
   </define>
   <define name="latlon_decimal1_multi_ascii">
     <data type="string">
-      <param name="pattern">/?([\-+]\d+\.\d[\-+]\d\d\d\.\d/)+</param>
+      <!-- pattern = "/?([\-+]\d+\.\d[\-+]\d\d\d\.\d/)+" -->
+      <param name="pattern">[\-+0-9./]+</param>
     </data>
   </define>
   <define name="latlon_multi_ascii">
