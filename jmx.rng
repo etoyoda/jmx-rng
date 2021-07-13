@@ -4620,7 +4620,7 @@
   </define>
   <define name="list_pbof">
     <data type="string">
-      <param name="pattern">気象庁|(.* )?気象庁予報部|気象庁地球環境・海洋部|気象庁地震火山部|気象庁本庁|.*気象台|.*測候所</param>
+      <param name="pattern">(環境省 )?気象庁|(.* )?気象庁予報部|気象庁地球環境・海洋部|気象庁地震火山部|気象庁本庁|.*気象台|.*測候所</param>
     </data>
   </define>
   <define name="list_typh_datetime">
@@ -4821,6 +4821,7 @@
       <value>地方季節予報（２週間気温予報）</value>
       <value>早期天候情報</value>
       <value>大雨危険度通知</value>
+      <value>熱中症警戒アラート</value>
     </choice>
   </define>
   <define name="pat_katakana">
