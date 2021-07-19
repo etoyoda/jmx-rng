@@ -4822,6 +4822,7 @@
       <value>早期天候情報</value>
       <value>大雨危険度通知</value>
       <value>熱中症警戒アラート</value>
+      <value>発達する熱帯低気圧に関する情報</value>
     </choice>
   </define>
   <define name="pat_katakana">
