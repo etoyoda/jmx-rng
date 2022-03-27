@@ -55,6 +55,12 @@ echo "# failed messages: $nfail" >&2
 
 exec 2>&1
 
+ed -s validate.log <<EDSCRIPT || :
+g/^.warning. .usr.bin.jing:/d
+w
+q
+EDSCRIPT
+
 mail --subject="JMX nightly validation $today $nfail/$n" $addr < validate.log
 if [ $nfail -gt 0 ]; then
   mail --subject="JMX nightly validation $today $nfail/$n" $public < validate.log
